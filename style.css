@@ -1,0 +1,150 @@
+/* Paleta: Rosa bebê (#f8d7da), Verde oliva (#556b2f), Dourado (#d4af37), Branco (#ffffff) */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8d7da;
+  color: #333;
+}
+
+/* Cabeçalho */
+header {
+  background-color: #f8d7da;
+  border-bottom: 2px solid #d4af37;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
+.logo {
+  height: 50px;
+}
+
+.site-title {
+  font-family: 'Great Vibes', cursive;
+  font-size: 28px;
+  color: #556b2f;
+}
+
+nav ul {
+  display: flex;
+  gap: 15px;
+  list-style: none;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #556b2f;
+  font-weight: bold;
+}
+
+nav ul li a:hover {
+  color: #d4af37;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  color: #556b2f;
+}
+
+.hero .btn {
+  background-color: #556b2f;
+  color: white;
+  padding: 12px 25px;
+  text-decoration: none;
+  border-radius: 25px;
+  margin-top: 20px;
+  display: inline-block;
+}
+
+.hero .btn:hover {
+  background-color: #d4af37;
+}
+
+/* Seção Sobre */
+section {
+  padding: 50px 20px;
+}
+
+h2 {
+  text-align: center;
+  color: #556b2f;
+  margin-bottom: 20px;
+}
+
+.sobre ul {
+  list-style: none;
+  margin-top: 20px;
+}
+
+.sobre li {
+  margin-bottom: 10px;
+}
+
+/* Portfólio */
+.portfolio .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.portfolio img {
+  width: 100%;
+  border-radius: 8px;
+  border: 2px solid #d4af37;
+}
+
+/* Agendamento */
+.agendamento {
+  text-align: center;
+}
+
+.agendamento .btn {
+  background-color: #556b2f;
+  color: white;
+  padding: 12px 25px;
+  margin: 10px;
+  text-decoration: none;
+  border-radius: 25px;
+}
+
+.agendamento .btn:hover {
+  background-color: #d4af37;
+}
+
+/* Contato */
+.contato {
+  text-align: center;
+}
+
+.contato a {
+  color: #556b2f;
+}
+
+.contato a:hover {
+  color: #d4af37;
+}
+
+/* Rodapé */
+footer {
+  background-color: #f8d7da;
+  text-align: center;
+  padding: 15px;
+  color: #556b2f;
+  font-size: 14px;
+}
