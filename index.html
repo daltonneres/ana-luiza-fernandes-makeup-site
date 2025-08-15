@@ -20,8 +20,12 @@
                 <ul>
                     <li><a href="#home">Home</a></li>
                     <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#equipe">Equipe</a></li>
                     <li><a href="#portfolio">Portfólio</a></li>
+                    <li><a href="#promocoes">Promoções</a></li>
+                    <li><a href="#catalogo">Catálogo</a></li>
                     <li><a href="#agendamento">Agendamento</a></li>
+                    <li><a href="#depoimentos">Depoimentos</a></li>
                     <li><a href="#contato">Contato</a></li>
                 </ul>
             </nav>
@@ -31,27 +35,104 @@
     <!-- Hero -->
     <section id="home" class="hero">
         <div class="container">
-            <h2>Beleza com Elegância</h2>
-            <p>Transforme seu visual e viva uma experiência única no mundo da beleza.</p>
-            <a href="#agendamento" class="btn">Agendar Agora</a>
+
+            <div class="banner-slider">
+                <div class="slide fade">
+                    <img src="banner1.jpg" alt="Banner 1">
+                </div>
+                <div class="slide fade">
+                    <img src="banner2.jpg" alt="Banner 2">
+                </div>
+                <div class="slide fade">
+                    <img src="banner3.jpg" alt="Banner 3">
+                </div>
+                <div class="slide fade">
+                    <img src="banner4.jpg" alt="Banner 4">
+                </div>
+            </div>
+
+            <h2>Seu Momento de Brilhar</h2>
+            <p>Venha se sentir incrível e realçar sua beleza com todo cuidado que você merece.</p>
+            <a href="#agendamento" class="btn">Agende pelo WhatsApp</a>
         </div>
     </section>
 
     <!-- Sobre -->
     <section id="sobre" class="sobre">
+        <div class="container sobre-flex">
+            <div class="sobre-img">
+                <img src="salao.jpg" alt="Interior do salão">
+            </div>
+            <div class="sobre-texto">
+                <h2>Sobre o Salão</h2>
+                <p>O <strong>Ana Luiza Fernandes Makeup</strong> é um espaço dedicado à beleza, oferecendo atendimento
+                    personalizado em um ambiente acolhedor. Nosso compromisso é realçar sua autoestima com serviços de
+                    alta qualidade, técnicas modernas e produtos de excelência — conquistando, até hoje, a confiança e a
+                    satisfação de mais de 500 clientes.</p>
+                <ul>
+                    <li><strong>Endereço:</strong> Av. Bertino Warmiling — em frente ao antigo hospital.</li>
+                    <li><strong>Horário de Atendimento:</strong> Segunda a sexta, das 13h30 às 20h | Sábados e domingos,
+                        das 7h30 às 18h.</li>
+                    <li><strong>Diferenciais:</strong> Cantinho do Café, espaços instagramáveis e atendimento VIP para
+                        tornar sua experiência ainda mais especial.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipe -->
+    <section id="Equipe" class="sobre">
+        <div class="container sobre-flex">
+            <div class="sobre-img">
+                <img src="salao.jpg" alt="Interior do salão">
+            </div>
+            <div class="sobre-texto">
+                <h2>Quem sou?</h2>
+                <p>O <strong>Ana Luiza Fernandes Makeup</strong> nasceu do sonho de transformar autoestima em beleza
+                    real. Nossa missão é valorizar cada cliente com atendimento personalizado e técnicas modernas.</p>
+
+                <h3>Missão</h3>
+                <p>Proporcionar experiências únicas e cuidados de excelência para realçar a beleza de cada cliente.</p>
+
+                <h3>Valores</h3>
+                <ul>
+                    <li>Profissionalismo</li>
+                    <li>Acolhimento</li>
+                    <li>Qualidade</li>
+                    <li>Inovação</li>
+                </ul>
+
+                <h3>Equipe</h3>
+                <div class="equipe-grid">
+                    <div class="equipe-membro">
+                        <img src="foto1.jpg" alt="Ana Luiza Fernandes">
+                        <p><strong>Ana Luiza Fernandes</strong><br>Makeup Artist</p>
+                    </div>
+                </div>
+
+                <h3>Espaços</h3>
+                <div class="espacos-grid">
+                    <img src="espaco1.jpg" alt="Foto do espaço 1">
+                    <img src="espaco2.jpg" alt="Foto do espaço 2">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section id="depoimentos" class="depoimentos">
         <div class="container">
-            <h2>Sobre o Salão</h2>
-            <p>
-                O <strong>Ana Luiza Fernandes Makeup</strong> é um espaço dedicado à beleza, com atendimento
-                personalizado e um ambiente acolhedor.
-                Nosso objetivo é realçar a sua autoestima com serviços de alta qualidade, utilizando técnicas modernas e
-                produtos de excelência.
-            </p>
-            <ul>
-                <li><strong>Endereço:</strong> Av. Bertino Warmiling, em frente ao antigo hospital</li>
-                <li><strong>Horário:</strong> Seg a Sex: 13:30 - 20:00 | Sáb e Dom: 07:30 - 18:00</li>
-                <li><strong>Diferenciais:</strong> Cantinho do café ☕, cantos instagramáveis 📸, atendimento VIP ✨</li>
-            </ul>
+            <h2>O que nossas clientes dizem</h2>
+            <div class="depoimentos-grid">
+                <div class="depoimento">
+                    <p>"Me senti maravilhosa! Atendimento impecável e ambiente acolhedor."</p>
+                    <span>- Juliana M.</span>
+                </div>
+                <div class="depoimento">
+                    <p>"Super recomendo! Cada detalhe pensado com carinho."</p>
+                    <span>- Fernanda R.</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -59,11 +140,101 @@
     <section id="portfolio" class="portfolio">
         <div class="container">
             <h2>Portfólio</h2>
-            <div class="grid">
-                <img src="assets/img1.jpg" alt="Trabalho 1">
-                <img src="assets/img2.jpg" alt="Trabalho 2">
-                <img src="assets/img3.jpg" alt="Trabalho 3">
-                <img src="assets/img4.jpg" alt="Trabalho 4">
+
+            <div class="portfolio-item">
+                <img src="img1.jpg" alt="Trabalho 1">
+                <div class="portfolio-desc">
+                    <h3>Maquiagem para Noivas</h3>
+                    <p>Beleza radiante e duradoura para o seu grande dia.</p>
+                </div>
+            </div>
+
+            <div class="portfolio-item reverse">
+                <img src="img2.jpg" alt="Trabalho 2">
+                <div class="portfolio-desc">
+                    <h3>Produção para Formaturas</h3>
+                    <p>Transforme o momento da formatura em uma lembrança inesquecível.</p>
+                </div>
+            </div>
+
+            <div class="portfolio-item">
+                <img src="img3.jpg" alt="Trabalho 3">
+                <div class="portfolio-desc">
+                    <h3>Maquiagem Social</h3>
+                    <p>Perfeita para festas, eventos e ocasiões especiais.</p>
+                </div>
+            </div>
+
+            <div class="portfolio-item reverse">
+                <img src="img4.jpg" alt="Trabalho 4">
+                <div class="portfolio-desc">
+                    <h3>Produção Completa</h3>
+                    <p>Cabelo e maquiagem com harmonia para qualquer ocasião.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Promoções -->
+    <section id="promocoes" class="promocoes">
+        <div class="container">
+            <h2>Promoções Especiais</h2>
+            <div class="promocoes-grid">
+                <div class="promocao">
+                    <h3>Maquiagem Social</h3>
+                    <p>R$ 120,00 (antes R$ 135,00)</p>
+                </div>
+                <div class="promocao">
+                    <h3>Penteados Semipresos</h3>
+                    <p>R$ 70,00 (antes R$ 80,00)</p>
+                </div>
+                <div class="promocao">
+                    <h3>Design de Sobrancelha + Henna</h3>
+                    <p>R$ 40,00 (antes R$ 45,00)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catálogo -->
+    <section id="catalogo" class="catalogo">
+        <div class="container">
+            <h2>Catálogo de Serviços</h2>
+            <p class="catalogo-desc">Confira nossos principais serviços de beleza e cuidados, realizados com excelência
+                e atenção aos detalhes.</p>
+            <div class="catalogo-grid">
+                <div class="produto">
+                    <h4>Maquiagem Social</h4>
+                    <p>R$ 135,00</p>
+                </div>
+                <div class="produto">
+                    <h4>Maquiagem Express</h4>
+                    <p>R$ 105,00</p>
+                </div>
+                <div class="produto">
+                    <h4>Design Personalizado</h4>
+                    <p>R$ 35,00</p>
+                </div>
+                <div class="produto">
+                    <h4>Design Personalizado + Henna/Tintura</h4>
+                    <p>R$ 45,00</p>
+                </div>
+                <div class="produto">
+                    <h4>Buço</h4>
+                    <p>R$ 15,00</p>
+                </div>
+                <div class="produto">
+                    <h4>Penteados Semipresos</h4>
+                    <p>A partir de R$ 80,00</p>
+                </div>
+                <div class="produto">
+                    <h4>Ondas</h4>
+                    <p>R$ 60,00</p>
+                </div>
+                <div class="produto">
+                    <h4>Penteados Presos</h4>
+                    <p>A partir de R$ 100,00</p>
+                </div>
             </div>
         </div>
     </section>
@@ -72,31 +243,49 @@
     <section id="agendamento" class="agendamento">
         <div class="container">
             <h2>Agende Seu Horário</h2>
-            <p>Escolha a melhor forma de reservar seu atendimento:</p>
+            <p>Vamos agendar seu momento especial? É só mandar um WhatsApp e garantir seu atendimento com carinho!</p>
             <a href="https://wa.me/5546999401775" target="_blank" class="btn">WhatsApp</a>
-            <a href="https://www.trinks.com/" target="_blank" class="btn">Trinks</a>
         </div>
     </section>
 
     <!-- Contato -->
+
     <section id="contato" class="contato">
         <div class="container">
             <h2>Contato</h2>
-            <p>Fale conosco ou venha nos visitar!</p>
-            <p><strong>WhatsApp:</strong> (46) 99940-1775</p>
-            <p><strong>Instagram:</strong> <a href="https://www.instagram.com/analuizafernandesmakeup"
-                    target="_blank">@analuizafernandesmakeup</a></p>
-            <p><strong>TikTok:</strong> <a href="https://www.tiktok.com/@anafernandesmakeup01"
-                    target="_blank">@anafernandesmakeup01</a></p>
-            <iframe src="https://www.google.com/maps?q=Av.%20Bertino%20Warmiling,%20Dois%20Vizinhos&output=embed"
+            <p>Fale conosco e venha nos visitar!</p>
+            <a href="https://wa.me/5546999401775" target="_blank" class="btn-whatsapp">Contato de Atendimento</a>
+            <a href="https://www.instagram.com/analuizafernandesmakeup" target="_blank" class="btn-instagram">Nosso
+                Instagram / Blog de Dicas</a>
+            <a href="https://www.tiktok.com/@anafernandesmakeup01" target="_blank" class="btn-tiktok"> Blog / TikTok</a>
+            <iframe
+                src="https://www.google.com/maps?q=Av.%20Bertino%20Warmiling,%20955%20-%20Centro,%20Salto%20do%20Lontra%20-%20PR,%2085670-000&output=embed"
                 width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </section>
+
 
     <!-- Rodapé -->
     <footer>
         <p>&copy; 2025 Ana Luiza Fernandes Makeup - Todos os direitos reservados</p>
     </footer>
+
+    <script>
+        let slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            let slides = document.getElementsByClassName("slide");
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1 }
+            slides[slideIndex - 1].style.display = "block";
+            setTimeout(showSlides, 4000); // Muda de slide a cada 4 segundos
+        }
+    </script>
+
 </body>
 
 </html>
