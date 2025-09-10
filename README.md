@@ -53,10 +53,13 @@ O objetivo é criar um site moderno, funcional e responsivo que:
 
 ---
 
-## 👨‍💻 Desenvolvedor Responsável
-**Dalton José Neres** - Desenvolvedor Full Stack  
-📞 (46) 92000-7229  
-📧 dev.neresdalton@gmail.com
+## 👨‍💻 Desenvolvedor
+
+Este projeto foi desenvolvido por **Dalton Neres**, **Full Stack Developer**, com foco em **criação de sites institucionais, aplicações web modernas e soluções acessíveis**.  
+
+- 🔗 **GitHub:** [Dalton Neres](https://github.com/daltonneres)  
+- 🌍 **Portfólio:** [Dalton Neres - Portfólio](https://daltonneres.github.io/potfolio_neres/)  
+- 💼 **LinkedIn:** [Dalton José Neres](https://www.linkedin.com/in/dalton-josé-neres)  
 
 ---
 
