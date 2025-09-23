@@ -357,3 +357,29 @@ footer {
     from {opacity: .4} 
     to {opacity: 1}
 }
+
+/* Scroll suave (opcional) */
+html { scroll-behavior: smooth; }
+
+/* Botão Voltar ao Início */
+.btn-topo {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #556b2f;
+  color: white;
+  font-size: 20px;
+  width: 44px;
+  height: 44px;
+  display: none;            /* escondido por padrão */
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  z-index: 1000;
+  transition: background 0.2s ease, transform 0.15s ease;
+  border: none;
+}
+.btn-topo:hover { transform: translateY(-3px); background-color: #d4af37; }
+.show-btn { display: flex !important; }
