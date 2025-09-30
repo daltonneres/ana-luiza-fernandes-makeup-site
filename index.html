@@ -21,13 +21,13 @@
                 <ul>
                     <li><a href="#home">Home</a></li>
                     <li><a href="#sobre">Sobre</a></li>
-                    <li><a href="#equipe">Equipe</a></li>
+                    <li><a href="#quem">Sobre - Ana Luiza</a></li>
+                    <li><a href="#depoimentos">Depoimentos</a></li>
                     <li><a href="#portfolio">Portfólio</a></li>
                     <li><a href="#promocoes">Promoções</a></li>
                     <li><a href="#catalogo">Catálogo</a></li>
                     <li><a href="#servicos">Serviços</a></li>
                     <li><a href="#agendamento">Agendamento</a></li>
-                    <li><a href="#depoimentos">Depoimentos</a></li>
                     <li><a href="#contato">Contato</a></li>
                 </ul>
             </nav>
@@ -64,7 +64,7 @@
     <section id="sobre" class="sobre">
         <div class="container sobre-flex">
             <div class="sobre-img">
-                <img src="interior 01.jpg" alt="Interior do salão">
+                <img src="interior 01.jpg" alt="Interior do salão" title="Interior do salão">
             </div>
             <div class="sobre-texto">
                 <h2>Sobre o Salão</h2>
@@ -83,12 +83,9 @@
         </div>
     </section>
 
-    <!-- Equipe -->
-    <section id="Equipe" class="sobre">
+    <!-- Quem sou -->
+    <section id="quem" class="quem">
         <div class="container sobre-flex">
-            <div class="sobre-img">
-                <img src="interior 02.jpg" alt="Interior do salão">
-            </div>
             <div class="sobre-texto">
                 <h2>Quem sou?</h2>
                 <p>O <strong>Ana Luiza Fernandes Makeup</strong> nasceu do sonho de transformar autoestima em beleza
@@ -104,71 +101,80 @@
                     <li>Qualidade</li>
                     <li>Inovação</li>
                 </ul>
+            </div>
 
-                <h3>Equipe</h3>
-                <div class="equipe-grid">
-                    <div class="equipe-membro">
-                        <img src="ana 01.jpg" alt="Ana Luiza Fernandes">
-                        <p><strong>Ana Luiza Fernandes</strong><br>Makeup Artist</p>
-                    </div>
-                </div>
-
-                <h3>Espaços</h3>
-                <div class="espacos-grid">
-                    <img src="espaço 01.jpg" alt="Foto do espaço 1">
-                    <img src="espaço 02.jpg" alt="Foto do espaço 2">
-                </div>
+            <!-- Foto da Ana ao lado -->
+            <div class="polaroid">
+                <img src="ana 01.jpg" alt="Ana Luiza Fernandes" title="Ana Luiza Fernandes">
+                <p><strong>Ana Luiza Fernandes</strong><br>Makeup Artist</p>
             </div>
         </div>
     </section>
 
-    <!-- Depoimentos -->
-    <section id="depoimentos" class="depoimentos">
-        <div class="container">
-            <h2>O que nossas clientes dizem</h2>
-            <div class="depoimentos-grid">
-                <div class="depoimento">
-                    <p>"Me senti maravilhosa! Atendimento impecável e ambiente acolhedor."</p>
-                    <span>- Juliana M.</span>
-                </div>
-                <div class="depoimento">
-                    <p>"Super recomendo! Cada detalhe pensado com carinho."</p>
-                    <span>- Fernanda R.</span>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Portfólio -->
-    <section id="portfolio" class="portfolio">
-        <div class="container">
-            <h2>Portfólio</h2>
+<!-- Depoimentos -->
+<section id="depoimentos" class="depoimentos">
+  <div class="container">
+    <h2>O que nossas clientes dizem</h2>
 
-            <div class="portfolio-item reverse">
-                <img src="img2.jpg" alt="Trabalho 2">
-                <div class="portfolio-desc">
-                    <h3>Produção para Formaturas</h3>
-                    <p>Transforme o momento da formatura em uma lembrança inesquecível.</p>
-                </div>
-            </div>
+    <!-- Depoimentos com imagens -->
+    <div class="depoimentos-grid">
+      <div class="depoimento">
+        <img src="depoimento 01.jpg" alt="Foto da Carla" title="Foto da Carla" class="depoimento-img">
+        <span>- Carla S.</span>
+      </div>
+      <div class="depoimento">
+        <img src="depoimento 03.jpg" alt="Foto da Marina" title="Foto da Marina" class="depoimento-img">
+        <span>- Marina T.</span>
+      </div>
+      <div class="depoimento">
+        <img src="depoimento 02.jpg" alt="Foto da Ana" title="Foto da Ana" class="depoimento-img">
+        <span>- Ana P.</span>
+      </div>
+    </div>
 
-            <div class="portfolio-item">
-                <img src="maquiagem social.jpg" alt="Trabalho 3">
-                <div class="portfolio-desc">
-                    <h3>Maquiagem Social</h3>
-                    <p>Perfeita para festas, eventos e ocasiões especiais.</p>
-                </div>
-            </div>
+    <!-- Depoimentos apenas com texto, centralizados -->
+    <div class="depoimentos-texto">
+      <div class="depoimento">
+        <p>"Me senti maravilhosa! Atendimento impecável e ambiente acolhedor."</p>
+        <span>- Juliana M.</span>
+      </div>
+      <div class="depoimento">
+        <p>"Super recomendo! Cada detalhe pensado com carinho."</p>
+        <span>- Fernanda R.</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-            <div class="portfolio-item reverse">
-                <img src="img4.jpg" alt="Trabalho 4">
-                <div class="portfolio-desc">
-                    <h3>Produção Completa</h3>
-                    <p>Cabelo e maquiagem com harmonia para qualquer ocasião.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- Portfólio -->
+<section id="portfolio" class="portfolio">
+  <div class="container">
+    <h2>Portfólio</h2>
+
+    <div class="portfolio-grid">
+      
+      <div class="polaroid">
+        <img src="maquiagem express.jpg" alt="Produção para Formaturas">
+        <p><strong>Produção para Formaturas</strong><br>
+        Transforme o momento da formatura em uma lembrança inesquecível.</p>
+      </div>
+
+      <div class="polaroid">
+        <img src="maquiagem social.jpg" alt="Maquiagem Social">
+        <p><strong>Maquiagem Social</strong><br>
+        Perfeita para festas, eventos e ocasiões especiais.</p>
+      </div>
+
+      <div class="polaroid">
+        <img src="baby liss.jpg" alt="Produção Completa">
+        <p><strong>Produção Completa</strong><br>
+        Cabelo e maquiagem com harmonia para qualquer ocasião.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
 
     <!-- Promoções -->
     <section id="promocoes" class="promocoes">
@@ -246,99 +252,95 @@
         </div>
     </section>
 
-    <!-- Serviços com Imagens -->
-    <section id="servicos" class="portfolio">
+    <section id="servicos" class="servicos">
         <div class="container">
             <h2>Nossos Serviços</h2>
+            <div class="servicos-grid">
 
-            <div class="portfolio-item">
-                <img src="social.jpg" alt="Maquiagem Social">
-                <div class="portfolio-desc">
+                <div class="polaroid">
+                    <img src="social.jpg" alt="Maquiagem Social">
                     <h3>Maquiagem Social</h3>
                     <p>Ideal para festas e eventos, garantindo um visual elegante e duradouro.</p>
                 </div>
-            </div>
 
-            <div class="portfolio-item reverse">
-                <img src="brow.jpg" alt="Brow Lamination">
-                <div class="portfolio-desc">
+                <div class="polaroid">
+                    <img src="brow.jpg" alt="Brow Lamination">
                     <h3>Brow Lamination</h3>
                     <p>Alinhamento e fixação dos fios para sobrancelhas impecáveis.</p>
                 </div>
-            </div>
 
-            <div class="portfolio-item">
-                <img src="maquiagem express.jpg" alt="Maquiagem Express">
-                <div class="portfolio-desc">
-                    <h3>Maquiagem Express</h3>
-                    <p>Opção rápida e prática para quem precisa estar pronta em poucos minutos.</p>
+                <div class="polaroid">
+                    <img src="maquiagem express.jpg" alt="Maquiagem Express">
+                    <div class="portfolio-desc">
+                        <h3>Maquiagem Express</h3>
+                        <p>Opção rápida e prática para quem precisa estar pronta em poucos minutos.</p>
+                    </div>
+                </div>
+
+                <div class="polaroid">
+                    <img src="baby liss.jpg" alt="Baby Liss">
+                    <div class="portfolio-desc">
+                        <h3>Baby Liss</h3>
+                        <p>Cachos definidos ou ondas naturais para um look moderno.</p>
+                    </div>
+                </div>
+
+                <div class="polaroid">
+                    <img src="preso + romantico.jpg" alt="Semipreso Romântico">
+                    <div class="portfolio-desc">
+                        <h3>Semipreso Romântico</h3>
+                        <p>Penteado delicado e elegante, perfeito para ocasiões especiais.</p>
+                    </div>
+                </div>
+
+                <div class="polaroid">
+                    <img src="coque express.jpg" alt="Coque Express">
+                    <div class="portfolio-desc">
+                        <h3>Coque Express</h3>
+                        <p>Praticidade e sofisticação em um penteado versátil e elegante.</p>
+                    </div>
+                </div>
+
+                <div class="polaroid">
+                    <img src="brow + henna.jpg" alt="Brow Lamination + Henna">
+                    <div class="portfolio-desc">
+                        <h3>Brow Lamination + Henna</h3>
+                        <p>Combinação perfeita para sobrancelhas definidas e com acabamento natural.</p>
+                    </div>
+                </div>
+
+                <div class="polaroid">
+                    <img src="classico.jpg" alt="Rabo Clássico">
+                    <div class="portfolio-desc">
+                        <h3>Rabo Clássico</h3>
+                        <p>Penteado atemporal que une charme e praticidade.</p>
+                    </div>
+                </div>
+
+                <div class="polaroid">
+                    <img src="preso  tranças.jpg" alt="Semipreso com Tranças">
+                    <div class="portfolio-desc">
+                        <h3>Semipreso com Tranças</h3>
+                        <p>Um toque romântico e moderno para realçar seu visual.</p>
+                    </div>
+                </div>
+
+                <div class="polaroid">
+                    <img src="lash lift.jpg" alt="Lash Lift">
+                    <div class="portfolio-desc">
+                        <h3>Lash Lift</h3>
+                        <p>Curvatura natural e duradoura para realçar ainda mais seu olhar.</p>
+                    </div>
+                </div>
+
+                <div class="polaroid">
+                    <img src="design.jpg" alt="Design Personalizado">
+                    <div class="portfolio-desc">
+                        <h3>Design Personalizado</h3>
+                        <p>Beleza sob medida, com técnicas exclusivas para destacar seus traços únicos.</p>
+                    </div>
                 </div>
             </div>
-
-            <div class="portfolio-item reverse">
-                <img src="baby liss.jpg" alt="Baby Liss">
-                <div class="portfolio-desc">
-                    <h3>Baby Liss</h3>
-                    <p>Cachos definidos ou ondas naturais para um look moderno.</p>
-                </div>
-            </div>
-
-            <div class="portfolio-item">
-                <img src="preso + romantico.jpg" alt="Semipreso Romântico">
-                <div class="portfolio-desc">
-                    <h3>Semipreso Romântico</h3>
-                    <p>Penteado delicado e elegante, perfeito para ocasiões especiais.</p>
-                </div>
-            </div>
-
-            <div class="portfolio-item reverse">
-                <img src="coque express.jpg" alt="Coque Express">
-                <div class="portfolio-desc">
-                    <h3>Coque Express</h3>
-                    <p>Praticidade e sofisticação em um penteado versátil e elegante.</p>
-                </div>
-            </div>
-
-            <div class="portfolio-item">
-                <img src="brow + henna.jpg" alt="Brow Lamination + Henna">
-                <div class="portfolio-desc">
-                    <h3>Brow Lamination + Henna</h3>
-                    <p>Combinação perfeita para sobrancelhas definidas e com acabamento natural.</p>
-                </div>
-            </div>
-
-            <div class="portfolio-item reverse">
-                <img src="classico.jpg" alt="Rabo Clássico">
-                <div class="portfolio-desc">
-                    <h3>Rabo Clássico</h3>
-                    <p>Penteado atemporal que une charme e praticidade.</p>
-                </div>
-            </div>
-
-            <div class="portfolio-item">
-                <img src="preso  tranças.jpg" alt="Semipreso com Tranças">
-                <div class="portfolio-desc">
-                    <h3>Semipreso com Tranças</h3>
-                    <p>Um toque romântico e moderno para realçar seu visual.</p>
-                </div>
-            </div>
-
-            <div class="portfolio-item reverse">
-                <img src="lash lift.jpg" alt="Lash Lift">
-                <div class="portfolio-desc">
-                    <h3>Lash Lift</h3>
-                    <p>Curvatura natural e duradoura para realçar ainda mais seu olhar.</p>
-                </div>
-            </div>
-
-            <div class="portfolio-item">
-                <img src="design.jpg" alt="Design Personalizado">
-                <div class="portfolio-desc">
-                    <h3>Design Personalizado</h3>
-                    <p>Beleza sob medida, com técnicas exclusivas para destacar seus traços únicos.</p>
-                </div>
-            </div>
-        </div>
     </section>
 
     <!-- Agendamento -->
@@ -418,6 +420,7 @@
             <path d="M5 12l7-7 7 7"></path>
         </svg>
     </a>
+
 
 </body>
 

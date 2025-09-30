@@ -124,8 +124,9 @@ h2 {
 
 .catalogo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
+  justify-content: center;  /* <<< centraliza os itens da última linha */
 }
 
 .catalogo-grid img {
@@ -342,9 +343,12 @@ footer {
     width: 100%;
 }
 
+/* Banner menor */
 .slide img {
-    width: 100%;
-    border-radius: 10px;
+  width: 100%;
+  height: 350px;   /* <<< altura reduzida */
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 /* Animação de fade */
@@ -383,3 +387,121 @@ html { scroll-behavior: smooth; }
 }
 .btn-topo:hover { transform: translateY(-3px); background-color: #d4af37; }
 .show-btn { display: flex !important; }
+
+/* Polaroid */
+.polaroid {
+  background: white;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-bottom: 30px solid #fff; /* borda maior embaixo estilo polaroid */
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.2);
+  display: inline-block;
+  text-align: center;
+  border-radius: 6px;
+}
+
+.polaroid img {
+  width: 200px;       /* largura fixa */
+  height: 200px;      /* altura fixa */
+  object-fit: cover;  /* corta a imagem mantendo proporção */
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.polaroid p {
+  font-size: 0.9em;
+  margin: 0;
+  color: #444;
+}
+
+/* Ajustar portfólio e serviços para estilo polaroide */
+.portfolio-item, .portfolio-item.reverse {
+  flex-direction: column !important; /* forçar em coluna */
+  align-items: center;
+  text-align: center;
+}
+
+.portfolio-item img {
+  max-width: 220px;
+  margin: 0 auto 10px auto;
+}
+
+.portfolio-desc {
+  max-width: 220px;
+}
+
+.servicos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  justify-content: center; /* <<< já está, mantém */
+}
+
+@media (max-width: 900px) {
+  .servicos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .servicos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  justify-content: center; /* centraliza última linha */
+}
+
+.portfolio-grid .polaroid img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* DEPOIMENTOS */
+
+.depoimentos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  justify-content: center; /* centraliza as colunas */
+  margin-bottom: 30px; /* espaço antes dos depoimentos de texto */
+}
+
+.depoimento {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px solid #d4af37;
+  font-style: italic;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.depoimento-img {
+  width: 100%;
+  max-width: 200px;      /* largura máxima */
+  height: auto;           /* altura proporcional */
+  object-fit: cover;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 2px solid #d4af37;
+}
+
+/* Grid para os depoimentos de texto menores */
+.depoimentos-texto {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.depoimentos-texto .depoimento {
+  width: 250px;  /* largura menor */
+  font-size: 0.9rem; /* texto menor */
+}
+
