@@ -346,10 +346,15 @@ footer {
 /* Banner menor */
 .slide img {
   width: 100%;
-  height: 350px;   /* <<< altura reduzida */
-  object-fit: cover;
+  height: auto;          /* altura se ajusta à proporção da imagem */
+  max-height: 500px;     /* altura máxima (pra não ficar gigante) */
+  object-fit: contain;   /* mostra a imagem inteira */
   border-radius: 10px;
+  background: #f8d7da;   /* cor de fundo, caso sobre espaço */
+  display: block;
+  margin: 0 auto;
 }
+
 
 /* Animação de fade */
 .fade {
@@ -426,8 +431,9 @@ html { scroll-behavior: smooth; }
   margin: 0 auto 10px auto;
 }
 
-.portfolio-desc {
-  max-width: 220px;
+.polaroid, 
+.polaroid .portfolio-desc {
+    text-align: center;
 }
 
 .servicos-grid {
@@ -505,3 +511,78 @@ html { scroll-behavior: smooth; }
   font-size: 0.9rem; /* texto menor */
 }
 
+
+/* Footer */
+.footer {
+  background-color: #f8d7da; /* fundo rosa */
+  padding: 40px 20px;
+  color: #000;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-col h3 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: #556b2f;
+}
+
+.footer-col p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #333;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+  color: #333;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.footer-col ul li a:hover {
+  color: #556b2f;
+}
+
+.social-icons a {
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 20px;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 30px;
+  border-top: 1px solid #d4af37; /* dourado */
+  padding-top: 15px;
+  font-size: 0.85rem;
+  color: #333;
+}
+
+.footer-bottom a {
+  color: #556b2f;
+  text-decoration: none;
+  font-weight: bold;
+}
+.footer-bottom a:hover {
+  color: #d4af37;
+}
