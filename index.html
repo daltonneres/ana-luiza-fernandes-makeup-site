@@ -56,12 +56,13 @@
         </div>
     </section>
 
-    <!-- Sobre -->
-    <section id="sobre" class="sobre">
-        <div class="container sobre-flex">
-            <div class="sobre-img">
-                <img src="interior 01.jpg" alt="Interior do salão" title="Interior do salão">
-            </div>
+<!-- Sobre -->
+<section id="sobre" class="sobre">
+    <div class="container sobre-flex">
+        <div class="sobre-video">
+            <!-- Vídeo pequeno com controles -->
+            <video id="video-thumb" src="interior.mp4" muted loop playsinline controls></video>
+        </div>
             <div class="sobre-texto">
                 <h2>Sobre o Salão</h2>
                 <p>O <strong>Ana Luiza Fernandes Makeup</strong> é um espaço dedicado à beleza, oferecendo atendimento
@@ -76,8 +77,8 @@
                         tornar sua experiência ainda mais especial.</li>
                 </ul>
             </div>
-        </div>
-    </section>
+    </div>
+</section>
 
     <!-- Quem sou -->
     <section id="quem" class="quem">
@@ -108,69 +109,69 @@
     </section>
 
 
-<!-- Depoimentos -->
-<section id="depoimentos" class="depoimentos">
-  <div class="container">
-    <h2>O que nossas clientes dizem</h2>
+    <!-- Depoimentos -->
+    <section id="depoimentos" class="depoimentos">
+        <div class="container">
+            <h2>O que nossas clientes dizem</h2>
 
-    <!-- Depoimentos com imagens -->
-    <div class="depoimentos-grid">
-      <div class="depoimento">
-        <img src="depoimento 01.jpg" alt="Foto da Carla" title="Foto da Carla" class="depoimento-img">
-        <span>- Carla S.</span>
-      </div>
-      <div class="depoimento">
-        <img src="depoimento 03.jpg" alt="Foto da Marina" title="Foto da Marina" class="depoimento-img">
-        <span>- Marina T.</span>
-      </div>
-      <div class="depoimento">
-        <img src="depoimento 02.jpg" alt="Foto da Ana" title="Foto da Ana" class="depoimento-img">
-        <span>- Ana P.</span>
-      </div>
-    </div>
+            <!-- Depoimentos com imagens -->
+            <div class="depoimentos-grid">
+                <div class="depoimento">
+                    <img src="depoimento 01.jpg" alt="Foto da Carla" title="Foto da Carla" class="depoimento-img">
+                    <span>- Carla S.</span>
+                </div>
+                <div class="depoimento">
+                    <img src="depoimento 03.jpg" alt="Foto da Marina" title="Foto da Marina" class="depoimento-img">
+                    <span>- Marina T.</span>
+                </div>
+                <div class="depoimento">
+                    <img src="depoimento 02.jpg" alt="Foto da Ana" title="Foto da Ana" class="depoimento-img">
+                    <span>- Ana P.</span>
+                </div>
+            </div>
 
-    <!-- Depoimentos apenas com texto, centralizados -->
-    <div class="depoimentos-texto">
-      <div class="depoimento">
-        <p>"Me senti maravilhosa! Atendimento impecável e ambiente acolhedor."</p>
-        <span>- Juliana M.</span>
-      </div>
-      <div class="depoimento">
-        <p>"Super recomendo! Cada detalhe pensado com carinho."</p>
-        <span>- Fernanda R.</span>
-      </div>
-    </div>
-  </div>
-</section>
+            <!-- Depoimentos apenas com texto, centralizados -->
+            <div class="depoimentos-texto">
+                <div class="depoimento">
+                    <p>"Me senti maravilhosa! Atendimento impecável e ambiente acolhedor."</p>
+                    <span>- Juliana M.</span>
+                </div>
+                <div class="depoimento">
+                    <p>"Super recomendo! Cada detalhe pensado com carinho."</p>
+                    <span>- Fernanda R.</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- Portfólio -->
-<section id="portfolio" class="portfolio">
-  <div class="container">
-    <h2>Portfólio</h2>
+    <!-- Portfólio -->
+    <section id="portfolio" class="portfolio">
+        <div class="container">
+            <h2>Portfólio</h2>
 
-    <div class="portfolio-grid">
-      
-      <div class="polaroid">
-        <img src="maquiagem express.jpg" alt="Produção para Formaturas">
-        <p><strong>Produção para Formaturas</strong><br>
-        Transforme o momento da formatura em uma lembrança inesquecível.</p>
-      </div>
+            <div class="portfolio-grid">
 
-      <div class="polaroid">
-        <img src="maquiagem social.jpg" alt="Maquiagem Social">
-        <p><strong>Maquiagem Social</strong><br>
-        Perfeita para festas, eventos e ocasiões especiais.</p>
-      </div>
+                <div class="polaroid">
+                    <img src="maquiagem express.jpg" alt="Produção para Formaturas">
+                    <p><strong>Produção para Formaturas</strong><br>
+                        Transforme o momento da formatura em uma lembrança inesquecível.</p>
+                </div>
 
-      <div class="polaroid">
-        <img src="baby liss.jpg" alt="Produção Completa">
-        <p><strong>Produção Completa</strong><br>
-        Cabelo e maquiagem com harmonia para qualquer ocasião.</p>
-      </div>
+                <div class="polaroid">
+                    <img src="maquiagem social.jpg" alt="Maquiagem Social">
+                    <p><strong>Maquiagem Social</strong><br>
+                        Perfeita para festas, eventos e ocasiões especiais.</p>
+                </div>
 
-    </div>
-  </div>
-</section>
+                <div class="polaroid">
+                    <img src="baby liss.jpg" alt="Produção Completa">
+                    <p><strong>Produção Completa</strong><br>
+                        Cabelo e maquiagem com harmonia para qualquer ocasião.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
     <!-- Catálogo -->
     <section id="catalogo" class="catalogo">
@@ -222,6 +223,10 @@
                 <div class="produto">
                     <h4>Design Personalizado</h4>
                     <p>R$ 35,00</p>
+                </div>
+                <div class="produto">
+                    <h4>TESTE</h4>
+                    <p>R$ 0,00</p>
                 </div>
             </div>
         </div>
@@ -315,6 +320,14 @@
                         <p>Beleza sob medida, com técnicas exclusivas para destacar seus traços únicos.</p>
                     </div>
                 </div>
+
+                <div class="polaroid">
+                    <img src="lash lift.jpg" alt="Lash Lift">
+                    <div class="portfolio-desc">
+                        <h3>TESTE</h3>
+                        <p>TESTE, TESTE, TESTE, TESTE</p>
+                    </div>
+                </div>
             </div>
     </section>
 
@@ -327,60 +340,62 @@
         </div>
     </section>
 
-<!-- Rodapé -->
-<footer class="footer">
-  <div class="footer-container">
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="footer-container">
 
-    <!-- Coluna 1 -->
-    <div class="footer-col">
-      <h3>Ana Luiza Fernandes Makeup</h3>
-      <p>
-        Serviços profissionais de maquiagem, design de sobrancelhas e penteados,
-        sempre destacando sua beleza única com todo cuidado.
-      </p>
-    </div>
+            <!-- Coluna 1 -->
+            <div class="footer-col">
+                <h3>Ana Luiza Fernandes Makeup</h3>
+                <p>
+                    Serviços profissionais de maquiagem, design de sobrancelhas e penteados,
+                    sempre destacando sua beleza única com todo cuidado.
+                </p>
+            </div>
 
-    <!-- Coluna 2 -->
-    <div class="footer-col">
-      <h3>Institucional</h3>
-      <ul>
-        <li><a href="#sobre">Sobre</a></li>
-        <li><a href="#portfolio">Portfólio</a></li>
-        <li><a href="#servicos">Serviços</a></li>
-      </ul>
-    </div>
+            <!-- Coluna 2 -->
+            <div class="footer-col">
+                <h3>Institucional</h3>
+                <ul>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#portfolio">Portfólio</a></li>
+                    <li><a href="#servicos">Serviços</a></li>
+                </ul>
+            </div>
 
-    <!-- Coluna 3 -->
-    <div class="footer-col">
-      <h3>Atendimento</h3>
-      <ul>
-        <li><a href="#contato">Fale Conosco</a></li>
-        <li><a href="https://www.google.com/maps?q=Av.%20Bertino%20Warmiling,%20955%20-%20Centro,%20Salto%20do%20Lontra%20-%20PR,%2085670-000" target="_blank">Localização</a></li>
-      </ul>
-    </div>
+            <!-- Coluna 3 -->
+            <div class="footer-col">
+                <h3>Atendimento</h3>
+                <ul>
+                    <li><a href="#contato">Fale Conosco</a></li>
+                    <li><a href="https://www.google.com/maps?q=Av.%20Bertino%20Warmiling,%20955%20-%20Centro,%20Salto%20do%20Lontra%20-%20PR,%2085670-000"
+                            target="_blank">Localização</a></li>
+                </ul>
+            </div>
 
-    <!-- Coluna 4 -->
-    <div class="footer-col">
-      <h3>Siga</h3>
-      <div class="social-icons">
-        <a href="https://wa.me/5546999401775" target="_blank" class="btn-whatsapp">WhatsApp</a>
-        <a href="https://www.instagram.com/analuizafernandesmakeup" target="_blank" class="btn-instagram">Instagram</a>
-        <a href="https://www.tiktok.com/@anafernandesmakeup01" target="_blank" class="btn-tiktok">TikTok</a>
-      </div>
-    </div>
+            <!-- Coluna 4 -->
+            <div class="footer-col">
+                <h3>Siga</h3>
+                <div class="social-icons">
+                    <a href="https://wa.me/5546999401775" target="_blank" class="btn-whatsapp">WhatsApp</a>
+                    <a href="https://www.instagram.com/analuizafernandesmakeup" target="_blank"
+                        class="btn-instagram">Instagram</a>
+                    <a href="https://www.tiktok.com/@anafernandesmakeup01" target="_blank" class="btn-tiktok">TikTok</a>
+                </div>
+            </div>
 
-  </div>
+        </div>
 
-  <div class="footer-bottom">
-    <p>&copy; 2025 Ana Luiza Fernandes Makeup - Todos os direitos reservados</p>
-    <p>
-      Desenvolvido por 
-      <a href="https://github.com/daltonneres" target="_blank">
-        Dalton Neres - Full Stack Developer
-      </a>
-    </p>
-  </div>
-</footer>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Ana Luiza Fernandes Makeup - Todos os direitos reservados</p>
+            <p>
+                Desenvolvido por
+                <a href="https://github.com/daltonneres" target="_blank">
+                    Dalton Neres - Full Stack Developer
+                </a>
+            </p>
+        </div>
+    </footer>
 
     <script>
         let slideIndex = 0;
@@ -431,7 +446,7 @@
         </svg>
     </a>
 
+<script src="script.js"></script>
 
 </body>
-
 </html>

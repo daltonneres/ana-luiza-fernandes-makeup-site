@@ -586,3 +586,15 @@ html { scroll-behavior: smooth; }
 .footer-bottom a:hover {
   color: #d4af37;
 }
+
+.sobre-video {
+    position: relative;
+    display: inline-block;
+}
+
+.sobre-video video {
+    width: 200px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
