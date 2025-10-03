@@ -725,9 +725,11 @@ html { scroll-behavior: smooth; }
   background: #fff0f1; /* rosa clarinho */
 }
 
+/* Reduz espaçamento antes/depois do agendamento */
 .chat-section {
   display: flex;
-  justify-content: center;  /* Centraliza na horizontal */
-  align-items: center;      /* Centraliza na vertical */
-  min-height: 100vh;        /* Faz ocupar a tela inteira */
+  justify-content: center;
+  align-items: center;
+  padding: 30px 20px;   /* reduzido */
+  min-height: auto;     /* remove a altura mínima forçada */
 }
