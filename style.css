@@ -598,3 +598,136 @@ html { scroll-behavior: smooth; }
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
+
+/* Chat container */
+.chat-container {
+  width: 360px;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  background-color: #f8d7da;
+
+  padding: 10px;       /* Adiciona espaço interno */
+  gap: 10px;           /* Espaço entre as seções internas */
+}
+
+/* Mensagens */
+.chat-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background-color: #fff0f1; /* rosa clarinho */
+}
+
+.message {
+  margin: 5px 0;
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+/* Mensagens do bot */
+.bot {
+  background-color: #d4af37; /* dourado */
+  color: #333;
+  align-self: flex-start;
+}
+
+/* Mensagens do usuário */
+.user {
+  background-color: #f8c1c7; /* rosa mais forte */
+  color: #333;
+  align-self: flex-end;
+}
+
+/* Input do chat */
+.chat-input {
+  display: flex;
+  border-top: 1px solid #d4af37;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background-color: #fff0f1; /* rosa clarinho */
+}
+
+.chat-input button {
+  padding: 10px 15px;
+  border: none;
+  background-color: #d4af37; /* dourado */
+  color: #333;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.chat-input button:hover {
+  background-color: #b8952b; /* dourado escuro no hover */
+}
+
+/* Botões do chat (opções) */
+.chat-option-btn {
+  background-color: #d4af37; /* dourado */
+  color: #333;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 14px;
+  margin: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.chat-option-btn:hover {
+  background-color: #b8952b; /* dourado escuro no hover */
+  transform: scale(1.05);
+}
+
+/* Área de opções e calendário */
+#optionsDiv, #calendarDiv {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0;
+  justify-content: center;
+}
+
+/* Botões do calendário */
+#calendarDiv .chat-option-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  padding: 0;
+  font-weight: bold;
+  background-color: #f8c1c7; /* rosa mais forte */
+}
+
+#calendarDiv .chat-option-btn:hover {
+  background-color: #d4af37; /* dourado */
+  color: #333;
+}
+
+/* Scroll do chat */
+#chatMessages {
+  max-height: 400px; 
+  overflow-y: auto;  
+  padding: 10px;
+  border: 1px solid #d4af37; /* borda dourada */
+  border-radius: 8px;
+  background: #fff0f1; /* rosa clarinho */
+}
+
+.chat-section {
+  display: flex;
+  justify-content: center;  /* Centraliza na horizontal */
+  align-items: center;      /* Centraliza na vertical */
+  min-height: 100vh;        /* Faz ocupar a tela inteira */
+}

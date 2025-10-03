@@ -19,15 +19,14 @@
             <img src="logo.png" alt="Logo Ana Luiza Fernandes Makeup" class="logo">
             <nav>
                 <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#sobre">Sobre</a></li>
-                    <li><a href="#quem">Sobre - Ana Luiza</a></li>
+                    <li><a href="#home">Início</a></li>
+                    <li><a href="#sobre">Sobre Nós</a></li>
+                    <li><a href="#quem">Ana Luiza</a></li>
                     <li><a href="#depoimentos">Depoimentos</a></li>
                     <li><a href="#portfolio">Portfólio</a></li>
                     <li><a href="#catalogo">Catálogo</a></li>
                     <li><a href="#servicos">Serviços</a></li>
-                    <li><a href="#agendamento">Agendamento</a></li>
-                    <li><a href="#contato">Contato</a></li>
+                    <li><a href="#chat">Agendamento</a></li>
                 </ul>
             </nav>
         </div>
@@ -56,13 +55,13 @@
         </div>
     </section>
 
-<!-- Sobre -->
-<section id="sobre" class="sobre">
-    <div class="container sobre-flex">
-        <div class="sobre-video">
-            <!-- Vídeo pequeno com controles -->
-            <video id="video-thumb" src="interior.mp4" muted loop playsinline controls></video>
-        </div>
+    <!-- Sobre -->
+    <section id="sobre" class="sobre">
+        <div class="container sobre-flex">
+            <div class="sobre-video">
+                <!-- Vídeo pequeno com controles -->
+                <video id="video-thumb" src="interior.mp4" muted loop playsinline controls></video>
+            </div>
             <div class="sobre-texto">
                 <h2>Sobre o Salão</h2>
                 <p>O <strong>Ana Luiza Fernandes Makeup</strong> é um espaço dedicado à beleza, oferecendo atendimento
@@ -77,8 +76,8 @@
                         tornar sua experiência ainda mais especial.</li>
                 </ul>
             </div>
-    </div>
-</section>
+        </div>
+    </section>
 
     <!-- Quem sou -->
     <section id="quem" class="quem">
@@ -225,8 +224,8 @@
                     <p>R$ 35,00</p>
                 </div>
                 <div class="produto">
-                    <h4>TESTE</h4>
-                    <p>R$ 0,00</p>
+                    <h4>DEPILAÇÃO DE BUÇO</h4>
+                    <p>R$ 15,00</p>
                 </div>
             </div>
         </div>
@@ -322,21 +321,36 @@
                 </div>
 
                 <div class="polaroid">
-                    <img src="lash lift.jpg" alt="Lash Lift">
+                    <img src="buço.jpg" alt="Depilação de buço profissional">
                     <div class="portfolio-desc">
-                        <h3>TESTE</h3>
-                        <p>TESTE, TESTE, TESTE, TESTE</p>
+                        <h3>DEPILAÇÃO DE BUÇO</h3>
+                        <p>Remova os pelos indesejados do buço com cuidado e precisão. Nossa técnica garante conforto,
+                            praticidade e resultado imediato para realçar a beleza do seu rosto.</p>
                     </div>
                 </div>
             </div>
+        </div>
     </section>
 
-    <!-- Agendamento -->
-    <section id="agendamento" class="agendamento">
-        <div class="container">
-            <h2>Agende Seu Horário</h2>
-            <p>Vamos agendar seu momento especial? É só mandar um WhatsApp e garantir seu atendimento com carinho!</p>
-            <a href="https://wa.me/5546999401775" target="_blank" class="btn">WhatsApp</a>
+    <!-- Bot de Atendimento -->
+    <section id="chat" class="chat-section">
+        <div class="chat-container">
+            <!-- Título e descrição -->
+            <div class="chat-header" style="text-align: center; padding: 10px 0;">
+                <h2 style="margin: 0; color: #556b2f;">Agendamento Online</h2>
+                <p style="margin: 5px 0 0 0; color: #333; font-size: 0.95rem;">
+                    Use nosso autoatendimento para agendar seu horário de maquiagem de forma rápida e prática.
+                </p>
+            </div>
+
+            <!-- Área de mensagens -->
+            <div id="chatMessages" class="chat-messages"></div>
+
+            <!-- Input do usuário -->
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Digite aqui..." />
+                <button id="sendBtn">Enviar</button>
+            </div>
         </div>
     </section>
 
@@ -446,7 +460,9 @@
         </svg>
     </a>
 
-<script src="script.js"></script>
+
+    <script src="script.js"></script>
 
 </body>
+
 </html>
