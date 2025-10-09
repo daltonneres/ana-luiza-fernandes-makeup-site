@@ -209,6 +209,27 @@
   </footer>
 
   <script>
+  const email = "anafernandesmakeup01@gmail.com";
+  const subject = "Contato via site";
+  const body = "Olá Dalton, gostaria de falar sobre...";
+  
+  const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const gmailWebLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  document.getElementById("email-link").addEventListener("click", function(e) {
+    // Tenta abrir o mailto primeiro
+    window.location.href = mailtoLink;
+
+    // Após 500ms, tenta abrir o Gmail web (fallback)
+    setTimeout(() => {
+      window.open(gmailWebLink, "_blank");
+    }, 500);
+
+    e.preventDefault();
+  });
+</script>
+
+  <script>
     // Accordion functionality
     const accordions = document.querySelectorAll('.accordion');
     accordions.forEach(acc => {
