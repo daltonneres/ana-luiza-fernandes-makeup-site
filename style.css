@@ -11,7 +11,7 @@ body {
 header {
   background-color: #f8d7da;
   border-bottom: 2px solid #d4af37;
-  position: sticky;
+  position: relative; /* ou position: static; */
   top: 0;
   z-index: 1000;
 }
