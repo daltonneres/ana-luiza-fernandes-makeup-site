@@ -224,6 +224,7 @@ function showProcedures() {
     "Semipreso com Tranças - R$ 100,00",
     "Lash Lift - R$ 120,00",
     "Design Personalizado - R$ 35,00",
+    "Design Personalizado + Tintura - R$ 45,00",
     "Depilação de Buço - R$ 15,00"
   ];
 

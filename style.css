@@ -18,11 +18,27 @@ header {
 
 .header-content {
   max-width: 1200px;
+  width: 100%;       /* garante que nunca ultrapasse a tela */
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 10px 10px; /* reduz o padding lateral no celular */
+  box-sizing: border-box; /* inclui o padding na largura */
+}
+
+@media (max-width: 768px) {
+  nav ul {
+    display: flex;
+    flex-direction: column; /* itens empilhados */
+    align-items: flex-start;
+    gap: 8px;
+    padding-left: 0;
+  }
+
+  nav ul li {
+    margin: 0; /* remove margin horizontal que causava overflow */
+  }
 }
 
 .logo {
