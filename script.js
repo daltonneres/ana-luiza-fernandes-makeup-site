@@ -19,7 +19,7 @@ let step = 0;
 const answers = {};
 
 const questions = [
-  "👋 Seja bem-vindo ao autoatendimento da Ana Luiza Fernandes Makeup!\nPor favor, nos diga seu nome:",
+"👋 Olá, MARAVILHOSA! ✨💖\nSeja bem-vinda(o) ao autoatendimento da Ana Luiza Fernandes Makeup!\nPor favor, me diga seu nome para começarmos a te atender com todo carinho:",
   "Prazer em falar com você! Qual seu Instagram? (opcional, digite 'pular')",
   "Qual período prefere? (Manhã, Tarde, Noite)",
   "Quais procedimentos deseja?",
