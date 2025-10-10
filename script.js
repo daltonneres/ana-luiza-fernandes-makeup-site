@@ -59,9 +59,8 @@ function userMessage(text) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// --- Função para enviar os dados à Google Planilha ---
+// --- Função para enviar os dados à Google Planilha via POST ---
 function sendToGoogleSheets() {
-  // Calcula o valor total dos procedimentos
   const valorProcedimentos = answers[questions[3]]
     .split(',')
     .map(p => {
@@ -70,20 +69,25 @@ function sendToGoogleSheets() {
     })
     .reduce((acc, val) => acc + val, 0);
 
-  const url = `https://script.google.com/macros/s/AKfycbx81_AU1vwQpT_zMEYOGWkTc_D3aPz5Bv4_nYA9muRZ-vx9Eg7wtWr2ge8whYiv30VZ/exec?` +
-    `nome=${encodeURIComponent(answers[questions[0]])}` +
-    `&instagram=${encodeURIComponent(answers[questions[1]])}` +
-    `&periodo=${encodeURIComponent(answers["Qual período prefere? (Manhã, Tarde, Noite)"])}` +
-    `&horario=${encodeURIComponent(answers["Escolha o horário"])}` +
-    `&procedimentos=${encodeURIComponent(answers[questions[3]])}` +
-    `&data=${encodeURIComponent(answers[questions[4]])}` +
-    `&pagamento=${encodeURIComponent(answers[questions[5]])}` +
-    `&valor=${encodeURIComponent(valorProcedimentos.toFixed(2))}`;
+  const payload = {
+    nome: answers[questions[0]],
+    instagram: answers[questions[1]],
+    periodo: answers["Qual período prefere? (Manhã, Tarde, Noite)"],
+    horario: answers["Escolha o horário"],
+    procedimentos: answers[questions[3]],
+    data: answers[questions[4]],
+    pagamento: answers[questions[5]],
+    valor: valorProcedimentos.toFixed(2)
+  };
 
-  fetch(url)
-    .then(res => res.text())
-    .then(res => console.log("Planilha:", res))
-    .catch(err => console.error("Erro ao enviar para a planilha:", err));
+  fetch("https://script.google.com/macros/s/AKfycbx81_AU1vwQpT_zMEYOGWkTc_D3aPz5Bv4_nYA9muRZ-vx9Eg7wtWr2ge8whYiv30VZ/exec", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  })
+  .then(res => res.text())
+  .then(res => console.log("Planilha:", res))
+  .catch(err => console.error("Erro ao enviar para a planilha:", err));
 }
 
 // --- Fluxo principal ---
@@ -97,7 +101,7 @@ function askNext() {
     else if (question.includes("pagamento")) showOptions(question);
     else botMessage(question);
   } else {
-    sendToGoogleSheets(); // envia para planilha
+    sendToGoogleSheets(); // envia para a planilha
     sendToWhatsApp();     // envia para WhatsApp
     botMessage("🎉 Obrigada por preencher todas as informações! Voltaremos em breve.");
   }
@@ -167,7 +171,7 @@ function showOptions(question) {
   optionsDiv.id = 'optionsDiv';
   chatMessages.appendChild(optionsDiv);
 
-  let options = ["PIX", "Dinheiro", "Cartão de Crédito", "Cartão de Débito"];
+  const options = ["PIX", "Dinheiro", "Cartão de Crédito", "Cartão de Débito"];
   options.forEach(opt => {
     const btn = document.createElement('button');
     btn.className = "chat-option-btn";
@@ -221,6 +225,7 @@ function showProcedures() {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
   botMessage("Quais procedimentos deseja? (Clique em todos que quiser e depois em 'Concluir')");
+  
   const procedures = [
     "Maquiagem Social - R$ 135,00",
     "Brow Lamination - R$ 120,00",
