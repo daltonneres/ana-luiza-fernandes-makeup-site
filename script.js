@@ -19,7 +19,7 @@ let step = 0;
 const answers = {};
 
 const questions = [
-"👋 Olá, MARAVILHOSA! ✨💖\nSeja bem-vinda(o) ao autoatendimento da Ana Luiza Fernandes Makeup!\nPor favor, me diga seu nome para começarmos a te atender com todo carinho:",
+  "👋 Olá, MARAVILHOSA! ✨💖\nSeja bem-vinda(o) ao autoatendimento da Ana Luiza Fernandes Makeup!\nPor favor, me diga seu nome para começarmos a te atender com todo carinho:",
   "Prazer em falar com você! Qual seu Instagram? (opcional, digite 'pular')",
   "Qual período prefere? (Manhã, Tarde, Noite)",
   "Quais procedimentos deseja?",
@@ -59,24 +59,46 @@ function userMessage(text) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
+// --- Função para enviar os dados à Google Planilha ---
+function sendToGoogleSheets() {
+  // Calcula o valor total dos procedimentos
+  const valorProcedimentos = answers[questions[3]]
+    .split(',')
+    .map(p => {
+      const match = p.match(/\d+,\d+|\d+/);
+      return match ? parseFloat(match[0].replace(',', '.')) : 0;
+    })
+    .reduce((acc, val) => acc + val, 0);
+
+  const url = `https://script.google.com/macros/s/AKfycbx81_AU1vwQpT_zMEYOGWkTc_D3aPz5Bv4_nYA9muRZ-vx9Eg7wtWr2ge8whYiv30VZ/exec?` +
+    `nome=${encodeURIComponent(answers[questions[0]])}` +
+    `&instagram=${encodeURIComponent(answers[questions[1]])}` +
+    `&periodo=${encodeURIComponent(answers["Qual período prefere? (Manhã, Tarde, Noite)"])}` +
+    `&horario=${encodeURIComponent(answers["Escolha o horário"])}` +
+    `&procedimentos=${encodeURIComponent(answers[questions[3]])}` +
+    `&data=${encodeURIComponent(answers[questions[4]])}` +
+    `&pagamento=${encodeURIComponent(answers[questions[5]])}` +
+    `&valor=${encodeURIComponent(valorProcedimentos.toFixed(2))}`;
+
+  fetch(url)
+    .then(res => res.text())
+    .then(res => console.log("Planilha:", res))
+    .catch(err => console.error("Erro ao enviar para a planilha:", err));
+}
+
 // --- Fluxo principal ---
 function askNext() {
   if (step < questions.length) {
     const question = questions[step];
 
-    if (question === "Qual período prefere? (Manhã, Tarde, Noite)") {
-      showPeriods();
-    } else if (question === "Quais procedimentos deseja?") {
-      showProcedures();
-    } else if (question === "Escolha a data:") {
-      showCalendar();
-    } else if (question === "Qual a forma de pagamento? (PIX, Dinheiro, Cartão de Crédito, Cartão de Débito)") {
-      showOptions(question);
-    } else {
-      botMessage(question);
-    }
+    if (question === "Qual período prefere? (Manhã, Tarde, Noite)") showPeriods();
+    else if (question === "Quais procedimentos deseja?") showProcedures();
+    else if (question === "Escolha a data:") showCalendar();
+    else if (question.includes("pagamento")) showOptions(question);
+    else botMessage(question);
   } else {
-    sendToWhatsApp();
+    sendToGoogleSheets(); // envia para planilha
+    sendToWhatsApp();     // envia para WhatsApp
     botMessage("🎉 Obrigada por preencher todas as informações! Voltaremos em breve.");
   }
 }
@@ -85,7 +107,6 @@ function askNext() {
 function showPeriods() {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
-
   botMessage("Qual período prefere?");
   const periods = ["Manhã", "Tarde", "Noite"];
   const optionsDiv = document.createElement('div');
@@ -101,7 +122,6 @@ function showPeriods() {
       answers["Qual período prefere? (Manhã, Tarde, Noite)"] = period;
       userMessage(period);
       optionsDiv.remove();
-      // Mostrar horários de acordo com o período
       showPeriodHours(period);
       resetInactivityTimer();
     };
@@ -138,19 +158,16 @@ function showPeriodHours(period) {
   }
 }
 
-// --- Função para mostrar opções gerais ---
+// --- Mostrar opções ---
 function showOptions(question) {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
-
   botMessage(question);
   const optionsDiv = document.createElement('div');
   optionsDiv.id = 'optionsDiv';
   chatMessages.appendChild(optionsDiv);
 
-  let options = [];
-  if (question.includes("pagamento")) options = ["PIX", "Dinheiro", "Cartão de Crédito", "Cartão de Débito"];
-
+  let options = ["PIX", "Dinheiro", "Cartão de Crédito", "Cartão de Débito"];
   options.forEach(opt => {
     const btn = document.createElement('button');
     btn.className = "chat-option-btn";
@@ -168,11 +185,10 @@ function showOptions(question) {
   });
 }
 
-// --- Função para mostrar calendário ---
+// --- Mostrar calendário ---
 function showCalendar() {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
-
   botMessage('Escolha um dia do mês:');
   const calendarDiv = document.createElement('div');
   calendarDiv.id = 'calendarDiv';
@@ -188,13 +204,7 @@ function showCalendar() {
     btn.className = "chat-option-btn";
     btn.innerText = i;
     btn.style.margin = '3px';
-    if (month === 9 && i >= 18 && i <= 26) {
-      btn.disabled = true;
-      btn.style.backgroundColor = "#ccc";
-      btn.style.cursor = "not-allowed";
-    }
     btn.onclick = () => {
-      if (btn.disabled) return;
       answers["Escolha a data:"] = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
       userMessage(answers["Escolha a data:"]);
       calendarDiv.remove();
@@ -206,11 +216,10 @@ function showCalendar() {
   }
 }
 
-// --- Função para procedimentos ---
+// --- Procedimentos ---
 function showProcedures() {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
-
   botMessage("Quais procedimentos deseja? (Clique em todos que quiser e depois em 'Concluir')");
   const procedures = [
     "Maquiagem Social - R$ 135,00",
