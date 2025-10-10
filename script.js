@@ -80,14 +80,25 @@ function sendToGoogleSheets() {
     valor: valorProcedimentos.toFixed(2)
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbx81_AU1vwQpT_zMEYOGWkTc_D3aPz5Bv4_nYA9muRZ-vx9Eg7wtWr2ge8whYiv30VZ/exec", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  })
-  .then(res => res.text())
-  .then(res => console.log("Planilha:", res))
-  .catch(err => console.error("Erro ao enviar para a planilha:", err));
+fetch("https://script.google.com/macros/s/SEU_DEPLOY_ID/exec", {
+  method: "POST",
+  body: JSON.stringify({
+    nome: answers[questions[0]],
+    instagram: answers[questions[1]],
+    periodo: answers["Qual período prefere? (Manhã, Tarde, Noite)"],
+    horario: answers["Escolha o horário"],
+    procedimentos: answers[questions[3]],
+    data: answers[questions[4]],
+    pagamento: answers[questions[5]],
+    valor: valorProcedimentos.toFixed(2)
+  }),
+  headers: {
+    "Content-Type": "application/json"
+  }
+})
+.then(res => res.json())
+.then(res => console.log("Planilha:", res))
+.catch(err => console.error("Erro ao enviar para a planilha:", err));
 }
 
 // --- Fluxo principal ---
