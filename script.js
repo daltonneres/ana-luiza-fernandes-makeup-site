@@ -19,7 +19,7 @@ let step = 0;
 const answers = {};
 
 const questions = [
-"👋 Olá, MARAVILHOSA! ✨💖\nSeja bem-vinda(o) ao autoatendimento da Ana Luiza Fernandes Makeup!\nPor favor, me diga seu nome para começarmos a te atender com todo carinho:",
+  "👋 Olá, MARAVILHOSA! ✨💖\nSeja bem-vinda(o) ao autoatendimento da Ana Luiza Fernandes Makeup!\nPor favor, me diga seu nome para começarmos a te atender com todo carinho:",
   "Prazer em falar com você! Qual seu Instagram? (opcional, digite 'pular')",
   "Qual período prefere? (Manhã, Tarde, Noite)",
   "Quais procedimentos deseja?",
@@ -59,24 +59,59 @@ function userMessage(text) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
+// --- Firebase Firestore ---
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAlZAZjT8ZOWPf40Tf4lowdXcWxO179e1I",
+  authDomain: "ana-makeup-bot.firebaseapp.com",
+  projectId: "ana-makeup-bot",
+  storageBucket: "ana-makeup-bot.firebasestorage.app",
+  messagingSenderId: "448009074377",
+  appId: "1:448009074377:web:fe1f01d20f35be123f7f18"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// --- Função para calcular valor total ---
+function calcularValor(procedimentosTexto) {
+  const mapaPrecos = {
+    "Maquiagem Social": 135,
+    "Brow Lamination": 120,
+    "Maquiagem Express": 105,
+    "Baby Liss": 60,
+    "Semipreso Romântico": 90,
+    "Coque Express": 120,
+    "Brow Lamination + Henna": 135,
+    "Rabo Clássico": 80,
+    "Semipreso com Tranças": 100,
+    "Lash Lift": 120,
+    "Design Personalizado": 35,
+    "Design Personalizado + Tintura": 45,
+    "Depilação de Buço": 15
+  };
+
+  let total = 0;
+  for (const nome in mapaPrecos) {
+    if (procedimentosTexto.includes(nome)) total += mapaPrecos[nome];
+  }
+  return total;
+}
+
 // --- Fluxo principal ---
 function askNext() {
   if (step < questions.length) {
     const question = questions[step];
 
-    if (question === "Qual período prefere? (Manhã, Tarde, Noite)") {
-      showPeriods();
-    } else if (question === "Quais procedimentos deseja?") {
-      showProcedures();
-    } else if (question === "Escolha a data:") {
-      showCalendar();
-    } else if (question === "Qual a forma de pagamento? (PIX, Dinheiro, Cartão de Crédito, Cartão de Débito)") {
-      showOptions(question);
-    } else {
-      botMessage(question);
-    }
+    if (question === "Qual período prefere? (Manhã, Tarde, Noite)") showPeriods();
+    else if (question === "Quais procedimentos deseja?") showProcedures();
+    else if (question === "Escolha a data:") showCalendar();
+    else if (question === "Qual a forma de pagamento? (PIX, Dinheiro, Cartão de Crédito, Cartão de Débito)") showOptions(question);
+    else botMessage(question);
   } else {
-    sendToWhatsApp();
+    sendToWhatsAppAndFirestore();
     botMessage("🎉 Obrigada por preencher todas as informações! Voltaremos em breve.");
   }
 }
@@ -101,7 +136,6 @@ function showPeriods() {
       answers["Qual período prefere? (Manhã, Tarde, Noite)"] = period;
       userMessage(period);
       optionsDiv.remove();
-      // Mostrar horários de acordo com o período
       showPeriodHours(period);
       resetInactivityTimer();
     };
@@ -138,7 +172,7 @@ function showPeriodHours(period) {
   }
 }
 
-// --- Função para mostrar opções gerais ---
+// --- Opções gerais ---
 function showOptions(question) {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
@@ -148,9 +182,7 @@ function showOptions(question) {
   optionsDiv.id = 'optionsDiv';
   chatMessages.appendChild(optionsDiv);
 
-  let options = [];
-  if (question.includes("pagamento")) options = ["PIX", "Dinheiro", "Cartão de Crédito", "Cartão de Débito"];
-
+  const options = ["PIX", "Dinheiro", "Cartão de Crédito", "Cartão de Débito"];
   options.forEach(opt => {
     const btn = document.createElement('button');
     btn.className = "chat-option-btn";
@@ -168,7 +200,7 @@ function showOptions(question) {
   });
 }
 
-// --- Função para mostrar calendário ---
+// --- Calendário ---
 function showCalendar() {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
@@ -188,13 +220,7 @@ function showCalendar() {
     btn.className = "chat-option-btn";
     btn.innerText = i;
     btn.style.margin = '3px';
-    if (month === 9 && i >= 18 && i <= 26) {
-      btn.disabled = true;
-      btn.style.backgroundColor = "#ccc";
-      btn.style.cursor = "not-allowed";
-    }
     btn.onclick = () => {
-      if (btn.disabled) return;
       answers["Escolha a data:"] = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
       userMessage(answers["Escolha a data:"]);
       calendarDiv.remove();
@@ -206,7 +232,7 @@ function showCalendar() {
   }
 }
 
-// --- Função para procedimentos ---
+// --- Procedimentos ---
 function showProcedures() {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
@@ -269,8 +295,8 @@ function showProcedures() {
   optionsDiv.appendChild(doneBtn);
 }
 
-// --- Envia para WhatsApp ---
-function sendToWhatsApp() {
+// --- Envia para WhatsApp e salva no Firestore ---
+async function sendToWhatsAppAndFirestore() {
   const mensagem = `Olá! Gostaria de agendar um horário:\n\n` +
     `Nome: ${answers[questions[0]]}\n` +
     `Instagram: ${answers[questions[1]]}\n` +
@@ -283,6 +309,21 @@ function sendToWhatsApp() {
   const telefone = "554699401775";
   const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
   window.open(url, '_blank');
+
+  // Salva no Firestore
+  try {
+    await addDoc(collection(db, "agendamentos"), {
+      nome: answers[questions[0]],
+      horario: answers["Escolha o horário"],
+      data: answers[questions[4]],
+      procedimento: answers[questions[3]],
+      formaPagamento: answers[questions[5]],
+      valor: calcularValor(answers[questions[3]])
+    });
+    console.log("✅ Agendamento salvo no Firestore!");
+  } catch (e) {
+    console.error("❌ Erro ao salvar no Firestore:", e);
+  }
 }
 
 // --- Captura input manual ---
@@ -301,6 +342,7 @@ sendBtn.addEventListener('click', () => {
 
 // --- Inicializa ---
 document.addEventListener("DOMContentLoaded", () => {
-  askNext();
+  // Mostrar imediatamente a primeira pergunta
+  botMessage(questions[0]);
   resetInactivityTimer();
 });
