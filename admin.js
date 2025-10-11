@@ -31,8 +31,8 @@ const pagamentosResumo = document.getElementById("pagamentosResumo");
 const btnApagarTudo = document.getElementById("btnApagarTudo");
 
 // --- Login ---
-const usuarioCorreto = "ana";
-const senhaCorreta = "AnaMakeup2025";
+const usuarioCorreto = "AnaLuiza-Makeup";
+const senhaCorreta = "AnaLuiza-Makeup-2025-SaltodoLontra";
 
 btnLogin.addEventListener("click", () => {
   const usuario = usuarioInput.value.trim();
