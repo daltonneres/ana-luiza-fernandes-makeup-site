@@ -215,19 +215,33 @@ function showCalendar() {
   const month = today.getMonth();
   const lastDay = new Date(year, month + 1, 0).getDate();
 
+  // dias bloqueados (18 a 26)
+  const blockedDays = [18, 19, 20, 21, 22, 23, 24, 25, 26];
+
   for (let i = 1; i <= lastDay; i++) {
     const btn = document.createElement('button');
     btn.className = "chat-option-btn";
     btn.innerText = i;
     btn.style.margin = '3px';
-    btn.onclick = () => {
-      answers["Escolha a data:"] = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-      userMessage(answers["Escolha a data:"]);
-      calendarDiv.remove();
-      step++;
-      askNext();
-      resetInactivityTimer();
-    };
+
+    if (blockedDays.includes(i)) {
+      // Desativa botão visualmente e funcionalmente
+      btn.disabled = true;
+      btn.style.backgroundColor = '#9bb6a2'; // verde acinzentado igual ao da imagem
+      btn.style.color = '#333';
+      btn.style.cursor = 'not-allowed';
+      btn.style.opacity = '0.8';
+    } else {
+      btn.onclick = () => {
+        answers["Escolha a data:"] = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+        userMessage(answers["Escolha a data:"]);
+        calendarDiv.remove();
+        step++;
+        askNext();
+        resetInactivityTimer();
+      };
+    }
+
     calendarDiv.appendChild(btn);
   }
 }
@@ -346,3 +360,4 @@ document.addEventListener("DOMContentLoaded", () => {
   botMessage(questions[0]);
   resetInactivityTimer();
 });
+
