@@ -18,12 +18,13 @@ const sendBtn = document.getElementById('sendBtn');
 let step = 0;
 const answers = {};
 
+// --- Perguntas do fluxo ---
 const questions = [
   "👋 Olá, MARAVILHOSA! ✨💖\nSeja bem-vinda(o) ao autoatendimento da Ana Luiza Fernandes Makeup!\nPor favor, me diga seu nome para começarmos a te atender com todo carinho:",
   "Prazer em falar com você! Qual seu Instagram? (opcional, digite 'pular')",
+  "Escolha a data:",
   "Qual período prefere? (Manhã, Tarde, Noite)",
   "Quais procedimentos deseja?",
-  "Escolha a data:",
   "Qual a forma de pagamento? (PIX, Dinheiro, Cartão de Crédito, Cartão de Débito)"
 ];
 
@@ -200,50 +201,82 @@ function showOptions(question) {
   });
 }
 
-// --- Calendário ---
 function showCalendar() {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
 
-  botMessage('Escolha um dia do mês:');
-  const calendarDiv = document.createElement('div');
-  calendarDiv.id = 'calendarDiv';
-  chatMessages.appendChild(calendarDiv);
+  botMessage('Escolha o mês e o dia desejado:');
 
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-  const lastDay = new Date(year, month + 1, 0).getDate();
+  const calendarContainer = document.createElement('div');
+  calendarContainer.id = 'calendarContainer';
+  chatMessages.appendChild(calendarContainer);
 
-  // dias bloqueados (18 a 26)
-  const blockedDays = [18, 19, 20, 21, 22, 23, 24, 25, 26];
+  // Meses disponíveis
+  const monthsAvailable = [
+    { name: "Novembro 2025", month: 10, year: 2025 },
+    { name: "Dezembro 2025", month: 11, year: 2025 },
+    { name: "Janeiro 2026", month: 0, year: 2026 },
+    { name: "Fevereiro 2026", month: 1, year: 2026 },
+    { name: "Março 2026", month: 2, year: 2026 },
+    { name: "Abril 2026", month: 3, year: 2026 },
+    { name: "Maio 2026", month: 4, year: 2026 },
+    { name: "Junho 2026", month: 5, year: 2026 },
+    { name: "Julho 2026", month: 6, year: 2026 },
+    { name: "Agosto 2026", month: 7, year: 2026 },
+    { name: "Setembro 2026", month: 8, year: 2026 },
+  ];
 
-  for (let i = 1; i <= lastDay; i++) {
-    const btn = document.createElement('button');
-    btn.className = "chat-option-btn";
-    btn.innerText = i;
-    btn.style.margin = '3px';
+  // Dropdown de meses
+  const monthSelect = document.createElement('select');
+  monthSelect.className = 'chat-option-select';
+  monthsAvailable.forEach(opt => {
+    const option = document.createElement('option');
+    option.value = JSON.stringify({ year: opt.year, month: opt.month });
+    option.textContent = opt.name;
+    monthSelect.appendChild(option);
+  });
+  calendarContainer.appendChild(monthSelect);
 
-    if (blockedDays.includes(i)) {
-      // Desativa botão visualmente e funcionalmente
-      btn.disabled = true;
-      btn.style.backgroundColor = '#9bb6a2'; // verde acinzentado igual ao da imagem
-      btn.style.color = '#333';
-      btn.style.cursor = 'not-allowed';
-      btn.style.opacity = '0.8';
-    } else {
+  // Div dos dias
+  const daysDiv = document.createElement('div');
+  daysDiv.id = 'calendarDays';
+  daysDiv.style.marginTop = '10px';
+  calendarContainer.appendChild(daysDiv);
+
+  // Renderiza os dias
+  function renderDays(year, month) {
+    daysDiv.innerHTML = '';
+    const lastDay = new Date(year, month + 1, 0).getDate();
+
+    for (let i = 1; i <= lastDay; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'chat-option-btn';
+      btn.innerText = i;
+      btn.style.margin = '3px';
+
       btn.onclick = () => {
-        answers["Escolha a data:"] = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-        userMessage(answers["Escolha a data:"]);
-        calendarDiv.remove();
+        const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+        answers["Escolha a data:"] = dateString;
+        userMessage(dateString);
+        calendarContainer.remove();
         step++;
         askNext();
         resetInactivityTimer();
       };
-    }
 
-    calendarDiv.appendChild(btn);
+      daysDiv.appendChild(btn);
+    }
   }
+
+  // Mostra inicialmente Novembro/2025
+  renderDays(2025, 10);
+
+  // Atualiza conforme o mês escolhido
+  monthSelect.addEventListener('change', (e) => {
+    const { year, month } = JSON.parse(e.target.value);
+    renderDays(year, month);
+    resetInactivityTimer();
+  });
 }
 
 // --- Procedimentos ---
