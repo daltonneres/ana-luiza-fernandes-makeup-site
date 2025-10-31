@@ -18,9 +18,8 @@ const sendBtn = document.getElementById('sendBtn');
 let step = 0;
 const answers = {};
 
-// --- Perguntas do fluxo ---
 const questions = [
-  "👋 Olá, MARAVILHOSA! ✨💖\nSeja bem-vinda(o) ao autoatendimento da Ana Luiza Fernandes Makeup!\nPor favor, me diga seu nome para começarmos a te atender com todo carinho:",
+  "👋 Olá, MARAVILHOSA! ✨💖\nSeja bem-vinda(o) ao autoatendimento da Ana Luiza Fernandes Makeup!\nPor favor, me diga seu nome para começarmos:",
   "Prazer em falar com você! Qual seu Instagram? (opcional, digite 'pular')",
   "Escolha a data:",
   "Qual período prefere? (Manhã, Tarde, Noite)",
@@ -29,7 +28,6 @@ const questions = [
 ];
 
 let inactivityTimer;
-
 function resetInactivityTimer() {
   clearTimeout(inactivityTimer);
   inactivityTimer = setTimeout(() => {
@@ -41,7 +39,7 @@ function resetInactivityTimer() {
     userInput.style.display = 'block';
     sendBtn.style.display = 'block';
     askNext();
-  }, 30000); // 30 segundos
+  }, 30000);
 }
 
 function botMessage(text) {
@@ -76,7 +74,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// --- Função para calcular valor total ---
+// --- Calcular valor ---
 function calcularValor(procedimentosTexto) {
   const mapaPrecos = {
     "Maquiagem Social": 135,
@@ -101,11 +99,10 @@ function calcularValor(procedimentosTexto) {
   return total;
 }
 
-// --- Fluxo principal ---
+// --- Fluxo ---
 function askNext() {
   if (step < questions.length) {
     const question = questions[step];
-
     if (question === "Qual período prefere? (Manhã, Tarde, Noite)") showPeriods();
     else if (question === "Quais procedimentos deseja?") showProcedures();
     else if (question === "Escolha a data:") showCalendar();
@@ -117,11 +114,10 @@ function askNext() {
   }
 }
 
-// --- Mostrar períodos e horários ---
+// --- Períodos ---
 function showPeriods() {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
-
   botMessage("Qual período prefere?");
   const periods = ["Manhã", "Tarde", "Noite"];
   const optionsDiv = document.createElement('div');
@@ -132,7 +128,6 @@ function showPeriods() {
     const btn = document.createElement('button');
     btn.className = "chat-option-btn";
     btn.innerText = period;
-    btn.style.margin = '3px';
     btn.onclick = () => {
       answers["Qual período prefere? (Manhã, Tarde, Noite)"] = period;
       userMessage(period);
@@ -145,7 +140,7 @@ function showPeriods() {
 }
 
 function showPeriodHours(period) {
-  botMessage(`Escolha o horário desejado (${period}):`);
+  botMessage(`Escolha o horário (${period}):`);
   const optionsDiv = document.createElement('div');
   optionsDiv.id = 'optionsDiv';
   chatMessages.appendChild(optionsDiv);
@@ -160,7 +155,6 @@ function showPeriodHours(period) {
     const btn = document.createElement('button');
     btn.className = "chat-option-btn";
     btn.innerText = hour;
-    btn.style.margin = '3px';
     btn.onclick = () => {
       answers["Escolha o horário"] = hour;
       userMessage(hour);
@@ -173,11 +167,10 @@ function showPeriodHours(period) {
   }
 }
 
-// --- Opções gerais ---
+// --- Opções ---
 function showOptions(question) {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
-
   botMessage(question);
   const optionsDiv = document.createElement('div');
   optionsDiv.id = 'optionsDiv';
@@ -188,7 +181,6 @@ function showOptions(question) {
     const btn = document.createElement('button');
     btn.className = "chat-option-btn";
     btn.innerText = opt;
-    btn.style.margin = '3px';
     btn.onclick = () => {
       answers[question] = opt;
       userMessage(opt);
@@ -201,81 +193,60 @@ function showOptions(question) {
   });
 }
 
+// --- Calendário ---
 function showCalendar() {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
+  botMessage('Escolha o mês e o dia:');
+  const container = document.createElement('div');
+  container.id = 'calendarContainer';
+  chatMessages.appendChild(container);
 
-  botMessage('Escolha o mês e o dia desejado:');
-
-  const calendarContainer = document.createElement('div');
-  calendarContainer.id = 'calendarContainer';
-  chatMessages.appendChild(calendarContainer);
-
-  // Meses disponíveis
   const monthsAvailable = [
     { name: "Novembro 2025", month: 10, year: 2025 },
     { name: "Dezembro 2025", month: 11, year: 2025 },
     { name: "Janeiro 2026", month: 0, year: 2026 },
-    { name: "Fevereiro 2026", month: 1, year: 2026 },
-    { name: "Março 2026", month: 2, year: 2026 },
-    { name: "Abril 2026", month: 3, year: 2026 },
-    { name: "Maio 2026", month: 4, year: 2026 },
-    { name: "Junho 2026", month: 5, year: 2026 },
-    { name: "Julho 2026", month: 6, year: 2026 },
-    { name: "Agosto 2026", month: 7, year: 2026 },
-    { name: "Setembro 2026", month: 8, year: 2026 },
+    { name: "Fevereiro 2026", month: 1, year: 2026 }
   ];
 
-  // Dropdown de meses
   const monthSelect = document.createElement('select');
-  monthSelect.className = 'chat-option-select';
   monthsAvailable.forEach(opt => {
     const option = document.createElement('option');
     option.value = JSON.stringify({ year: opt.year, month: opt.month });
     option.textContent = opt.name;
     monthSelect.appendChild(option);
   });
-  calendarContainer.appendChild(monthSelect);
+  container.appendChild(monthSelect);
 
-  // Div dos dias
   const daysDiv = document.createElement('div');
   daysDiv.id = 'calendarDays';
   daysDiv.style.marginTop = '10px';
-  calendarContainer.appendChild(daysDiv);
+  container.appendChild(daysDiv);
 
-  // Renderiza os dias
   function renderDays(year, month) {
     daysDiv.innerHTML = '';
     const lastDay = new Date(year, month + 1, 0).getDate();
-
     for (let i = 1; i <= lastDay; i++) {
       const btn = document.createElement('button');
       btn.className = 'chat-option-btn';
       btn.innerText = i;
-      btn.style.margin = '3px';
-
       btn.onclick = () => {
         const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
         answers["Escolha a data:"] = dateString;
         userMessage(dateString);
-        calendarContainer.remove();
+        container.remove();
         step++;
         askNext();
         resetInactivityTimer();
       };
-
       daysDiv.appendChild(btn);
     }
   }
 
-  // Mostra inicialmente Novembro/2025
   renderDays(2025, 10);
-
-  // Atualiza conforme o mês escolhido
   monthSelect.addEventListener('change', (e) => {
     const { year, month } = JSON.parse(e.target.value);
     renderDays(year, month);
-    resetInactivityTimer();
   });
 }
 
@@ -283,8 +254,7 @@ function showCalendar() {
 function showProcedures() {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
-
-  botMessage("Quais procedimentos deseja? (Clique em todos que quiser e depois em 'Concluir')");
+  botMessage("Quais procedimentos deseja?");
   const procedures = [
     "Maquiagem Social - R$ 135,00",
     "Brow Lamination - R$ 120,00",
@@ -301,22 +271,20 @@ function showProcedures() {
     "Depilação de Buço - R$ 15,00"
   ];
 
-  const selectedProcedures = [];
+  const selected = [];
   const optionsDiv = document.createElement('div');
-  optionsDiv.id = 'optionsDiv';
   chatMessages.appendChild(optionsDiv);
 
   procedures.forEach(proc => {
     const btn = document.createElement('button');
     btn.className = "chat-option-btn";
     btn.innerText = proc;
-    btn.style.margin = '3px';
     btn.onclick = () => {
-      if (!selectedProcedures.includes(proc)) {
-        selectedProcedures.push(proc);
+      if (!selected.includes(proc)) {
+        selected.push(proc);
         btn.style.backgroundColor = "#00bcd4";
       } else {
-        selectedProcedures.splice(selectedProcedures.indexOf(proc), 1);
+        selected.splice(selected.indexOf(proc), 1);
         btn.style.backgroundColor = "#00e5ff";
       }
       resetInactivityTimer();
@@ -329,11 +297,10 @@ function showProcedures() {
   doneBtn.innerText = "Concluir";
   doneBtn.style.backgroundColor = "#556b2f";
   doneBtn.style.color = "white";
-  doneBtn.style.margin = '5px';
   doneBtn.onclick = () => {
-    if (selectedProcedures.length === 0) return;
-    answers[questions[step]] = selectedProcedures.join(", ");
-    userMessage(selectedProcedures.join(", "));
+    if (selected.length === 0) return;
+    answers["Quais procedimentos deseja?"] = selected.join(", ");
+    userMessage(selected.join(", "));
     optionsDiv.remove();
     step++;
     askNext();
@@ -342,30 +309,30 @@ function showProcedures() {
   optionsDiv.appendChild(doneBtn);
 }
 
-// --- Envia para WhatsApp e salva no Firestore ---
+// --- Enviar para WhatsApp + Firestore ---
 async function sendToWhatsAppAndFirestore() {
   const mensagem = `Olá! Gostaria de agendar um horário:\n\n` +
     `Nome: ${answers[questions[0]]}\n` +
     `Instagram: ${answers[questions[1]]}\n` +
+    `Data: ${answers["Escolha a data:"]}\n` +
     `Período: ${answers["Qual período prefere? (Manhã, Tarde, Noite)"]}\n` +
     `Horário: ${answers["Escolha o horário"]}\n` +
-    `Procedimentos: ${answers[questions[3]]}\n` +
-    `Data: ${answers[questions[4]]}\n` +
+    `Procedimentos: ${answers["Quais procedimentos deseja?"]}\n` +
     `Pagamento: ${answers[questions[5]]}`;
 
   const telefone = "554699401775";
-  const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
-  window.open(url, '_blank');
+  window.open(`https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`, '_blank');
 
-  // Salva no Firestore
   try {
     await addDoc(collection(db, "agendamentos"), {
       nome: answers[questions[0]],
+      instagram: answers[questions[1]],
+      data: answers["Escolha a data:"],
+      periodo: answers["Qual período prefere? (Manhã, Tarde, Noite)"],
       horario: answers["Escolha o horário"],
-      data: answers[questions[4]],
-      procedimento: answers[questions[3]],
-      formaPagamento: answers[questions[5]],
-      valor: calcularValor(answers[questions[3]])
+      procedimento: answers["Quais procedimentos deseja?"],
+      formaPagamento: answers["Qual a forma de pagamento? (PIX, Dinheiro, Cartão de Crédito, Cartão de Débito)"],
+      valor: calcularValor(answers["Quais procedimentos deseja?"]) || 0
     });
     console.log("✅ Agendamento salvo no Firestore!");
   } catch (e) {
@@ -373,14 +340,12 @@ async function sendToWhatsAppAndFirestore() {
   }
 }
 
-// --- Captura input manual ---
+// --- Input manual ---
 sendBtn.addEventListener('click', () => {
   const input = userInput.value.trim();
   if (!input) return;
-
   userMessage(input);
   answers[questions[step]] = input.toLowerCase() === 'pular' ? 'Não informado' : input;
-
   userInput.value = '';
   step++;
   askNext();
@@ -389,8 +354,6 @@ sendBtn.addEventListener('click', () => {
 
 // --- Inicializa ---
 document.addEventListener("DOMContentLoaded", () => {
-  // Mostrar imediatamente a primeira pergunta
   botMessage(questions[0]);
   resetInactivityTimer();
 });
-
