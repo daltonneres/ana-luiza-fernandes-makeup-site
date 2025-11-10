@@ -388,7 +388,8 @@ table {
     });
   </script>
 
-  <style>
+    <style>
+/* --- Dropdown Responsivo --- */
 .dropdown {
   position: relative;
   display: inline-block;
@@ -409,10 +410,11 @@ table {
   position: absolute;
   background-color: white;
   min-width: 180px;
-  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
-  z-index: 10;
+  z-index: 9999;
   text-align: left;
+  overflow: hidden;
 }
 
 .dropdown-content a {
@@ -426,10 +428,7 @@ table {
 .dropdown-content a:hover {
   background-color: #f3f4f6;
 }
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
 </style>
+
 </body>
 </html>
