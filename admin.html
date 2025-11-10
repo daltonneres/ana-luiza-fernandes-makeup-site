@@ -29,20 +29,23 @@
     <h1>📋 Agendamentos - Ana Makeup</h1>
 
     <table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Data</th>
-          <th>Período</th>
-          <th>Horário</th>
-          <th>Procedimento</th>
-          <th>Forma de Pagamento</th>
-          <th>Valor (R$)</th>
-          <th>Desconto?</th>
-          <th>Valor Final (R$)</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Telefone</th>
+      <th>Data</th>
+      <th>Período</th>
+      <th>Horário</th>
+      <th>Procedimento</th>
+      <th>Forma de Pagamento</th>
+      <th>Valor (R$)</th>
+      <th>Desconto?</th>
+      <th>Valor Final (R$)</th>
+      <th>Concluído</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
       <tbody id="tabelaAgendamentos"></tbody>
     </table>
 
@@ -384,5 +387,49 @@ table {
       }
     });
   </script>
+
+  <style>
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  background-color: #3498db;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 180px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  z-index: 10;
+  text-align: left;
+}
+
+.dropdown-content a {
+  color: #333;
+  padding: 10px 14px;
+  text-decoration: none;
+  display: block;
+  font-size: 13px;
+}
+
+.dropdown-content a:hover {
+  background-color: #f3f4f6;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+</style>
 </body>
 </html>

@@ -141,25 +141,22 @@ async function carregarAgendamentos() {
     agendamentos.push(ag);
   });
 
-  // --- Ordenar por data (crescente: dia 01 → fim do mês) ---
-  agendamentos.sort((a, b) => {
-    if (!a.data) return 1;
-    if (!b.data) return -1;
-    return new Date(a.data) - new Date(b.data);
-  });
+  agendamentos.sort((a, b) => new Date(a.data) - new Date(b.data));
 
   let total = 0;
   let pagamentos = {};
   let contador = 0;
 
   agendamentos.forEach((ag) => {
-    const dataBase = ag.data.slice(0, 7); // yyyy-mm
+    const dataBase = ag.data.slice(0, 7);
     if (filtroMes !== "todos" && dataBase !== filtroMes) return;
     if (filtroDia && ag.data !== filtroDia) return;
 
     const valor = Number(ag.valor || 0);
     const desconto = Number(ag.desconto || 0);
     const valorFinal = Math.max(valor - desconto, 0);
+    const concluido = ag.concluido === true;
+
     contador++;
     total += valorFinal;
 
@@ -169,7 +166,8 @@ async function carregarAgendamentos() {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${ag.nome || "-"}</td>
-      <td>${ag.data || "-"}</td>
+      <td>${ag.telefone || "-"}</td>
+      <td>${ag.data ? ag.data.split("-").reverse().join("/") : "-"}</td>
       <td>${ag.periodo || "-"}</td>
       <td>${ag.horario || "-"}</td>
       <td>${ag.procedimento || "-"}</td>
@@ -177,15 +175,27 @@ async function carregarAgendamentos() {
       <td>R$ ${valor.toFixed(2)}</td>
       <td>${desconto > 0 ? "Sim (R$ " + desconto.toFixed(2) + ")" : "Não"}</td>
       <td><strong>R$ ${valorFinal.toFixed(2)}</strong></td>
+      <td><input type="checkbox" class="chkConcluir" data-id="${ag.id}" ${concluido ? "checked" : ""}></td>
       <td>
-        <button class="btnEditar" data-id="${ag.id}" style="background:#3498db; color:white; border:none; border-radius:6px; padding:5px 10px; cursor:pointer;">Editar</button>
-        <button class="btnExcluir" data-id="${ag.id}" style="background:#e74c3c; color:white; border:none; border-radius:6px; padding:5px 10px; cursor:pointer;">Excluir</button>
+        <div class="dropdown">
+          <button class="dropbtn">⚙️ Ações</button>
+          <div class="dropdown-content">
+            <a href="#" class="editarAtendimento" data-id="${ag.id}">✏️ Editar Atendimento</a>
+            <a href="#" class="confirmarWhats" 
+               data-tel="${ag.telefone}" 
+               data-nome="${ag.nome}" 
+               data-data="${ag.data}" 
+               data-periodo="${ag.periodo}" 
+               data-horario="${ag.horario}" 
+               data-procedimento="${ag.procedimento}" 
+               data-valor="${(ag.valor - (ag.desconto || 0)).toFixed(2)}">💬 Confirmar Agendamento</a>
+          </div>
+        </div>
       </td>
     `;
     tabelaAgendamentos.appendChild(tr);
   });
 
-    // --- Atualizar resumo ---
   totalAgendamentos.textContent = `Total de agendamentos: ${contador}`;
   valorTotal.textContent = `Valor total: R$ ${total.toFixed(2)}`;
 
@@ -195,29 +205,177 @@ async function carregarAgendamentos() {
   resumoHTML += "</ul>";
   pagamentosResumo.innerHTML = resumoHTML;
 
-  // --- Botões de edição e exclusão ---
-  document.querySelectorAll(".btnEditar").forEach((btn) => {
+  // --- Botão de Editar Atendimento ---
+  document.querySelectorAll(".editarAtendimento").forEach((btn) => {
     btn.addEventListener("click", async (e) => {
       const id = e.target.dataset.id;
-      const novoValor = parseFloat(prompt("Novo valor (R$):"));
-      const desconto = parseFloat(prompt("Desconto (R$):")) || 0;
-      if (isNaN(novoValor)) return alert("Valor inválido.");
-      await updateDoc(doc(db, "agendamentos", id), { valor: novoValor, desconto });
-      alert("Atendimento atualizado!");
-      carregarAgendamentos();
+      const querySnapshot = await getDocs(collection(db, "agendamentos"));
+      let atendimento = null;
+
+      querySnapshot.forEach((docSnap) => {
+        if (docSnap.id === id) atendimento = { id: docSnap.id, ...docSnap.data() };
+      });
+
+      if (!atendimento) return alert("Atendimento não encontrado.");
+
+      // Modal de edição
+      const modalEdit = document.createElement("div");
+      modalEdit.className = "modal";
+      modalEdit.style.display = "flex";
+      modalEdit.innerHTML = `
+        <div class="modal-content">
+          <span class="close" id="fecharEditModal" style="cursor:pointer;">&times;</span>
+          <h2>✏️ Editar Atendimento</h2>
+
+          <label>Nome:</label>
+          <input type="text" id="editNome" value="${atendimento.nome || ""}" />
+
+          <label>Telefone:</label>
+          <input type="tel" id="editTelefone" value="${atendimento.telefone || ""}" />
+
+          <label>Data:</label>
+          <input type="date" id="editData" value="${atendimento.data || ""}" />
+
+          <label>Período:</label>
+          <select id="editPeriodo">
+            <option ${atendimento.periodo === "Manhã" ? "selected" : ""}>Manhã</option>
+            <option ${atendimento.periodo === "Tarde" ? "selected" : ""}>Tarde</option>
+            <option ${atendimento.periodo === "Noite" ? "selected" : ""}>Noite</option>
+          </select>
+
+          <label>Horário:</label>
+          <input type="time" id="editHorario" value="${atendimento.horario || ""}" />
+
+          <label>Procedimento:</label>
+          <input type="text" id="editProcedimento" value="${atendimento.procedimento || ""}" />
+
+          <label>Forma de Pagamento:</label>
+          <select id="editPagamento">
+            <option ${atendimento.formaPagamento === "PIX" ? "selected" : ""}>PIX</option>
+            <option ${atendimento.formaPagamento === "Dinheiro" ? "selected" : ""}>Dinheiro</option>
+            <option ${atendimento.formaPagamento === "Cartão de Crédito" ? "selected" : ""}>Cartão de Crédito</option>
+            <option ${atendimento.formaPagamento === "Cartão de Débito" ? "selected" : ""}>Cartão de Débito</option>
+          </select>
+
+          <label>Valor (R$):</label>
+          <input type="number" id="editValor" value="${atendimento.valor || 0}" />
+
+          <label>Desconto (R$):</label>
+          <input type="number" id="editDesconto" value="${atendimento.desconto || 0}" />
+
+          <label>Observações:</label>
+          <textarea id="editObs">${atendimento.observacoes || ""}</textarea>
+
+          <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:12px;">
+            <button id="deletarAtendimento" class="btnPerigo">🗑️ Excluir</button>
+            <button id="salvarEdit" class="btnPrimario">💾 Salvar Alterações</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modalEdit);
+
+      // Fechar modal
+      document.getElementById("fecharEditModal").onclick = () => modalEdit.remove();
+      modalEdit.addEventListener("click", (ev) => { if (ev.target === modalEdit) modalEdit.remove(); });
+
+      // Salvar alterações
+      document.getElementById("salvarEdit").addEventListener("click", async () => {
+        const nome = document.getElementById("editNome").value.trim();
+        const telefone = document.getElementById("editTelefone").value.trim();
+        const data = document.getElementById("editData").value;
+        const periodo = document.getElementById("editPeriodo").value;
+        const horario = document.getElementById("editHorario").value;
+        const procedimento = document.getElementById("editProcedimento").value.trim();
+        const formaPagamento = document.getElementById("editPagamento").value;
+        const valor = parseFloat(document.getElementById("editValor").value || 0);
+        const desconto = parseFloat(document.getElementById("editDesconto").value || 0);
+        const observacoes = document.getElementById("editObs").value.trim();
+
+        if (!nome || !data || !procedimento) {
+          alert("Preencha os campos obrigatórios!");
+          return;
+        }
+
+        await updateDoc(doc(db, "agendamentos", id), {
+          nome,
+          telefone,
+          data,
+          periodo,
+          horario,
+          procedimento,
+          formaPagamento,
+          valor,
+          desconto,
+          observacoes
+        });
+
+        alert("✅ Atendimento atualizado com sucesso!");
+        modalEdit.remove();
+        carregarAgendamentos();
+      });
+
+      // Excluir atendimento
+      document.getElementById("deletarAtendimento").addEventListener("click", async () => {
+        if (!confirm("Tem certeza que deseja excluir este atendimento?")) return;
+        await deleteDoc(doc(db, "agendamentos", id));
+        alert("🗑️ Atendimento excluído!");
+        modalEdit.remove();
+        carregarAgendamentos();
+      });
     });
   });
 
-  document.querySelectorAll(".btnExcluir").forEach((btn) => {
-    btn.addEventListener("click", async (e) => {
+// --- Confirmar Agendamento (WhatsApp) ---
+document.querySelectorAll(".confirmarWhats").forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const nome = btn.dataset.nome || "Maravilhosa";
+    const tel = (btn.dataset.tel || "").replace(/\D/g, "");
+    const data = btn.dataset.data ? btn.dataset.data.split("-").reverse().join("/") : "-";
+    const periodo = btn.dataset.periodo || "-";
+    const horario = btn.dataset.horario || "-";
+    const procedimento = btn.dataset.procedimento || "-";
+    const valor = btn.dataset.valor || "0,00";
+
+    const localizacao = "https://maps.app.goo.gl/xxxxxxxxx"; // 🔗 substitua pelo link real
+
+    const mensagemBruta = `
+Olá ${nome} 😍✨
+
+Passando aqui para te lembrar que o seu agendamento aqui no *Espaço Ana Luiza Makeup* é no dia *${data}*, no período *${periodo}*, às *${horario}*.
+
+Os procedimentos realizados serão: *${procedimento}*.
+O valor total ficou em *R$ ${valor}*.
+
+Também segue em anexo a localização do nosso espaço:
+${localizacao}
+
+Esperamos você aqui! Beijos 😘✨💖
+`;
+
+    const mensagemCodificada = encodeURIComponent(mensagemBruta);
+
+    if (!tel) {
+      alert("❌ Número de telefone não informado!");
+      return;
+    }
+
+    const link = `https://wa.me/55${tel}?text=${mensagemCodificada}`;
+    window.open(link, "_blank");
+  });
+});
+
+
+  // --- Checkbox de conclusão ---
+  document.querySelectorAll(".chkConcluir").forEach((chk) => {
+    chk.addEventListener("change", async (e) => {
       const id = e.target.dataset.id;
-      if (!confirm("Deseja excluir este atendimento?")) return;
-      await deleteDoc(doc(db, "agendamentos", id));
-      alert("Atendimento excluído!");
-      carregarAgendamentos();
+      const concluido = e.target.checked;
+      await updateDoc(doc(db, "agendamentos", id), { concluido });
+      if (concluido) alert("💖 Mais um atendimento concluído! Parabéns, Ana! 🎉✨");
     });
   });
-} 
+}
 
 // --- Apagar todos --- //
 btnApagarTudo.addEventListener("click", async () => {
@@ -242,6 +400,7 @@ btnFecharModal.addEventListener("click", () => {
 
 btnSalvarManual.addEventListener("click", async () => {
   const nome = document.getElementById("nomeManual").value.trim();
+  const telefone = document.getElementById("telefoneManual")?.value.trim() || "";
   const data = document.getElementById("dataManual").value;
   const periodo = document.getElementById("periodoManual").value;
   const horario = document.getElementById("horaManual").value;
@@ -257,8 +416,17 @@ btnSalvarManual.addEventListener("click", async () => {
   }
 
   await addDoc(collection(db, "agendamentos"), {
-    nome, data, periodo, horario, procedimento,
-    formaPagamento, valor, desconto, observacoes: obs,
+    nome,
+    telefone,
+    data,
+    periodo,
+    horario,
+    procedimento,
+    formaPagamento,
+    valor,
+    desconto,
+    observacoes: obs,
+    concluido: false
   });
 
   alert("✅ Atendimento adicionado!");
@@ -267,7 +435,6 @@ btnSalvarManual.addEventListener("click", async () => {
   carregarAgendamentos();
 });
 
-// --- Exibir login inicial --- //
 document.addEventListener("DOMContentLoaded", () => {
   loginContainer.style.display = "flex";
 });

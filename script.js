@@ -20,6 +20,7 @@ const answers = {};
 
 const questions = [
   "👋 Olá, MARAVILHOSA! ✨💖\nSeja bem-vinda(o) ao autoatendimento da Ana Luiza Fernandes Makeup!\nPor favor, me diga seu nome para começarmos:",
+  "Perfeito! Agora, poderia me informar seu número de telefone com DDD? 📞",
   "Prazer em falar com você! Qual seu Instagram? (opcional, digite 'pular')",
   "Escolha a data:",
   "Qual período prefere? (Manhã, Tarde, Noite)",
@@ -313,6 +314,7 @@ function showProcedures() {
 async function sendToWhatsAppAndFirestore() {
   const mensagem = `Olá! Gostaria de agendar um horário:\n\n` +
     `Nome: ${answers[questions[0]]}\n` +
+    `Telefone: ${answers[questions[1]]}\n` +
     `Instagram: ${answers[questions[1]]}\n` +
     `Data: ${answers["Escolha a data:"]}\n` +
     `Período: ${answers["Qual período prefere? (Manhã, Tarde, Noite)"]}\n` +
@@ -326,6 +328,7 @@ async function sendToWhatsAppAndFirestore() {
   try {
     await addDoc(collection(db, "agendamentos"), {
       nome: answers[questions[0]],
+      telefone: answers[questions[1]],
       instagram: answers[questions[1]],
       data: answers["Escolha a data:"],
       periodo: answers["Qual período prefere? (Manhã, Tarde, Noite)"],
