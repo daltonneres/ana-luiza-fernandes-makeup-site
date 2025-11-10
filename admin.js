@@ -194,25 +194,6 @@ async function carregarAgendamentos() {
       </td>
     `;
     tabelaAgendamentos.appendChild(tr);
-
-    // --- Dropdown responsivo (abre e fecha no clique) ---
-document.querySelectorAll(".dropbtn").forEach((btn) => {
-  btn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const dropdown = btn.nextElementSibling;
-    const isVisible = dropdown.style.display === "block";
-
-    // Fecha todos antes de abrir outro
-    document.querySelectorAll(".dropdown-content").forEach(dc => dc.style.display = "none");
-
-    dropdown.style.display = isVisible ? "none" : "block";
-  });
-});
-
-// Fecha o menu se clicar fora
-window.addEventListener("click", () => {
-  document.querySelectorAll(".dropdown-content").forEach(dc => dc.style.display = "none");
-});
   });
 
   totalAgendamentos.textContent = `Total de agendamentos: ${contador}`;
