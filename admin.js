@@ -217,7 +217,7 @@ async function carregarAgendamentos() {
       carregarAgendamentos();
     });
   });
-}
+} 
 
 // --- Apagar todos --- //
 btnApagarTudo.addEventListener("click", async () => {
