@@ -1,4 +1,4 @@
-// --- Firebase Firestore ---
+// --- Firebase --- //
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore,
@@ -9,6 +9,12 @@ import {
   updateDoc,
   addDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAlZAZjT8ZOWPf40Tf4lowdXcWxO179e1I",
@@ -21,8 +27,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
-// --- Elementos ---
+// --- Elementos --- //
 const loginContainer = document.getElementById("loginContainer");
 const adminContainer = document.getElementById("adminContainer");
 const usuarioInput = document.getElementById("usuario");
@@ -37,28 +44,37 @@ const pagamentosResumo = document.getElementById("pagamentosResumo");
 const btnApagarTudo = document.getElementById("btnApagarTudo");
 const btnNovoAtendimento = document.getElementById("btnNovoAtendimento");
 
-// --- Login ---
-const usuarioCorreto = "AnaLuiza-Makeup";
-const senhaCorreta = "AnaLuiza-Makeup-2025-SaltodoLontra";
-
-btnLogin.addEventListener("click", () => {
-  const usuario = usuarioInput.value.trim();
+// --- Login com Firebase Auth --- //
+btnLogin.addEventListener("click", async () => {
+  const email = usuarioInput.value.trim();
   const senha = senhaInput.value.trim();
 
-  if (usuario === usuarioCorreto && senha === senhaCorreta) {
-    loginContainer.style.display = "none";
-    adminContainer.style.display = "block";
-    carregarAgendamentos();
-  } else {
+  try {
+    await signInWithEmailAndPassword(auth, email, senha);
+    erroLogin.style.display = "none";
+  } catch (error) {
+    console.error("Erro no login:", error);
     erroLogin.style.display = "block";
   }
 });
 
-btnLogout.addEventListener("click", () => {
-  adminContainer.style.display = "none";
-  loginContainer.style.display = "flex";
-  usuarioInput.value = "";
-  senhaInput.value = "";
+// --- Logout --- //
+btnLogout.addEventListener("click", async () => {
+  await signOut(auth);
+});
+
+// --- Observa o estado do login --- //
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    loginContainer.style.display = "none";
+    adminContainer.style.display = "block";
+    carregarAgendamentos();
+  } else {
+    adminContainer.style.display = "none";
+    loginContainer.style.display = "flex";
+    usuarioInput.value = "";
+    senhaInput.value = "";
+  }
 });
 
 // --- Carregar agendamentos ---
