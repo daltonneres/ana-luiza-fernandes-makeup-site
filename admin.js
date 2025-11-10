@@ -109,7 +109,10 @@ async function carregarAgendamentos() {
       <td>R$ ${valor.toFixed(2)}</td>
       <td>${desconto > 0 ? "Sim (R$ " + desconto.toFixed(2) + ")" : "Não"}</td>
       <td><strong>R$ ${valorFinal.toFixed(2)}</strong></td>
-      <td><button class="btnEditar" data-id="${documento.id}">Editar</button></td>
+      <td>
+        <button class="btnEditar" data-id="${documento.id}" style="background:#3498db; color:white; border:none; border-radius:6px; padding:5px 10px; cursor:pointer;">Editar</button>
+        <button class="btnExcluir" data-id="${documento.id}" style="background:#e74c3c; color:white; border:none; border-radius:6px; padding:5px 10px; cursor:pointer;">Excluir</button>
+      </td>
     `;
     tabelaAgendamentos.appendChild(tr);
   });
@@ -125,7 +128,7 @@ async function carregarAgendamentos() {
   resumoHTML += "</ul>";
   pagamentosResumo.innerHTML = resumoHTML;
 
-  // Botões de edição
+  // --- Botões de edição individual ---
   document.querySelectorAll(".btnEditar").forEach((btn) => {
     btn.addEventListener("click", async (e) => {
       const id = e.target.dataset.id;
@@ -141,6 +144,23 @@ async function carregarAgendamentos() {
 
       alert("Atendimento atualizado com sucesso!");
       carregarAgendamentos();
+    });
+  });
+
+  // --- Botões de exclusão individual ---
+  document.querySelectorAll(".btnExcluir").forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      const id = e.target.dataset.id;
+      const confirmar = confirm("Deseja realmente excluir este atendimento?");
+      if (!confirmar) return;
+
+      try {
+        await deleteDoc(doc(db, "agendamentos", id));
+        alert("🗑️ Atendimento excluído com sucesso!");
+        carregarAgendamentos();
+      } catch (erro) {
+        alert("❌ Erro ao excluir: " + erro.message);
+      }
     });
   });
 }
