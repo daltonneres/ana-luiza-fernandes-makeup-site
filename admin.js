@@ -48,7 +48,6 @@ const btnNovoAtendimento = document.getElementById("btnNovoAtendimento");
 btnLogin.addEventListener("click", async () => {
   const email = usuarioInput.value.trim();
   const senha = senhaInput.value.trim();
-
   try {
     await signInWithEmailAndPassword(auth, email, senha);
     erroLogin.style.display = "none";
@@ -80,7 +79,6 @@ onAuthStateChanged(auth, (user) => {
 // --- Criar filtros de mês e dia --- //
 function criarFiltros() {
   if (document.getElementById("filtrosContainer")) return;
-
   const filtrosContainer = document.createElement("div");
   filtrosContainer.id = "filtrosContainer";
   filtrosContainer.style.display = "flex";
@@ -133,11 +131,10 @@ async function carregarAgendamentos() {
   const filtroDia = document.getElementById("filtroDia")?.value || "";
 
   let agendamentos = [];
-
-  querySnapshot.forEach((documento) => {
-    const ag = documento.data();
+  querySnapshot.forEach((docSnap) => {
+    const ag = docSnap.data();
     if (!ag.data) return;
-    ag.id = documento.id;
+    ag.id = docSnap.id;
     agendamentos.push(ag);
   });
 
@@ -159,7 +156,6 @@ async function carregarAgendamentos() {
 
     contador++;
     total += valorFinal;
-
     if (ag.formaPagamento)
       pagamentos[ag.formaPagamento] = (pagamentos[ag.formaPagamento] || 0) + valorFinal;
 
@@ -202,7 +198,6 @@ async function carregarAgendamentos() {
   resumoHTML += "</ul>";
   pagamentosResumo.innerHTML = resumoHTML;
 
-  // --- Checkbox de conclusão --- //
   document.querySelectorAll(".chkConcluir").forEach((chk) => {
     chk.addEventListener("change", async (e) => {
       const id = e.target.dataset.id;
@@ -213,7 +208,7 @@ async function carregarAgendamentos() {
   });
 }
 
-// --- Modal de Ações Moderno --- //
+// --- Modal de Ações --- //
 const modalAcoes = document.getElementById("modalAcoes");
 const fecharAcoes = document.getElementById("fecharAcoes");
 const btnFecharModalAcoes = document.getElementById("acaoFechar");
@@ -243,13 +238,52 @@ fecharAcoes.onclick = () => modalAcoes.style.display = "none";
 btnFecharModalAcoes.onclick = () => modalAcoes.style.display = "none";
 window.onclick = (e) => { if (e.target === modalAcoes) modalAcoes.style.display = "none"; };
 
-// Editar
-document.getElementById("acaoEditar").onclick = () => {
+// --- Editar --- //
+document.getElementById("acaoEditar").onclick = async () => {
   modalAcoes.style.display = "none";
-  document.querySelector(`[data-id='${agendamentoSelecionado.id}'].editarAtendimento`)?.click();
+  const docSnap = await getDocs(collection(db, "agendamentos"));
+  const ag = docSnap.docs.find(d => d.id === agendamentoSelecionado.id)?.data();
+  if (!ag) return alert("Erro ao carregar o atendimento!");
+
+  document.getElementById("modalNovo").style.display = "flex";
+  document.getElementById("nomeManual").value = ag.nome || "";
+  document.getElementById("telefoneManual").value = ag.telefone || "";
+  document.getElementById("dataManual").value = ag.data || "";
+  document.getElementById("periodoManual").value = ag.periodo || "Manhã";
+  document.getElementById("horaManual").value = ag.horario || "";
+  document.getElementById("procedimentoManual").value = ag.procedimento || "";
+  document.getElementById("pagamentoManual").value = ag.formaPagamento || "PIX";
+  document.getElementById("valorManual").value = ag.valor || "";
+  document.getElementById("descontoManual").value = ag.desconto || "";
+  document.getElementById("obsManual").value = ag.observacoes || "";
+
+  const btnSalvar = document.getElementById("salvarManual");
+  btnSalvar.textContent = "💾 Salvar Alterações";
+  btnSalvar.onclick = async () => {
+    const nome = document.getElementById("nomeManual").value.trim();
+    const telefone = document.getElementById("telefoneManual").value.trim();
+    const data = document.getElementById("dataManual").value;
+    const periodo = document.getElementById("periodoManual").value;
+    const horario = document.getElementById("horaManual").value;
+    const procedimento = document.getElementById("procedimentoManual").value.trim();
+    const formaPagamento = document.getElementById("pagamentoManual").value;
+    const valor = parseFloat(document.getElementById("valorManual").value || 0);
+    const desconto = parseFloat(document.getElementById("descontoManual").value || 0);
+    const obs = document.getElementById("obsManual").value.trim();
+
+    await updateDoc(doc(db, "agendamentos", agendamentoSelecionado.id), {
+      nome, telefone, data, periodo, horario, procedimento, formaPagamento, valor, desconto, observacoes: obs
+    });
+
+    alert("✅ Atendimento atualizado!");
+    document.getElementById("modalNovo").style.display = "none";
+    carregarAgendamentos();
+    btnSalvar.textContent = "💾 Salvar Atendimento";
+    btnSalvar.onclick = salvarNovoAtendimento;
+  };
 };
 
-// WhatsApp
+// --- WhatsApp --- //
 document.getElementById("acaoWhats").onclick = () => {
   modalAcoes.style.display = "none";
   const nome = agendamentoSelecionado.nome || "Maravilhosa";
@@ -269,7 +303,7 @@ Te esperamos no Espaço Ana Luiza Makeup! 💄✨
   window.open(link, "_blank");
 };
 
-// Excluir
+// --- Excluir --- //
 document.getElementById("acaoExcluir").onclick = async () => {
   if (!confirm("Tem certeza que deseja excluir este atendimento?")) return;
   await deleteDoc(doc(db, "agendamentos", agendamentoSelecionado.id));
@@ -288,18 +322,17 @@ btnApagarTudo.addEventListener("click", async () => {
   carregarAgendamentos();
 });
 
-// --- Novo Atendimento Manual --- //
+// --- Novo Atendimento --- //
 btnNovoAtendimento.addEventListener("click", () => {
   document.getElementById("modalNovo").style.display = "flex";
 });
 
-const btnSalvarManual = document.getElementById("salvarManual");
 const btnFecharModal = document.getElementById("fecharModal");
 btnFecharModal.addEventListener("click", () => {
   document.getElementById("modalNovo").style.display = "none";
 });
 
-btnSalvarManual.addEventListener("click", async () => {
+async function salvarNovoAtendimento() {
   const nome = document.getElementById("nomeManual").value.trim();
   const telefone = document.getElementById("telefoneManual")?.value.trim() || "";
   const data = document.getElementById("dataManual").value;
@@ -317,24 +350,16 @@ btnSalvarManual.addEventListener("click", async () => {
   }
 
   await addDoc(collection(db, "agendamentos"), {
-    nome,
-    telefone,
-    data,
-    periodo,
-    horario,
-    procedimento,
-    formaPagamento,
-    valor,
-    desconto,
-    observacoes: obs,
-    concluido: false
+    nome, telefone, data, periodo, horario, procedimento,
+    formaPagamento, valor, desconto, observacoes: obs, concluido: false
   });
 
   alert("✅ Atendimento adicionado!");
   document.getElementById("modalNovo").style.display = "none";
   document.querySelectorAll("#modalNovo input, #modalNovo textarea").forEach(el => el.value = "");
   carregarAgendamentos();
-});
+}
+document.getElementById("salvarManual").onclick = salvarNovoAtendimento;
 
 document.addEventListener("DOMContentLoaded", () => {
   loginContainer.style.display = "flex";
