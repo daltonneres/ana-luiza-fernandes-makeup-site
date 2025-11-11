@@ -430,6 +430,70 @@ table {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
+/* --- Modal de Ações Bonito --- */
+.modal-acoes {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 380px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  animation: aparecer 0.25s ease;
+}
+
+.modal-acoes h2 {
+  color: #c2185b;
+  margin-bottom: 10px;
+}
+
+.modal-acoes p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.acoes-botoes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btnFechar {
+  background: #888;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btnFechar:hover {
+  background: #666;
+}
+
+@keyframes aparecer {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
 </style>
+
+<!-- Modal de Ações Bonito -->
+<div id="modalAcoes" class="modal">
+  <div class="modal-acoes">
+    <span id="fecharAcoes" class="close">&times;</span>
+    <h2>⚙️ Escolher Ação</h2>
+    <p>O que você deseja fazer com este atendimento?</p>
+    <div class="acoes-botoes">
+      <button id="acaoEditar" class="btnPrimario">✏️ Editar Atendimento</button>
+      <button id="acaoWhats" class="btnSecundario">💬 Confirmar no WhatsApp</button>
+      <button id="acaoExcluir" class="btnPerigo">🗑️ Excluir Atendimento</button>
+      <button id="acaoFechar" class="btnFechar">❌ Fechar</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
