@@ -288,7 +288,10 @@ document.getElementById("acaoWhats").onclick = () => {
   modalAcoes.style.display = "none";
   const nome = agendamentoSelecionado.nome || "Maravilhosa";
   const tel = (agendamentoSelecionado.telefone || "").replace(/\D/g, "");
-  const data = agendamentoSelecionado.data ? agendamentoSelecionado.data.split("-").reverse().join("/") : "-";
+  const data = agendamentoSelecionado.data
+    ? agendamentoSelecionado.data.split("-").reverse().join("/")
+    : "-";
+
   const msg = `
 Olá ${nome} 😍✨
 
@@ -296,8 +299,13 @@ Seu atendimento está confirmado para *${data}*, período *${agendamentoSelecion
 Procedimento: *${agendamentoSelecionado.procedimento}*.
 Valor: *R$ ${agendamentoSelecionado.valor}* 💖
 
-Te esperamos no Espaço Ana Luiza Makeup! 💄✨
+📍 Local: *Espaço Ana Luiza Makeup*  
+Salto Do Lontra-PR
+🗺️ https://maps.app.goo.gl/n74UzXbv88cw8Mbq5?g_st=ipc
+
+Te esperamos com muito carinho! 💄✨
 `;
+
   if (!tel) return alert("Telefone não informado!");
   const link = `https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`;
   window.open(link, "_blank");
