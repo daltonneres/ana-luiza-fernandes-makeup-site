@@ -203,12 +203,27 @@ function showCalendar() {
   container.id = 'calendarContainer';
   chatMessages.appendChild(container);
 
-  const monthsAvailable = [
-    { name: "Novembro 2025", month: 10, year: 2025 },
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+  const currentDay = today.getDate();
+
+  // --- MESES ATUALIZADOS (NOVEMBRO REMOVIDO + MARÇO E ABRIL INCLUÍDOS) ---
+  let monthsAvailable = [
     { name: "Dezembro 2025", month: 11, year: 2025 },
     { name: "Janeiro 2026", month: 0, year: 2026 },
-    { name: "Fevereiro 2026", month: 1, year: 2026 }
+    { name: "Fevereiro 2026", month: 1, year: 2026 },
+    { name: "Março 2026", month: 2, year: 2026 },
+    { name: "Abril 2026", month: 3, year: 2026 }
   ];
+
+  // --- Remove meses passados automaticamente ---
+  monthsAvailable = monthsAvailable.filter(m => {
+    return (
+      m.year > currentYear ||
+      (m.year === currentYear && m.month >= currentMonth)
+    );
+  });
 
   const monthSelect = document.createElement('select');
   monthsAvailable.forEach(opt => {
@@ -225,27 +240,46 @@ function showCalendar() {
   container.appendChild(daysDiv);
 
   function renderDays(year, month) {
-    daysDiv.innerHTML = '';
+    daysDiv.innerHTML = "";
     const lastDay = new Date(year, month + 1, 0).getDate();
+
     for (let i = 1; i <= lastDay; i++) {
       const btn = document.createElement('button');
-      btn.className = 'chat-option-btn';
+      btn.className = "chat-option-btn";
       btn.innerText = i;
-      btn.onclick = () => {
-        const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-        answers["Escolha a data:"] = dateString;
-        userMessage(dateString);
-        container.remove();
-        step++;
-        askNext();
-        resetInactivityTimer();
-      };
+
+      // --- BLOQUEIO AUTOMÁTICO DE DIAS PASSADOS ---
+      const isPastDay =
+        year === currentYear &&
+        month === currentMonth &&
+        i < currentDay; // O dia de hoje fica disponível
+
+      if (isPastDay) {
+        btn.disabled = true;
+        btn.style.opacity = "0.4";
+        btn.style.cursor = "not-allowed";
+      } else {
+        btn.onclick = () => {
+          const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+          answers["Escolha a data:"] = dateString;
+          userMessage(dateString);
+          container.remove();
+          step++;
+          askNext();
+          resetInactivityTimer();
+        };
+      }
+
       daysDiv.appendChild(btn);
     }
   }
 
-  renderDays(2025, 10);
-  monthSelect.addEventListener('change', (e) => {
+  // Exibir automaticamente o primeiro mês válido
+  const firstMonth = JSON.parse(monthSelect.value);
+  renderDays(firstMonth.year, firstMonth.month);
+
+  // Troca de mês
+  monthSelect.addEventListener("change", (e) => {
     const { year, month } = JSON.parse(e.target.value);
     renderDays(year, month);
   });
@@ -311,16 +345,33 @@ function showProcedures() {
 }
 
 // --- Enviar para WhatsApp + Firestore ---
+function formatarTelefone(tel) {
+  // Entrada: 46 999999999
+  const [ddd, numero] = tel.split(" ");
+
+  if (numero.length === 9) {
+    // Formato 99999-9999
+    return `(${ddd}) ${numero.slice(0,5)}-${numero.slice(5)}`;
+  } else {
+    // Formato 9999-9999
+    return `(${ddd}) ${numero.slice(0,4)}-${numero.slice(4)}`;
+  }
+}
+
 async function sendToWhatsAppAndFirestore() {
-  const mensagem = `Olá! Gostaria de agendar um horário:\n\n` +
-    `Nome: ${answers[questions[0]]}\n` +
-    `Telefone: ${answers[questions[1]]}\n` +
-    `Instagram: ${answers[questions[1]]}\n` +
-    `Data: ${answers["Escolha a data:"]}\n` +
-    `Período: ${answers["Qual período prefere? (Manhã, Tarde, Noite)"]}\n` +
-    `Horário: ${answers["Escolha o horário"]}\n` +
-    `Procedimentos: ${answers["Quais procedimentos deseja?"]}\n` +
-    `Pagamento: ${answers[questions[5]]}`;
+const mensagem = 
+  `Olá Ana! 💕 Tudo bem?\n` +
+  `Estou passando aqui pelo seu atendimento automático e gostaria muito de agendar um horário com você! ✨\n\n` +
+  `Aqui estão minhas informações:\n` +
+  `👤 Nome: ${answers[questions[0]]}\n` +
+  `📞 Telefone: ${formatarTelefone(answers[questions[1]])}\n` +
+  `📸 Instagram: ${answers[questions[2]]}\n` +
+  `📅 Data escolhida: ${answers["Escolha a data:"]}\n` +
+  `🕒 Período: ${answers["Qual período prefere? (Manhã, Tarde, Noite)"]}\n` +
+  `⏰ Horário: ${answers["Escolha o horário"]}\n` +
+  `💄 Procedimentos desejados: ${answers["Quais procedimentos deseja?"]}\n` +
+  `💳 Forma de pagamento: ${answers[questions[6]]}\n\n` +
+  `Fico no aguardo da sua confirmação. Obrigado pelo carinho e atenção! ✨🥰`;
 
   const telefone = "554699401775";
   window.open(`https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`, '_blank');
@@ -328,8 +379,8 @@ async function sendToWhatsAppAndFirestore() {
   try {
     await addDoc(collection(db, "agendamentos"), {
       nome: answers[questions[0]],
-      telefone: answers[questions[1]],
-      instagram: answers[questions[1]],
+      telefone: formatarTelefone(answers[questions[1]]),
+      instagram: answers[questions[2]],
       data: answers["Escolha a data:"],
       periodo: answers["Qual período prefere? (Manhã, Tarde, Noite)"],
       horario: answers["Escolha o horário"],
@@ -337,7 +388,9 @@ async function sendToWhatsAppAndFirestore() {
       formaPagamento: answers["Qual a forma de pagamento? (PIX, Dinheiro, Cartão de Crédito, Cartão de Débito)"],
       valor: calcularValor(answers["Quais procedimentos deseja?"]) || 0
     });
+
     console.log("✅ Agendamento salvo no Firestore!");
+
   } catch (e) {
     console.error("❌ Erro ao salvar no Firestore:", e);
   }
@@ -346,7 +399,19 @@ async function sendToWhatsAppAndFirestore() {
 // --- Input manual ---
 sendBtn.addEventListener('click', () => {
   const input = userInput.value.trim();
+
   if (!input) return;
+
+  // --- VALIDAÇÃO EXCLUSIVA DO TELEFONE ---
+  if (questions[step] === "Perfeito! Agora, poderia me informar seu número de telefone com DDD? 📞") {
+    const telefoneRegex = /^[0-9]{2} [0-9]{8,9}$/; // 00 000000000
+
+    if (!telefoneRegex.test(input)) {
+      botMessage("⚠️ Número inválido!\nSiga o formato: 00 000000000");
+      return; // não avança
+    }
+  }
+
   userMessage(input);
   answers[questions[step]] = input.toLowerCase() === 'pular' ? 'Não informado' : input;
   userInput.value = '';
