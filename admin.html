@@ -23,7 +23,8 @@
     <div id="adminHeader" style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px;">
       <button id="btnLogout" class="btnSecundario">📤 Sair</button>
       <button id="btnNovoAtendimento" class="btnPrimario">➕ Novo Atendimento</button>
-      <button id="btnApagarTudo" class="btnPerigo">🗑️ Apagar Todos</button>
+      <button id="btnExportar" class="btnSecundario">📄 Exportar PDF</button>
+      <button id="btnApagarMes" class="btnPerigo">🗑️ Apagar mês</button>
     </div>
 
     <h1>📋 Agendamentos - Ana Makeup</h1>
@@ -312,6 +313,13 @@ table {
   color: #000;
 }
 
+#btnApagarMes {
+  opacity: 0.9;
+}
+#btnApagarMes:hover {
+  opacity: 1;
+}
+
 /* --- Responsividade --- */
 @media (max-width: 768px) {
   h1 {
@@ -334,64 +342,7 @@ table {
     padding: 20px;
   }
 }
-  </style>
 
-  <script type="module">
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAlZAZjT8ZOWPf40Tf4lowdXcWxO179e1I",
-      authDomain: "ana-makeup-bot.firebaseapp.com",
-      projectId: "ana-makeup-bot",
-      storageBucket: "ana-makeup-bot.firebasestorage.app",
-      messagingSenderId: "448009074377",
-      appId: "1:448009074377:web:fe1f01d20f35be123f7f18"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const modal = document.getElementById("modalNovo");
-    const btnAbrir = document.getElementById("btnNovoAtendimento");
-    const btnFechar = document.getElementById("fecharModal");
-    const btnSalvar = document.getElementById("salvarManual");
-
-    btnAbrir.addEventListener("click", () => modal.style.display = "flex");
-    btnFechar.addEventListener("click", () => modal.style.display = "none");
-    window.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
-
-    btnSalvar.addEventListener("click", async () => {
-      const nome = document.getElementById("nomeManual").value.trim();
-      const data = document.getElementById("dataManual").value;
-      const periodo = document.getElementById("periodoManual").value;
-      const horario = document.getElementById("horaManual").value;
-      const procedimento = document.getElementById("procedimentoManual").value.trim();
-      const formaPagamento = document.getElementById("pagamentoManual").value;
-      const valor = parseFloat(document.getElementById("valorManual").value || 0);
-      const desconto = parseFloat(document.getElementById("descontoManual").value || 0);
-      const obs = document.getElementById("obsManual").value.trim();
-
-      if (!nome || !data || !horario || !procedimento) {
-        alert("Preencha todos os campos obrigatórios!");
-        return;
-      }
-
-      try {
-        await addDoc(collection(db, "agendamentos"), {
-          nome, data, periodo, horario, procedimento,
-          formaPagamento, valor, desconto, observacoes: obs
-        });
-        alert("✅ Atendimento adicionado com sucesso!");
-        modal.style.display = "none";
-        window.location.reload(); // Atualiza a lista
-      } catch (e) {
-        alert("❌ Erro ao salvar: " + e.message);
-      }
-    });
-  </script>
-
-  <style>
 .dropdown {
   position: relative;
   display: inline-block;
@@ -497,6 +448,9 @@ table {
     </div>
   </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
 
 </body>
 </html>

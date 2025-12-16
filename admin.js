@@ -41,7 +41,8 @@ const tabelaAgendamentos = document.getElementById("tabelaAgendamentos");
 const totalAgendamentos = document.getElementById("totalAgendamentos");
 const valorTotal = document.getElementById("valorTotal");
 const pagamentosResumo = document.getElementById("pagamentosResumo");
-const btnApagarTudo = document.getElementById("btnApagarTudo");
+const btnExportar = document.getElementById("btnExportar");
+const btnApagarMes = document.getElementById("btnApagarMes");
 const btnNovoAtendimento = document.getElementById("btnNovoAtendimento");
 
 // --- Login --- //
@@ -320,7 +321,8 @@ document.getElementById("acaoExcluir").onclick = async () => {
   carregarAgendamentos();
 };
 
-// --- Apagar todos --- //
+// --- Apagar todos DESATIVADO por segurança --- //
+/*
 btnApagarTudo.addEventListener("click", async () => {
   if (!confirm("Tem certeza que deseja apagar todos os agendamentos?")) return;
   const querySnapshot = await getDocs(collection(db, "agendamentos"));
@@ -329,6 +331,7 @@ btnApagarTudo.addEventListener("click", async () => {
   alert("Todos foram apagados!");
   carregarAgendamentos();
 });
+*/
 
 // --- Novo Atendimento --- //
 btnNovoAtendimento.addEventListener("click", () => {
@@ -372,3 +375,89 @@ document.getElementById("salvarManual").onclick = salvarNovoAtendimento;
 document.addEventListener("DOMContentLoaded", () => {
   loginContainer.style.display = "flex";
 });
+
+async function exportarPDF(mes) {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+
+  const querySnapshot = await getDocs(collection(db, "agendamentos"));
+  let linhas = [];
+  let total = 0;
+
+  querySnapshot.forEach(docSnap => {
+    const ag = docSnap.data();
+    if (ag.data?.startsWith(mes)) {
+      const valorFinal = Math.max(
+        Number(ag.valor || 0) - Number(ag.desconto || 0),
+        0
+      );
+
+      total += valorFinal;
+
+      linhas.push([
+        ag.nome || "-",
+        ag.telefone || "-",
+        ag.data.split("-").reverse().join("/"),
+        ag.procedimento || "-",
+        ag.formaPagamento || "-",
+        `R$ ${valorFinal.toFixed(2)}`
+      ]);
+    }
+  });
+
+  if (!linhas.length) {
+    alert("Nenhum dado encontrado para este mês.");
+    return false;
+  }
+
+  pdf.text(`Relatório de Agendamentos - ${mes}`, 14, 15);
+
+  pdf.autoTable({
+    startY: 25,
+    head: [["Nome", "Telefone", "Data", "Procedimento", "Pagamento", "Valor"]],
+    body: linhas,
+    styles: { fontSize: 9 }
+  });
+
+  const y = pdf.lastAutoTable.finalY || 40;
+  pdf.text(`Total do mês: R$ ${total.toFixed(2)}`, 14, y + 10);
+
+  pdf.save(`agendamentos-${mes}.pdf`);
+  return true;
+}
+
+async function apagarPorMes(mes) {
+  const querySnapshot = await getDocs(collection(db, "agendamentos"));
+
+  for (const docSnap of querySnapshot.docs) {
+    const ag = docSnap.data();
+    if (ag.data?.startsWith(mes)) {
+      await deleteDoc(doc(db, "agendamentos", docSnap.id));
+    }
+  }
+
+  alert(`Agendamentos de ${mes} apagados com sucesso.`);
+}
+
+
+let pdfExportado = false;
+
+btnExportar.onclick = async () => {
+  const mes = document.getElementById("filtroMes").value;
+  if (mes === "todos") return alert("Selecione um mês.");
+  pdfExportado = await exportarPDF(mes);
+};
+
+btnApagarMes.onclick = async () => {
+  if (!pdfExportado) {
+    alert("⚠️ Exporte o PDF antes de apagar.");
+    return;
+  }
+
+  const mes = document.getElementById("filtroMes").value;
+  if (!confirm(`Tem certeza que deseja apagar os dados de ${mes}?`)) return;
+
+  await apagarPorMes(mes);
+  pdfExportado = false;
+  carregarAgendamentos();
+};
