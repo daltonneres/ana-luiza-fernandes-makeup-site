@@ -139,7 +139,30 @@ async function carregarAgendamentos() {
     agendamentos.push(ag);
   });
 
-  agendamentos.sort((a, b) => new Date(a.data) - new Date(b.data));
+const ordemPeriodo = {
+  "Manhã": 1,
+  "Tarde": 2,
+  "Noite": 3
+};
+
+agendamentos.sort((a, b) => {
+  // 1️⃣ Ordena pela data
+  const dataA = new Date(a.data);
+  const dataB = new Date(b.data);
+  if (dataA.getTime() !== dataB.getTime()) {
+    return dataA - dataB;
+  }
+
+  // 2️⃣ Se for o mesmo dia, ordena pelo período
+  const periodoA = ordemPeriodo[a.periodo] || 99;
+  const periodoB = ordemPeriodo[b.periodo] || 99;
+  if (periodoA !== periodoB) {
+    return periodoA - periodoB;
+  }
+
+  // 3️⃣ Se ainda empatar, ordena pelo horário
+  return (a.horario || "").localeCompare(b.horario || "");
+});
 
   let total = 0;
   let pagamentos = {};
