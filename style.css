@@ -823,3 +823,114 @@ html { scroll-behavior: smooth; }
     transform: translateX(50%) translateY(0);
   }
 }
+
+/* Avaliação Resumo */
+.avaliacao-resumo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  margin: 20px 0 40px;
+  text-align: center;
+}
+
+/* Estrelas */
+.estrelas-animadas {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.estrela {
+  font-size: 1.4rem;
+  color: #d4af37;
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+/* só anima quando ativado */
+.depoimentos.animar .estrela {
+  animation: estrelaPop 0.5s ease forwards;
+}
+
+/* delay em cascata */
+.depoimentos.animar .estrela:nth-child(1) { animation-delay: 0.1s; }
+.depoimentos.animar .estrela:nth-child(2) { animation-delay: 0.2s; }
+.depoimentos.animar .estrela:nth-child(3) { animation-delay: 0.3s; }
+.depoimentos.animar .estrela:nth-child(4) { animation-delay: 0.4s; }
+.depoimentos.animar .estrela:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes estrelaPop {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Texto */
+.avaliacao-nota p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Contador */
+.avaliacao-clientes .clientes-numero {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #556b2f;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .avaliacao-resumo {
+    flex-direction: column;
+    gap: 25px;
+  }
+}
+
+/* ===== HERO CTA ===== */
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  margin-top: 1.2rem;
+  padding: 14px 28px;
+
+  background: linear-gradient(135deg, #f8c1c7, #fff0f1);
+  color: #5a1e2d; /* tom escuro elegante para contraste */
+
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+
+  border-radius: 50px;
+  box-shadow: 0 10px 25px rgba(248, 193, 199, 0.55);
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    filter 0.3s ease;
+}
+
+/* Hover desktop */
+.hero-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(248, 193, 199, 0.7);
+  filter: brightness(0.97);
+}
+
+/* Active mobile */
+.hero-cta:active {
+  transform: scale(0.97);
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 768px) {
+  .hero-cta {
+    width: 100%;
+    max-width: 320px;
+    font-size: 1.05rem;
+    padding: 16px 24px;
+  }
+}

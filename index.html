@@ -37,31 +37,47 @@
       </div>
     </header>
 
-    <!-- Hero -->
-    <section id="home" class="hero">
-      <div class="container">
-        <div class="banner-slider">
-          <div class="slide fade">
-            <img src="imgs/banner 01.jpg" alt="Banner 1" title="Banner 1" />
-          </div>
-          <div class="slide fade">
-            <img src="imgs/banner 02.jpg" alt="Banner 2" title="Banner 2" />
-          </div>
-          <div class="slide fade">
-            <img src="imgs/banner 03.jpg" alt="Banner 3" title="Banner 3" />
-          </div>
-          <div class="slide fade">
-            <img src="imgs/banner 04.jpg" alt="Banner 4" title="Banner 4" />
-          </div>
-        </div>
+<!-- Hero -->
+<section id="home" class="hero">
+  <div class="container">
 
-        <h2>Seu Momento de Brilhar</h2>
-        <p>
-          Venha se sentir incrível e realçar sua beleza com todo cuidado que
-          você merece.
-        </p>
+    <!-- Texto sobre o banner -->
+    <div class="hero-overlay">
+      <span class="hero-eyebrow">✨ Beleza • Cuidado • Experiência</span>
+      <h2>Seu Momento de Brilhar</h2>
+    </div>
+
+    <!-- Banner Slider -->
+    <div class="banner-slider">
+      <div class="slide fade">
+        <img src="imgs/banner 01.jpg" alt="Banner 1" title="Banner 1" />
       </div>
-    </section>
+      <div class="slide fade">
+        <img src="imgs/banner 02.jpg" alt="Banner 2" title="Banner 2" />
+      </div>
+      <div class="slide fade">
+        <img src="imgs/banner 03.jpg" alt="Banner 3" title="Banner 3" />
+      </div>
+      <div class="slide fade">
+        <img src="imgs/banner 04.jpg" alt="Banner 4" title="Banner 4" />
+      </div>
+    </div>
+
+    <!-- Texto + CTA abaixo -->
+    <p class="hero-subtitle">
+      Venha se sentir incrível e realçar sua beleza com todo cuidado que você
+      merece.
+    </p>
+
+<a
+  href="#chat"
+  class="btn-primary hero-cta"
+>
+  💬 Agendar agora
+</a>
+
+  </div>
+</section>
 
     <!-- Sobre -->
     <section id="sobre" class="sobre">
@@ -164,7 +180,7 @@
     </section>
 
     <!-- Depoimentos -->
-    <section id="depoimentos" class="depoimentos">
+<section id="depoimentos" class="depoimentos">
       <div class="container">
         <h2>O que nossas clientes dizem</h2>
 
@@ -198,6 +214,24 @@
             <span>- Ana P.</span>
           </div>
         </div>
+
+          <div class="avaliacao-resumo">
+  <div class="avaliacao-nota">
+    <div class="estrelas-animadas" aria-label="Avaliação 4.9 de 5">
+      <span class="estrela">★</span>
+      <span class="estrela">★</span>
+      <span class="estrela">★</span>
+      <span class="estrela">★</span>
+      <span class="estrela meia">★</span>
+    </div>
+    <p><strong>4.9 / 5.0</strong><br />Baseado em avaliações reais</p>
+  </div>
+
+  <div class="avaliacao-clientes">
+    <span class="clientes-numero" data-target="500">0</span>
+    <p>clientes atendidas</p>
+  </div>
+</div>
 
         <!-- Depoimentos apenas com texto, centralizados -->
         <div class="depoimentos-texto">
@@ -504,9 +538,8 @@
           <h3>Institucional</h3>
           <ul>
             <li><a href="#sobre">Sobre</a></li>
-            <li><a href="#portfolio">Portfólio</a></li>
-            <li><a href="#servicos">Serviços</a></li>
             <li><a href="privacidade.html">Política de Privacidade</a></li>
+            <li><a href="#">Política de Cancelamento</a></li>
             <li><a href="admin.html">Planilha de Acessos</a></li>
           </ul>
         </div>
@@ -516,6 +549,8 @@
           <h3>Atendimento</h3>
           <ul>
             <li><a href="#contato">Fale Conosco</a></li>
+            <li><a href="#portfolio">Portfólio</a></li>
+            <li><a href="#servicos">Serviços</a></li>
             <li>
               <a
                 href="https://www.google.com/maps?q=Av.%20Bertino%20Warmiling,%20955%20-%20Centro,%20Salto%20do%20Lontra%20-%20PR,%2085670-000"
@@ -606,6 +641,54 @@
       });
     </script>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const secao = document.querySelector("#depoimentos");
+    const contador = document.querySelector(".clientes-numero");
+
+    if (!secao || !contador) return;
+
+    let animou = false;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !animou) {
+            animou = true;
+
+            /* ativa estrelas */
+            secao.classList.add("animar");
+
+            /* contador animado */
+            const alvo = parseInt(contador.dataset.target, 10);
+            let atual = 0;
+
+            const animarContador = () => {
+              const incremento = Math.ceil(alvo / 60);
+              atual += incremento;
+
+              if (atual >= alvo) {
+                contador.textContent = `+${alvo}`;
+              } else {
+                contador.textContent = atual;
+                requestAnimationFrame(animarContador);
+              }
+            };
+
+            animarContador();
+            observer.disconnect(); // roda só uma vez
+          }
+        });
+      },
+      {
+        threshold: 0.4, // 40% da seção visível
+      }
+    );
+
+    observer.observe(secao);
+  });
+</script>
+
     <!-- Botão Voltar ao Início -->
     <a href="#home" class="btn-topo" aria-label="Voltar ao início">
       <svg
@@ -633,7 +716,7 @@
   aria-label="Agendar pelo WhatsApp"
 >
 Agendar pelo WhatsApp
-</a>
+  </a>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
