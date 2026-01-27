@@ -15,6 +15,21 @@
       <input type="password" id="senha" placeholder="Senha" />
       <button id="btnLogin">Entrar</button>
       <p id="erroLogin" style="color: red; display: none;">Usuário ou senha incorretos.</p>
+
+            <button id="btnEsqueciSenha" class="btnSecundario" style="margin-top: 10px;">🔑 Esqueci / Alterar Senha</button>
+      <a 
+  href="https://daltonneres.github.io/dashboard-EMPRESAS/" 
+  target="_blank"
+  style="text-decoration: none;"
+>
+  <button class="btnSecundario" style="margin-top: 10px; width: 100%;">
+    📊 Conhecer Dashboard Empresarial
+  </button>
+</a>
+
+<p style="font-size: 12px; color: #666; margin-top: 6px;">
+  Ideal para empresas que desejam controle financeiro e operacional.
+</p>
     </div>
   </div>
 
@@ -432,7 +447,46 @@ table {
   from { transform: scale(0.8); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
+
+.footer-dev {
+  margin-top: 40px;
+  padding: 15px;
+  text-align: center;
+  font-size: 13px;
+  color: #555;
+}
+
+.footer-dev a {
+  color: #c2185b;
+  text-decoration: none;
+}
+
+.footer-dev a:hover {
+  text-decoration: underline;
+}
 </style>
+
+<!-- Modal Esqueci Senha -->
+<div id="modalSenha" class="modal">
+  <div class="modal-content">
+    <span class="close" id="fecharSenha">&times;</span>
+    <h2>🔐 Redefinir Senha</h2>
+
+    <label>E-mail cadastrado:</label>
+    <input type="email" id="emailRecuperacao" placeholder="exemplo@email.com" required />
+
+    <label>Nova senha desejada:</label>
+    <input type="password" id="novaSenha" placeholder="Digite a nova senha" required />
+
+    <button id="enviarSenha" class="btnPrimario">
+      📲 Enviar solicitação
+    </button>
+
+    <p style="font-size: 12px; color: #555; margin-top: 10px;">
+      A solicitação será enviada via WhatsApp para validação.
+    </p>
+  </div>
+</div>
 
 <!-- Modal de Ações Bonito -->
 <div id="modalAcoes" class="modal">
@@ -448,6 +502,18 @@ table {
     </div>
   </div>
 </div>
+
+<footer class="footer-dev">
+  Desenvolvido por 
+  <a 
+    href="https://github.com/daltonneres" 
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <strong>Dalton Neres</strong>
+  </a> 
+  | Full Stack Developer 🚀
+</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>

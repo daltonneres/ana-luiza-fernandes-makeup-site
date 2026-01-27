@@ -484,3 +484,35 @@ btnApagarMes.onclick = async () => {
   pdfExportado = false;
   carregarAgendamentos();
 };
+
+const btnEsqueci = document.getElementById("btnEsqueciSenha");
+const modalSenha = document.getElementById("modalSenha");
+const fecharSenha = document.getElementById("fecharSenha");
+const enviarSenha = document.getElementById("enviarSenha");
+
+btnEsqueci.onclick = () => modalSenha.style.display = "flex";
+fecharSenha.onclick = () => modalSenha.style.display = "none";
+
+enviarSenha.onclick = () => {
+  const email = document.getElementById("emailRecuperacao").value;
+  const senha = document.getElementById("novaSenha").value;
+
+  if (!email || !senha) {
+    alert("Preencha todos os campos.");
+    return;
+  }
+
+  const mensagem = `
+🔐 *Solicitação de Alteração de Senha*
+
+📧 Email: ${email}
+🔑 Nova senha: ${senha}
+
+Solicitação enviada pelo Painel Administrativo.
+  `;
+
+  const whatsapp = `https://wa.me/5546999711937?text=${encodeURIComponent(mensagem)}`;
+  window.open(whatsapp, "_blank");
+
+  modalSenha.style.display = "none";
+};

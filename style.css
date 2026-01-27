@@ -750,3 +750,18 @@ html { scroll-behavior: smooth; }
   padding: 30px 20px;   /* reduzido */
   min-height: auto;     /* remove a altura mínima forçada */
 }
+
+.lgpd-info {
+  background-color: #f8d7da;
+  border-top: 1px solid #ddd;
+  padding: 12px 16px;
+  font-size: 0.85rem;
+}
+
+.lgpd-container {
+  max-width: 420px;
+  margin: 0 auto;
+  color: #555;
+  text-align: center;
+  line-height: 1.4;
+}
