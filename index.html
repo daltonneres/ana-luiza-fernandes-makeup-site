@@ -708,33 +708,34 @@
       </svg>
     </a>
 
-    <!-- CTA WhatsApp Flutuante -->
-<a
-  href="https://wa.me/5546999401775?text=Olá!%20Gostaria%20de%20agendar%20um%20horário%20😊"
-  class="cta-whatsapp"
-  target="_blank"
-  aria-label="Agendar pelo WhatsApp"
->
-Agendar pelo WhatsApp
+<!--
+  <a
+    href="https://wa.me/5546999401775?text=Olá!%20Gostaria%20de%20agendar%20um%20horário%20😊"
+    class="cta-whatsapp"
+    target="_blank"
+    aria-label="Agendar pelo WhatsApp"
+  >
+    Agendar pelo WhatsApp
   </a>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const ctaWhatsapp = document.querySelector(".cta-whatsapp");
-    if (!ctaWhatsapp) return;
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const ctaWhatsapp = document.querySelector(".cta-whatsapp");
+      if (!ctaWhatsapp) return;
 
-    const toggleCTA = () => {
-      if (window.scrollY > 200) {
-        ctaWhatsapp.classList.add("show");
-      } else {
-        ctaWhatsapp.classList.remove("show");
-      }
-    };
+      const toggleCTA = () => {
+        if (window.scrollY > 200) {
+          ctaWhatsapp.classList.add("show");
+        } else {
+          ctaWhatsapp.classList.remove("show");
+        }
+      };
 
-    window.addEventListener("scroll", toggleCTA);
-    toggleCTA();
-  });
-</script>
+      window.addEventListener("scroll", toggleCTA);
+      toggleCTA();
+    });
+  </script>
+-->
 
 <script type="module" src="script.js"></script>
   </body>
