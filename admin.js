@@ -93,13 +93,23 @@ function criarFiltros() {
   selectMes.style.padding = "6px";
   selectMes.style.borderRadius = "6px";
 
-  const meses = [
-    { nome: "Todos os Meses", mes: "todos" },
-    { nome: "Novembro 2025", mes: "2025-11" },
-    { nome: "Dezembro 2025", mes: "2025-12" },
-    { nome: "Janeiro 2026", mes: "2026-01" },
-    { nome: "Fevereiro 2026", mes: "2026-02" },
-  ];
+const meses = [
+  { nome: "Todos os Meses", mes: "todos" },
+
+  { nome: "Novembro 2025", mes: "2025-11" },
+  { nome: "Dezembro 2025", mes: "2025-12" },
+
+  { nome: "Janeiro 2026", mes: "2026-01" },
+  { nome: "Fevereiro 2026", mes: "2026-02" },
+  { nome: "Março 2026", mes: "2026-03" },
+  { nome: "Abril 2026", mes: "2026-04" },
+  { nome: "Maio 2026", mes: "2026-05" },
+  { nome: "Junho 2026", mes: "2026-06" },
+  { nome: "Julho 2026", mes: "2026-07" },
+  { nome: "Agosto 2026", mes: "2026-08" },
+  { nome: "Setembro 2026", mes: "2026-09" },
+  { nome: "Outubro 2026", mes: "2026-10" },
+];
 
   meses.forEach(m => {
     const opt = document.createElement("option");
