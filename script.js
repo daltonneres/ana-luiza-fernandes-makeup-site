@@ -431,3 +431,29 @@ document.addEventListener("DOMContentLoaded", () => {
   botMessage(questions[0]);
   resetInactivityTimer();
 });
+
+// POP-UP DE AVISO
+  document.addEventListener("DOMContentLoaded", () => {
+    const popup = document.getElementById("popupAviso");
+    const fechar = document.getElementById("fecharPopup");
+    const entendi = document.getElementById("entendiPopup");
+
+    // abre popup após 1 segundo
+    setTimeout(() => {
+      popup.classList.add("active");
+    }, 1000);
+
+    function fecharPopup() {
+      popup.classList.remove("active");
+    }
+
+    fechar.addEventListener("click", fecharPopup);
+    entendi.addEventListener("click", fecharPopup);
+
+    // fechar clicando fora
+    popup.addEventListener("click", (e) => {
+      if (e.target === popup) {
+        fecharPopup();
+      }
+    });
+  });
