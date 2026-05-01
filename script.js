@@ -209,13 +209,19 @@ function showCalendar() {
   const currentDay = today.getDate();
 
   // --- MESES ATUALIZADOS (NOVEMBRO REMOVIDO + MARÇO E ABRIL INCLUÍDOS) ---
-  let monthsAvailable = [
-    { name: "Dezembro 2025", month: 11, year: 2025 },
-    { name: "Janeiro 2026", month: 0, year: 2026 },
-    { name: "Fevereiro 2026", month: 1, year: 2026 },
-    { name: "Março 2026", month: 2, year: 2026 },
-    { name: "Abril 2026", month: 3, year: 2026 }
-  ];
+let monthsAvailable = [
+  { name: "Dezembro 2025", month: 11, year: 2025 },
+  { name: "Janeiro 2026", month: 0, year: 2026 },
+  { name: "Fevereiro 2026", month: 1, year: 2026 },
+  { name: "Março 2026", month: 2, year: 2026 },
+  { name: "Abril 2026", month: 3, year: 2026 },
+  { name: "Maio 2026", month: 4, year: 2026 },
+  { name: "Junho 2026", month: 5, year: 2026 },
+  { name: "Julho 2026", month: 6, year: 2026 },
+  { name: "Agosto 2026", month: 7, year: 2026 },
+  { name: "Setembro 2026", month: 8, year: 2026 },
+  { name: "Outubro 2026", month: 9, year: 2026 }
+];
 
   // --- Remove meses passados automaticamente ---
   monthsAvailable = monthsAvailable.filter(m => {
