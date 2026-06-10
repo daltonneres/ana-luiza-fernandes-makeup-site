@@ -7,19 +7,19 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" href="favicon.png" type="image/png" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
     <!-- Font Awesome -->
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-/>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
   </head>
 
   <body>
     <!-- Cabeçalho -->
-    <header>
+    <header id="site-header">
       <div class="container header-content">
         <img
           src="imgs/logo.png"
@@ -27,62 +27,139 @@
           title="Logo Ana Luiza Fernandes Makeup"
           class="logo"
         />
-        <nav>
+        <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <nav id="main-nav">
           <ul>
             <li><a href="#home">Início</a></li>
-            <li><a href="#sobre">Sobre Nós</a></li>
             <li><a href="#quem">Ana Luiza</a></li>
+            <li><a href="#sobre">Sobre Nós</a></li>
             <li><a href="#depoimentos">Depoimentos</a></li>
             <li><a href="#portfolio">Portfólio</a></li>
             <li><a href="#catalogo">Catálogo</a></li>
             <li><a href="#servicos">Serviços</a></li>
-            <li><a href="#chat">Agendamento</a></li>
+            <li><a href="#chat" class="nav-cta">Agendamento</a></li>
           </ul>
         </nav>
       </div>
     </header>
 
-<!-- Hero -->
-<section id="home" class="hero">
-  <div class="container">
+    <!-- Hero -->
+    <section id="home" class="hero">
+      <div class="container">
 
-    <!-- Texto sobre o banner -->
-    <div class="hero-overlay">
-      <span class="hero-eyebrow">✨ Beleza • Cuidado • Experiência</span>
-      <h2>Seu Momento de Brilhar</h2>
-    </div>
+        <!-- Texto sobre o banner -->
+        <div class="hero-overlay">
+        <h2>Mais que Maquiagem, Uma Experiência</h2>
+        <span class="hero-eyebrow">
+        Permita-se viver um momento único de cuidado, autoestima e transformação.
+        </span>
+        </div>
 
-    <!-- Banner Slider -->
-    <div class="banner-slider">
-      <div class="slide fade">
-        <img src="imgs/banner 01.jpg" alt="Banner 1" title="Banner 1" />
+        <!-- Banner Slider -->
+        <div class="banner-slider">
+          <div class="slide fade">
+            <img src="imgs/banner 01.jpg" alt="Banner 1" title="Banner 1" />
+          </div>
+          <div class="slide fade">
+            <img src="imgs/banner 02.jpg" alt="Banner 2" title="Banner 2" />
+          </div>
+          <div class="slide fade">
+            <img src="imgs/banner 03.jpg" alt="Banner 3" title="Banner 3" />
+          </div>
+          <div class="slide fade">
+            <img src="imgs/banner 04.jpg" alt="Banner 4" title="Banner 4" />
+          </div>
+          <!-- Indicadores do slider -->
+          <div class="slider-dots">
+            <span class="dot active" onclick="goToSlide(0)"></span>
+            <span class="dot" onclick="goToSlide(1)"></span>
+            <span class="dot" onclick="goToSlide(2)"></span>
+            <span class="dot" onclick="goToSlide(3)"></span>
+          </div>
+        </div>
       </div>
-      <div class="slide fade">
-        <img src="imgs/banner 02.jpg" alt="Banner 2" title="Banner 2" />
-      </div>
-      <div class="slide fade">
-        <img src="imgs/banner 03.jpg" alt="Banner 3" title="Banner 3" />
-      </div>
-      <div class="slide fade">
-        <img src="imgs/banner 04.jpg" alt="Banner 4" title="Banner 4" />
-      </div>
-    </div>
 
-    <!-- Texto + CTA abaixo -->
-    <p class="hero-subtitle">
-      Venha se sentir incrível e realçar sua beleza com todo cuidado que você
-      merece.
-    </p>
+      <!-- Bot de Atendimento -->
+      <section id="chat" class="chat-section">
+        <div class="chat-container">
+          <!-- Título e descrição -->
+          <div class="chat-header">
+            <h2>Agendamento Online</h2>
+            <p>
+              Use nosso autoatendimento para agendar seu horário de maquiagem de
+              forma rápida e prática.
+            </p>
+          </div>
 
-<a
-  href="#chat"
-  class="btn-primary hero-cta"
->
-  💬 Agendar agora
-</a>
+          <!-- Área de mensagens -->
+          <div id="chatMessages" class="chat-messages"></div>
 
-  </div>
-</section>
+          <!-- Input do usuário -->
+          <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Digite aqui..." />
+            <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- Quem sou -->
+    <section id="quem" class="quem">
+      <div class="container sobre-flex">
+        <div class="sobre-texto">
+          <span class="section-label">A Profissional</span>
+          <h2>Quem sou?</h2>
+          <p>
+            O <strong>Ana Luiza Fernandes Makeup</strong> nasceu do sonho de
+            transformar autoestima em beleza real. Com anos de experiência no
+            mercado, Ana Luiza dedica-se a proporcionar resultados que unem
+            sofisticação, criatividade e cuidado personalizado.
+          </p>
+
+          <div class="valores-grid">
+            <div class="valor-card">
+              <span class="valor-icon">🎯</span>
+              <h3>Missão</h3>
+              <p>Proporcionar experiências únicas e cuidados de excelência para realçar a beleza de cada cliente, sempre respeitando sua individualidade.</p>
+            </div>
+            <div class="valor-card">
+              <span class="valor-icon">💎</span>
+              <h3>Valores</h3>
+              <ul>
+                <li>Profissionalismo</li>
+                <li>Acolhimento</li>
+                <li>Qualidade</li>
+                <li>Inovação</li>
+                <li>Paixão pelo que faz</li>
+                <li>Empatia e respeito</li>
+              </ul>
+            </div>
+            <div class="valor-card">
+              <span class="valor-icon">✨</span>
+              <h3>Especialidades</h3>
+              <p>Especialista em maquiagens para eventos, noivas, ensaios fotográficos e consultoria personalizada de beleza.</p>
+            </div>
+            <div class="valor-card">
+              <span class="valor-icon">🌸</span>
+              <h3>Curiosidade</h3>
+              <p>Além da maquiagem, Ana Luiza adora criar conteúdos para redes sociais e transformar cada visita em uma experiência acolhedora.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Foto da Ana ao lado -->
+        <div class="polaroid">
+          <img
+            src="imgs/ana 01.jpg"
+            alt="Ana Luiza Fernandes"
+            title="Ana Luiza Fernandes"
+          />
+          <p><strong>Ana Luiza Fernandes</strong><br />Makeup Artist</p>
+        </div>
+      </div>
+    </section>
 
     <!-- Sobre -->
     <section id="sobre" class="sobre">
@@ -98,100 +175,49 @@
             controls
           ></video>
         </div>
-<div class="sobre-texto">
-  <h2>Sobre o Salão</h2>
-  <p>
-    O <strong>Ana Luiza Fernandes Makeup</strong> é um espaço dedicado à
-    beleza e ao bem-estar, oferecendo atendimento personalizado em um
-    ambiente acolhedor e sofisticado. Nosso objetivo é realçar sua
-    autoestima através de serviços de alta qualidade, técnicas modernas
-    e produtos selecionados com excelência. Até hoje, conquistamos a
-    confiança e a satisfação de mais de 500 clientes.
-  </p>
-
-  <ul>
-<li>
-  <strong>Endereço:</strong> Salão Santa Sara, Av. Bertino Warmiling —
-  em frente ao antigo hospital, Salto do Lontra-PR.
-</li>
-
-    <li>
-      <strong>Horário de Atendimento:</strong>
-      Segunda a sexta, das 06h às 12h e das 13h às 20h;
-      sábados e domingos, das 07h às 18h.
-    </li>
-
-    <li>
-      <strong>Diferenciais:</strong> Cantinho do café, espaços
-      instagramáveis e atendimento VIP, para tornar cada visita uma
-      experiência única.
-    </li>
-  </ul>
-</ul>
-</div>
-</div>
-</section>
-
-    <!-- Quem sou -->
-    <section id="quem" class="quem">
-      <div class="container sobre-flex">
         <div class="sobre-texto">
-          <h2>Quem sou?</h2>
+          <span class="section-label">O Espaço</span>
+          <h2>Sobre o Salão</h2>
           <p>
-            O <strong>Ana Luiza Fernandes Makeup</strong> nasceu do sonho de
-            transformar autoestima em beleza real. Com anos de experiência no
-            mercado, Ana Luiza dedica-se a proporcionar resultados que unem
-            sofisticação, criatividade e cuidado personalizado.
+            O <strong>Ana Luiza Fernandes Makeup</strong> é um espaço dedicado à
+            beleza e ao bem-estar, oferecendo atendimento personalizado em um
+            ambiente acolhedor e sofisticado. Nosso objetivo é realçar sua
+            autoestima através de serviços de alta qualidade, técnicas modernas
+            e produtos selecionados com excelência. Até hoje, conquistamos a
+            confiança e a satisfação de mais de 500 clientes.
           </p>
 
-          <h3>🎯 Missão</h3>
-          <p>
-            Proporcionar experiências únicas e cuidados de excelência para
-            realçar a beleza de cada cliente, sempre respeitando sua
-            individualidade.
-          </p>
-
-          <h3>💎 Valores</h3>
-          <ul>
-            <li>Profissionalismo</li>
-            <li>Acolhimento</li>
-            <li>Qualidade</li>
-            <li>Inovação</li>
-            <li>Paixão pelo que faz</li>
-            <li>Empatia e respeito</li>
+          <ul class="info-list">
+            <li>
+              <i class="fa-solid fa-location-dot"></i>
+              <div>
+                <strong>Endereço</strong>
+                Salão Santa Sara, Av. Bertino Warmiling — em frente ao antigo hospital, Salto do Lontra-PR.
+              </div>
+            </li>
+            <li>
+              <i class="fa-regular fa-clock"></i>
+              <div>
+                <strong>Horário de Atendimento</strong>
+                Segunda a sexta, das 06h às 12h e das 13h às 20h; sábados e domingos, das 07h às 18h.
+              </div>
+            </li>
+            <li>
+              <i class="fa-solid fa-star"></i>
+              <div>
+                <strong>Diferenciais</strong>
+                Cantinho do café, espaços instagramáveis e atendimento VIP, para tornar cada visita uma experiência única.
+              </div>
+            </li>
           </ul>
-
-          <h3>✨ Especialidades</h3>
-          <p>
-            Ana Luiza é especialista em maquiagens para eventos, noivas, ensaios
-            fotográficos, e também oferece consultoria personalizada de beleza.
-            Sempre atualizada com as últimas tendências, combina técnicas
-            modernas com atenção aos detalhes para resultados impecáveis.
-          </p>
-
-          <h3>🌸 Curiosidade</h3>
-          <p>
-            Além da maquiagem, Ana Luiza adora criar conteúdos para redes
-            sociais, compartilhar dicas de beleza e transformar cada visita em
-            uma experiência acolhedora e inesquecível.
-          </p>
-        </div>
-
-        <!-- Foto da Ana ao lado -->
-        <div class="polaroid">
-          <img
-            src="imgs/ana 01.jpg"
-            alt="Ana Luiza Fernandes"
-            title="Ana Luiza Fernandes"
-          />
-          <p><strong>Ana Luiza Fernandes</strong><br />Makeup Artist</p>
         </div>
       </div>
     </section>
 
     <!-- Depoimentos -->
-<section id="depoimentos" class="depoimentos">
+    <section id="depoimentos" class="depoimentos">
       <div class="container">
+        <span class="section-label">Clientes</span>
         <h2>O que nossas clientes dizem</h2>
 
         <!-- Depoimentos com imagens -->
@@ -225,23 +251,23 @@
           </div>
         </div>
 
-          <div class="avaliacao-resumo">
-  <div class="avaliacao-nota">
-    <div class="estrelas-animadas" aria-label="Avaliação 4.9 de 5">
-      <span class="estrela">★</span>
-      <span class="estrela">★</span>
-      <span class="estrela">★</span>
-      <span class="estrela">★</span>
-      <span class="estrela meia">★</span>
-    </div>
-    <p><strong>4.9 / 5.0</strong><br />Baseado em avaliações reais</p>
-  </div>
+        <div class="avaliacao-resumo">
+          <div class="avaliacao-nota">
+            <div class="estrelas-animadas" aria-label="Avaliação 4.9 de 5">
+              <span class="estrela">★</span>
+              <span class="estrela">★</span>
+              <span class="estrela">★</span>
+              <span class="estrela">★</span>
+              <span class="estrela meia">★</span>
+            </div>
+            <p><strong>4.9 / 5.0</strong><br />Baseado em avaliações reais</p>
+          </div>
 
-  <div class="avaliacao-clientes">
-    <span class="clientes-numero" data-target="500">0</span>
-    <p>clientes atendidas</p>
-  </div>
-</div>
+          <div class="avaliacao-clientes">
+            <span class="clientes-numero" data-target="500">0</span>
+            <p>clientes atendidas</p>
+          </div>
+        </div>
 
         <!-- Depoimentos apenas com texto, centralizados -->
         <div class="depoimentos-texto">
@@ -263,6 +289,7 @@
     <!-- Portfólio -->
     <section id="portfolio" class="portfolio">
       <div class="container">
+        <span class="section-label">Trabalhos</span>
         <h2>Portfólio</h2>
 
         <div class="portfolio-grid">
@@ -300,6 +327,7 @@
     <!-- Catálogo -->
     <section id="catalogo" class="catalogo">
       <div class="container">
+        <span class="section-label">Preços</span>
         <h2>Catálogo de Serviços</h2>
         <p class="catalogo-desc">
           Confira nossos principais serviços de beleza e cuidados, realizados
@@ -307,56 +335,69 @@
         </p>
         <div class="catalogo-grid">
           <div class="produto">
+            <span class="produto-icon">💄</span>
             <h4>Maquiagem Social</h4>
-            <p>R$ 135,00</p>
+            <p class="produto-preco">R$ 135,00</p>
           </div>
           <div class="produto">
+            <span class="produto-icon">🌿</span>
             <h4>Brow Lamination</h4>
-            <p>R$ 120,00</p>
+            <p class="produto-preco">R$ 120,00</p>
           </div>
           <div class="produto">
+            <span class="produto-icon">⚡</span>
             <h4>Maquiagem Express</h4>
-            <p>R$ 105,00</p>
+            <p class="produto-preco">R$ 105,00</p>
           </div>
           <div class="produto">
+            <span class="produto-icon">✨</span>
             <h4>Baby Liss</h4>
-            <p>R$ 60,00</p>
+            <p class="produto-preco">R$ 60,00</p>
           </div>
           <div class="produto">
+            <span class="produto-icon">🌸</span>
             <h4>Semipreso Romântico</h4>
-            <p>R$ 90,00</p>
+            <p class="produto-preco">R$ 90,00</p>
           </div>
           <div class="produto">
+            <span class="produto-icon">👑</span>
             <h4>Coque Express</h4>
-            <p>R$ 120,00</p>
+            <p class="produto-preco">R$ 120,00</p>
           </div>
           <div class="produto">
+            <span class="produto-icon">🌿</span>
             <h4>Brow Lamination + Henna</h4>
-            <p>R$ 135,00</p>
+            <p class="produto-preco">R$ 135,00</p>
           </div>
           <div class="produto">
+            <span class="produto-icon">🎀</span>
             <h4>Rabo Clássico</h4>
-            <p>R$ 80,00</p>
+            <p class="produto-preco">R$ 80,00</p>
           </div>
           <div class="produto">
+            <span class="produto-icon">🌺</span>
             <h4>Semipreso com Tranças</h4>
-            <p>R$ 100,00</p>
+            <p class="produto-preco">R$ 100,00</p>
           </div>
           <div class="produto">
+            <span class="produto-icon">👁️</span>
             <h4>Lash Lift</h4>
-            <p>R$ 120,00</p>
+            <p class="produto-preco">R$ 120,00</p>
           </div>
           <div class="produto">
+            <span class="produto-icon">✏️</span>
             <h4>Design Personalizado</h4>
-            <p>R$ 35,00</p>
+            <p class="produto-preco">R$ 35,00</p>
           </div>
           <div class="produto">
+            <span class="produto-icon">🎨</span>
             <h4>Design Personalizado + Tintura</h4>
-            <p>R$ 45,00</p>
+            <p class="produto-preco">R$ 45,00</p>
           </div>
           <div class="produto">
-            <h4>DEPILAÇÃO DE BUÇO</h4>
-            <p>R$ 15,00</p>
+            <span class="produto-icon">🌙</span>
+            <h4>Depilação de Buço</h4>
+            <p class="produto-preco">R$ 15,00</p>
           </div>
         </div>
       </div>
@@ -364,6 +405,7 @@
 
     <section id="servicos" class="servicos">
       <div class="container">
+        <span class="section-label">Especialidades</span>
         <h2>Nossos Serviços</h2>
         <div class="servicos-grid">
           <div class="polaroid">
@@ -482,7 +524,7 @@
           <div class="polaroid">
             <img src="imgs/buço.jpg" alt="Depilação de buço profissional" title="Depilação de buço profissional" />
             <div class="portfolio-desc">
-              <h3>DEPILAÇÃO DE BUÇO</h3>
+              <h3>Depilação de Buço</h3>
               <p>
                 Remova os pelos indesejados do buço com cuidado e precisão.
                 Nossa técnica garante conforto, praticidade e resultado imediato
@@ -494,42 +536,19 @@
       </div>
     </section>
 
-    <!-- Bot de Atendimento -->
-    <section id="chat" class="chat-section">
-      <div class="chat-container">
-        <!-- Título e descrição -->
-        <div class="chat-header" style="text-align: center; padding: 10px 0">
-          <h2 style="margin: 0; color: #556b2f">Agendamento Online</h2>
-          <p style="margin: 5px 0 0 0; color: #333; font-size: 0.95rem">
-            Use nosso autoatendimento para agendar seu horário de maquiagem de
-            forma rápida e prática.
-          </p>
-        </div>
-
-        <!-- Área de mensagens -->
-        <div id="chatMessages" class="chat-messages"></div>
-
-        <!-- Input do usuário -->
-        <div class="chat-input">
-          <input type="text" id="userInput" placeholder="Digite aqui..." />
-          <button id="sendBtn">Enviar</button>
-        </div>
+    <!-- LGPD - Proteção de Dados -->
+    <section class="lgpd-info">
+      <div class="lgpd-container">
+        <p>
+          🔒 <strong>Proteção de Dados (LGPD)</strong><br>
+          As informações fornecidas neste atendimento são utilizadas
+          exclusivamente para fins de agendamento e contato.
+          Seus dados são tratados de forma segura, em conformidade com a
+          Lei Geral de Proteção de Dados (Lei nº 13.709/2018),
+          e não são compartilhados com terceiros.
+        </p>
       </div>
     </section>
-
-    <!-- LGPD - Proteção de Dados -->
-<section class="lgpd-info">
-  <div class="lgpd-container">
-    <p>
-      🔒 <strong>Proteção de Dados (LGPD)</strong><br>
-      As informações fornecidas neste atendimento são utilizadas
-      exclusivamente para fins de agendamento e contato.
-      Seus dados são tratados de forma segura, em conformidade com a
-      Lei Geral de Proteção de Dados (Lei nº 13.709/2018),
-      e não são compartilhados com terceiros.
-    </p>
-  </div>
-</section>
 
     <!-- Rodapé -->
     <footer class="footer">
@@ -571,39 +590,38 @@
           </ul>
         </div>
 
-<!-- Coluna 4 -->
-<div class="footer-col">
-  <h3>Siga-me nas redes</h3>
+        <!-- Coluna 4 -->
+        <div class="footer-col">
+          <h3>Siga-me nas redes</h3>
 
-  <div class="social-icons">
-    <a
-      href="https://wa.me/5546999401775"
-      target="_blank"
-      class="btn-whatsapp"
-    >
-      <i class="fa-brands fa-whatsapp"></i>
-      WhatsApp
-    </a>
+          <div class="social-icons">
+            <a
+              href="https://wa.me/5546999401775"
+              target="_blank"
+              class="btn-whatsapp"
+            >
+              <i class="fa-brands fa-whatsapp"></i>
+              WhatsApp
+            </a>
 
-    <a
-      href="https://www.instagram.com/analuizafernandesmakeup"
-      target="_blank"
-      class="btn-instagram"
-    >
-      <i class="fa-brands fa-instagram"></i>
-      Instagram
-    </a>
+            <a
+              href="https://www.instagram.com/analuizafernandesmakeup"
+              target="_blank"
+              class="btn-instagram"
+            >
+              <i class="fa-brands fa-instagram"></i>
+              Instagram
+            </a>
 
-    <a
-      href="https://www.tiktok.com/@anafernandesmakeup01"
-      target="_blank"
-      class="btn-tiktok"
-    >
-      <i class="fa-brands fa-tiktok"></i>
-      TikTok
-    </a>
-  </div>
-</div>
+            <a
+              href="https://www.tiktok.com/@anafernandesmakeup01"
+              target="_blank"
+              class="btn-tiktok"
+            >
+              <i class="fa-brands fa-tiktok"></i>
+              TikTok
+            </a>
+          </div>
         </div>
       </div>
 
@@ -619,95 +637,6 @@
         </p>
       </div>
     </footer>
-
-    <script>
-      let slideIndex = 0;
-      showSlides();
-
-      function showSlides() {
-        let slides = document.getElementsByClassName("slide");
-        for (let i = 0; i < slides.length; i++) {
-          slides[i].style.display = "none";
-        }
-        slideIndex++;
-        if (slideIndex > slides.length) {
-          slideIndex = 1;
-        }
-        slides[slideIndex - 1].style.display = "block";
-        setTimeout(showSlides, 4000); // Muda de slide a cada 4 segundos
-      }
-    </script>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // botão
-        const btnTopo = document.querySelector(".btn-topo");
-        if (!btnTopo) return; // segurança
-
-        // mostrar/ocultar ao rolar
-        const toggleBtn = () => {
-          if (window.scrollY > 200) btnTopo.classList.add("show-btn");
-          else btnTopo.classList.remove("show-btn");
-        };
-
-        window.addEventListener("scroll", toggleBtn);
-        toggleBtn(); // inicializa caso a página já esteja rolada
-
-        // clique: rolagem suave até o topo (previne salto brusco)
-        btnTopo.addEventListener("click", function (e) {
-          e.preventDefault();
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-      });
-    </script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const secao = document.querySelector("#depoimentos");
-    const contador = document.querySelector(".clientes-numero");
-
-    if (!secao || !contador) return;
-
-    let animou = false;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !animou) {
-            animou = true;
-
-            /* ativa estrelas */
-            secao.classList.add("animar");
-
-            /* contador animado */
-            const alvo = parseInt(contador.dataset.target, 10);
-            let atual = 0;
-
-            const animarContador = () => {
-              const incremento = Math.ceil(alvo / 60);
-              atual += incremento;
-
-              if (atual >= alvo) {
-                contador.textContent = `+${alvo}`;
-              } else {
-                contador.textContent = atual;
-                requestAnimationFrame(animarContador);
-              }
-            };
-
-            animarContador();
-            observer.disconnect(); // roda só uma vez
-          }
-        });
-      },
-      {
-        threshold: 0.4, // 40% da seção visível
-      }
-    );
-
-    observer.observe(secao);
-  });
-</script>
 
     <!-- Botão Voltar ao Início -->
     <a href="#home" class="btn-topo" aria-label="Voltar ao início">
@@ -728,73 +657,132 @@
       </svg>
     </a>
 
-<!--
-  <a
-    href="https://wa.me/5546999401775?text=Olá!%20Gostaria%20de%20agendar%20um%20horário%20😊"
-    class="cta-whatsapp"
-    target="_blank"
-    aria-label="Agendar pelo WhatsApp"
-  >
-    Agendar pelo WhatsApp
-  </a>
+    <script>
+      // ── Slider ──────────────────────────────────────────────
+      let slideIndex = 0;
+      const slides = document.getElementsByClassName("slide");
+      const dots = document.getElementsByClassName("dot");
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const ctaWhatsapp = document.querySelector(".cta-whatsapp");
-      if (!ctaWhatsapp) return;
-
-      const toggleCTA = () => {
-        if (window.scrollY > 200) {
-          ctaWhatsapp.classList.add("show");
-        } else {
-          ctaWhatsapp.classList.remove("show");
+      function showSlides() {
+        for (let i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+          if (dots[i]) dots[i].classList.remove("active");
         }
-      };
+        slideIndex++;
+        if (slideIndex > slides.length) slideIndex = 1;
+        slides[slideIndex - 1].style.display = "block";
+        if (dots[slideIndex - 1]) dots[slideIndex - 1].classList.add("active");
+        setTimeout(showSlides, 4000);
+      }
 
-      window.addEventListener("scroll", toggleCTA);
-      toggleCTA();
-    });
-  </script>
--->
+      function goToSlide(n) {
+        slideIndex = n;
+        for (let i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+          if (dots[i]) dots[i].classList.remove("active");
+        }
+        slides[n].style.display = "block";
+        if (dots[n]) dots[n].classList.add("active");
+      }
 
-<!-- POPUP AVISO -->
-<div id="popupAviso" class="popup-overlay">
-  <div class="popup-box">
-    <button class="popup-close" id="fecharPopup">&times;</button>
+      showSlides();
 
-    <h2>✨ Aviso Importante</h2>
+      // ── Header scroll sticky ─────────────────────────────────
+      const header = document.getElementById("site-header");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 60) header.classList.add("scrolled");
+        else header.classList.remove("scrolled");
+      });
 
-    <p>
-      👋 Olá, <strong>MARAVILHOSA!</strong> Como está?
-      Espero que esteja bem! ✨💖
-    </p>
+      // ── Menu mobile toggle ───────────────────────────────────
+      const navToggle = document.querySelector(".nav-toggle");
+      const mainNav = document.getElementById("main-nav");
+      navToggle.addEventListener("click", () => {
+        const open = mainNav.classList.toggle("nav-open");
+        navToggle.setAttribute("aria-expanded", open);
+      });
+      // Fecha ao clicar num link
+      document.querySelectorAll("#main-nav a").forEach(link => {
+        link.addEventListener("click", () => {
+          mainNav.classList.remove("nav-open");
+          navToggle.setAttribute("aria-expanded", false);
+        });
+      });
 
-    <p>
-      Atualmente, a <strong>Ana Luiza</strong> reside em
-      <strong>Dois Vizinhos</strong> e não mais em Salto do Lontra.
-    </p>
+      // ── Botão voltar ao topo ─────────────────────────────────
+      document.addEventListener("DOMContentLoaded", function () {
+        const btnTopo = document.querySelector(".btn-topo");
+        if (!btnTopo) return;
 
-    <p>
-      Neste momento, os atendimentos estão sendo priorizados
-      principalmente aos <strong>finais de semana</strong>.
-    </p>
+        const toggleBtn = () => {
+          if (window.scrollY > 200) btnTopo.classList.add("show-btn");
+          else btnTopo.classList.remove("show-btn");
+        };
+        window.addEventListener("scroll", toggleBtn);
+        toggleBtn();
 
-    <p>
-      Você pode realizar seu agendamento normalmente 💖
-      Porém, a Ana irá validar a disponibilidade do horário solicitado.
-    </p>
+        btnTopo.addEventListener("click", function (e) {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      });
 
-    <p>
-      Recomendamos fazer seu agendamento com antecedência
-      para garantir sua vaga ✨
-    </p>
+      // ── Contador de clientes + estrelas ─────────────────────
+      document.addEventListener("DOMContentLoaded", function () {
+        const secao = document.querySelector("#depoimentos");
+        const contador = document.querySelector(".clientes-numero");
+        if (!secao || !contador) return;
 
-    <button id="entendiPopup" class="popup-btn">
-      Entendi
-    </button>
-  </div>
-</div>
+        let animou = false;
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && !animou) {
+                animou = true;
+                secao.classList.add("animar");
 
-<script type="module" src="script.js"></script>
+                const alvo = parseInt(contador.dataset.target, 10);
+                let atual = 0;
+                const animarContador = () => {
+                  const incremento = Math.ceil(alvo / 60);
+                  atual += incremento;
+                  if (atual >= alvo) {
+                    contador.textContent = `+${alvo}`;
+                  } else {
+                    contador.textContent = atual;
+                    requestAnimationFrame(animarContador);
+                  }
+                };
+                animarContador();
+                observer.disconnect();
+              }
+            });
+          },
+          { threshold: 0.4 }
+        );
+        observer.observe(secao);
+      });
+
+      // ── Reveal animado ao scroll (sections) ──────────────────
+      document.addEventListener("DOMContentLoaded", () => {
+        const revealEls = document.querySelectorAll(
+          ".polaroid, .produto, .depoimento, .valor-card, .info-list li"
+        );
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((el) => {
+              if (el.isIntersecting) {
+                el.target.classList.add("visible");
+                io.unobserve(el.target);
+              }
+            });
+          },
+          { threshold: 0.15 }
+        );
+        revealEls.forEach((el) => io.observe(el));
+      });
+    </script>
+
+    <script type="module" src="script.js"></script>
   </body>
 </html>
