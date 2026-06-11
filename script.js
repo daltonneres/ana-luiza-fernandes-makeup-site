@@ -79,14 +79,14 @@ const db = getFirestore(app);
 function calcularValor(procedimentosTexto) {
   const mapaPrecos = {
     "Maquiagem Social": 135,
-    "Brow Lamination": 120,
     "Maquiagem Express": 105,
-    "Baby Liss": 60,
-    "Semipreso Romântico": 90,
-    "Coque Express": 120,
+    "Brow Lamination": 120,
     "Brow Lamination + Henna": 135,
+    "Baby Liss": 60,
     "Rabo Clássico": 80,
+    "Semipreso Romântico": 90,
     "Semipreso com Tranças": 100,
+    "Coque Express": 120,
     "Lash Lift": 120,
     "Design Personalizado": 35,
     "Design Personalizado + Tintura": 45,
@@ -301,19 +301,19 @@ function showProcedures() {
   sendBtn.style.display = 'none';
   botMessage("💄 Agora me conta, quais procedimentos você gostaria de fazer? (pode escolher mais de um)");
   const procedures = [
-    "Maquiagem Social - R$ 135,00",
-    "Brow Lamination - R$ 120,00",
-    "Maquiagem Express - R$ 105,00",
-    "Baby Liss - R$ 60,00",
-    "Semipreso Romântico - R$ 90,00",
-    "Coque Express - R$ 120,00",
-    "Brow Lamination + Henna - R$ 135,00",
-    "Rabo Clássico - R$ 80,00",
-    "Semipreso com Tranças - R$ 100,00",
-    "Lash Lift - R$ 120,00",
-    "Design Personalizado - R$ 35,00",
-    "Design Personalizado + Tintura - R$ 45,00",
-    "Depilação de Buço - R$ 15,00"
+    "💄 Maquiagem Social - R$ 135,00",
+    "⚡ Maquiagem Express - R$ 105,00",
+    "🌿 Brow Lamination - R$ 120,00",
+    "🌿 Brow Lamination + Henna - R$ 135,00",
+    "✨ Baby Liss - R$ 60,00",
+    "🌸 Semipreso Romântico - R$ 90,00",
+    "🌺 Semipreso com Tranças - R$ 100,00",
+    "👑 Coque Express - R$ 120,00",
+    "🎀 Rabo Clássico - R$ 80,00",
+    "👁️ Lash Lift - R$ 120,00",
+    "✏️ Design Personalizado - R$ 35,00",
+    "🎨 Design Personalizado + Tintura - R$ 45,00",
+    "🌙 Depilação de Buço - R$ 15,00"
   ];
 
   const selected = [];
