@@ -19,9 +19,9 @@ let step = 0;
 const answers = {};
 
 const questions = [
-  "👋 Olá, MARAVILHOSA! ✨💖\nSeja bem-vinda(o) ao autoatendimento da Ana Luiza Fernandes Makeup!\nPor favor, me diga seu nome para começarmos:",
+  "👋 Olá, MARAVILHOSA! ✨💖\nSeja muito bem-vinda(o) ao autoatendimento da Ana Luiza Fernandes Makeup!\nPara começarmos, qual é o seu nome? 😊",
   "Perfeito! Agora, poderia me informar seu número de telefone com DDD? 📞",
-  "Prazer em falar com você! Qual seu Instagram? (opcional, digite 'pular')",
+  "Que prazer falar com você! 💕 Qual é o seu Instagram? (se preferir não informar, digite 'pular')",
   "Escolha a data:",
   "Qual período prefere? (Manhã, Tarde, Noite)",
   "Quais procedimentos deseja?",
@@ -32,7 +32,7 @@ let inactivityTimer;
 function resetInactivityTimer() {
   clearTimeout(inactivityTimer);
   inactivityTimer = setTimeout(() => {
-    botMessage("⚠️ Atendimento encerrado por inatividade. Voltando ao início...");
+    botMessage("⏳ Notei que você ficou um tempinho sem responder, então reiniciei nosso atendimento. Vamos começar de novo? 😊");
     chatMessages.innerHTML = "";
     step = 0;
     for (let key in answers) delete answers[key];
@@ -111,7 +111,7 @@ function askNext() {
     else botMessage(question);
   } else {
     sendToWhatsAppAndFirestore();
-    botMessage("🎉 Obrigada por preencher todas as informações! Voltaremos em breve.");
+    botMessage("🎉 Prontinho! Recebi todas as suas informações. Te chamo no WhatsApp para confirmar tudo certinho. Até já! 💕");
   }
 }
 
@@ -119,7 +119,7 @@ function askNext() {
 function showPeriods() {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
-  botMessage("Qual período prefere?");
+  botMessage("Ótimo! 😊 Qual período do dia fica melhor para você?");
   const periods = ["Manhã", "Tarde", "Noite"];
   const optionsDiv = document.createElement('div');
   optionsDiv.id = 'optionsDiv';
@@ -141,7 +141,7 @@ function showPeriods() {
 }
 
 function showPeriodHours(period) {
-  botMessage(`Escolha o horário (${period}):`);
+  botMessage(`Perfeito! Agora escolha o horário (${period}): 🕒`);
   const optionsDiv = document.createElement('div');
   optionsDiv.id = 'optionsDiv';
   chatMessages.appendChild(optionsDiv);
@@ -172,7 +172,11 @@ function showPeriodHours(period) {
 function showOptions(question) {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
-  botMessage(question);
+  if (question === questions[6]) {
+    botMessage("Quase lá! 💳 Qual será a forma de pagamento?");
+  } else {
+    botMessage(question);
+  }
   const optionsDiv = document.createElement('div');
   optionsDiv.id = 'optionsDiv';
   chatMessages.appendChild(optionsDiv);
@@ -198,7 +202,7 @@ function showOptions(question) {
 function showCalendar() {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
-  botMessage('Escolha o mês e o dia:');
+  botMessage('Agora vamos marcar a data! 📅 Escolha o mês e o dia:');
   const container = document.createElement('div');
   container.id = 'calendarContainer';
   chatMessages.appendChild(container);
@@ -295,7 +299,7 @@ let monthsAvailable = [
 function showProcedures() {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
-  botMessage("Quais procedimentos deseja?");
+  botMessage("💄 Agora me conta, quais procedimentos você gostaria de fazer? (pode escolher mais de um)");
   const procedures = [
     "Maquiagem Social - R$ 135,00",
     "Brow Lamination - R$ 120,00",
@@ -366,8 +370,8 @@ function formatarTelefone(tel) {
 
 async function sendToWhatsAppAndFirestore() {
 const mensagem = 
-  `Olá Ana! 💕 Tudo bem?\n` +
-  `Estou passando aqui pelo seu atendimento automático e gostaria muito de agendar um horário com você! ✨\n\n` +
+  `Oi Ana! 💕 Tudo bem?\n` +
+  `Acabei de fazer meu agendamento pelo autoatendimento do site e ficaria super feliz em confirmar com você! ✨\n\n` +
   `Aqui estão minhas informações:\n` +
   `👤 Nome: ${answers[questions[0]]}\n` +
   `📞 Telefone: ${formatarTelefone(answers[questions[1]])}\n` +
@@ -413,7 +417,7 @@ sendBtn.addEventListener('click', () => {
     const telefoneRegex = /^[0-9]{2} [0-9]{8,9}$/; // 00 000000000
 
     if (!telefoneRegex.test(input)) {
-      botMessage("⚠️ Número inválido!\nSiga o formato: 00 000000000");
+      botMessage("⚠️ Ops, esse formato não é válido!\nPor favor, digite assim: 00 000000000 (DDD + número, só números).");
       return; // não avança
     }
   }
