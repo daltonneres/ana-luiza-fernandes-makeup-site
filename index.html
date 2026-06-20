@@ -21,12 +21,12 @@
     <!-- Cabeçalho -->
     <header id="site-header">
       <div class="container header-content">
-        <img
-          src="imgs/logo.png"
-          alt="Logo Ana Luiza Fernandes Makeup"
-          title="Logo Ana Luiza Fernandes Makeup"
-          class="logo"
-        />
+        <div class="header-brand">
+          <div class="header-tagline">
+            <span class="header-title">Ana Luiza Fernandes</span>
+            <span class="header-subtitle">Mais que Maquiagem, Uma Experiência</span>
+          </div>
+        </div>
         <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
@@ -49,35 +49,12 @@
     <section id="home" class="hero">
       <div class="container">
 
-        <!-- Texto sobre o banner -->
+        <!-- Texto de boas-vindas -->
         <div class="hero-overlay">
         <h2>Mais que Maquiagem, Uma Experiência</h2>
         <span class="hero-eyebrow">
         Permita-se viver um momento único de cuidado, autoestima e transformação.
         </span>
-        </div>
-
-        <!-- Banner Slider -->
-        <div class="banner-slider">
-          <div class="slide fade">
-            <img src="imgs/banner 01.jpg" alt="Banner 1" title="Banner 1" />
-          </div>
-          <div class="slide fade">
-            <img src="imgs/banner 02.jpg" alt="Banner 2" title="Banner 2" />
-          </div>
-          <div class="slide fade">
-            <img src="imgs/banner 03.jpg" alt="Banner 3" title="Banner 3" />
-          </div>
-          <div class="slide fade">
-            <img src="imgs/banner 04.jpg" alt="Banner 4" title="Banner 4" />
-          </div>
-          <!-- Indicadores do slider -->
-          <div class="slider-dots">
-            <span class="dot active" onclick="goToSlide(0)"></span>
-            <span class="dot" onclick="goToSlide(1)"></span>
-            <span class="dot" onclick="goToSlide(2)"></span>
-            <span class="dot" onclick="goToSlide(3)"></span>
-          </div>
         </div>
       </div>
 
@@ -699,35 +676,6 @@
     </a>
 
     <script>
-      // ── Slider ──────────────────────────────────────────────
-      let slideIndex = 0;
-      const slides = document.getElementsByClassName("slide");
-      const dots = document.getElementsByClassName("dot");
-
-      function showSlides() {
-        for (let i = 0; i < slides.length; i++) {
-          slides[i].style.display = "none";
-          if (dots[i]) dots[i].classList.remove("active");
-        }
-        slideIndex++;
-        if (slideIndex > slides.length) slideIndex = 1;
-        slides[slideIndex - 1].style.display = "block";
-        if (dots[slideIndex - 1]) dots[slideIndex - 1].classList.add("active");
-        setTimeout(showSlides, 4000);
-      }
-
-      function goToSlide(n) {
-        slideIndex = n;
-        for (let i = 0; i < slides.length; i++) {
-          slides[i].style.display = "none";
-          if (dots[i]) dots[i].classList.remove("active");
-        }
-        slides[n].style.display = "block";
-        if (dots[n]) dots[n].classList.add("active");
-      }
-
-      showSlides();
-
       // ── Header scroll sticky ─────────────────────────────────
       const header = document.getElementById("site-header");
       window.addEventListener("scroll", () => {
