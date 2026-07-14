@@ -354,17 +354,29 @@ function showProcedures() {
   optionsDiv.appendChild(doneBtn);
 }
 
-// --- Enviar para WhatsApp + Firestore ---
 function formatarTelefone(tel) {
-  // Entrada: 46 999999999
-  const [ddd, numero] = tel.split(" ");
+  if (!tel) return "";
+
+  // Remove tudo que não for número
+  const numeros = tel.replace(/\D/g, "");
+
+  // Remove o código do país (55), se existir
+  const telefone = numeros.startsWith("55")
+    ? numeros.slice(2)
+    : numeros;
+
+  // Deve ficar com DDD + número
+  if (telefone.length < 10 || telefone.length > 11) {
+    return tel; // ou return "";
+  }
+
+  const ddd = telefone.slice(0, 2);
+  const numero = telefone.slice(2);
 
   if (numero.length === 9) {
-    // Formato 99999-9999
-    return `(${ddd}) ${numero.slice(0,5)}-${numero.slice(5)}`;
+    return `(${ddd}) ${numero.slice(0, 5)}-${numero.slice(5)}`;
   } else {
-    // Formato 9999-9999
-    return `(${ddd}) ${numero.slice(0,4)}-${numero.slice(4)}`;
+    return `(${ddd}) ${numero.slice(0, 4)}-${numero.slice(4)}`;
   }
 }
 
@@ -414,11 +426,25 @@ sendBtn.addEventListener('click', () => {
 
   // --- VALIDAÇÃO EXCLUSIVA DO TELEFONE ---
   if (questions[step] === "Perfeito! Agora, poderia me informar seu número de telefone com DDD? 📞") {
-    const telefoneRegex = /^[0-9]{2} [0-9]{8,9}$/; // 00 000000000
 
-    if (!telefoneRegex.test(input)) {
-      botMessage("⚠️ Ops, esse formato não é válido!\nPor favor, digite assim: 00 000000000 (DDD + número, só números).");
-      return; // não avança
+    // Remove tudo que não for número
+    const numeros = input.replace(/\D/g, "");
+
+    // Remove o código do país (55), se existir
+    const telefone = numeros.startsWith("55")
+      ? numeros.slice(2)
+      : numeros;
+
+    // Aceita DDD + número (10 ou 11 dígitos)
+    if (telefone.length !== 10 && telefone.length !== 11) {
+      botMessage(
+        "⚠️ Número inválido!\n\nVocê pode digitar:\n" +
+        "• (46) 99999-9999\n" +
+        "• 46 99999-9999\n" +
+        "• 46999999999\n" +
+        "• +55 46 99999-9999"
+      );
+      return;
     }
   }
 
