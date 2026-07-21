@@ -90,13 +90,26 @@ function calcularValor(procedimentosTexto) {
     "Lash Lift": 120,
     "Design Personalizado": 35,
     "Design Personalizado + Tintura": 45,
+    "Design Personalizado + Henna": 45,
     "Depilação de Buço": 15
   };
 
   let total = 0;
+
+  const procedimentos = procedimentosTexto
+    .split(",")
+    .map(p =>
+      p.replace(/^[^\p{L}\d]+/u, "")
+       .split(" - ")[0]
+       .trim()
+    );
+
   for (const nome in mapaPrecos) {
-    if (procedimentosTexto.includes(nome)) total += mapaPrecos[nome];
+    if (procedimentos.includes(nome)) {
+      total += mapaPrecos[nome];
+    }
   }
+
   return total;
 }
 

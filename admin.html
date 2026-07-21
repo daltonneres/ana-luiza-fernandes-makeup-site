@@ -113,7 +113,26 @@
       <input type="time" id="horaManual" required />
 
       <label>Procedimento:</label>
-      <input type="text" id="procedimentoManual" placeholder="Ex: Maquiagem Social" required />
+      <input type="text" id="procedimentoManual" list="procedimentosCatalogo" placeholder="Digite ou escolha na lista" autocomplete="off" required />
+      <datalist id="procedimentosCatalogo">
+        <option value="Maquiagem Social">
+        <option value="Maquiagem Express">
+        <option value="Brow Lamination">
+        <option value="Brow Lamination + Henna">
+        <option value="Baby Liss">
+        <option value="Rabo Clássico">
+        <option value="Semipreso Romântico">
+        <option value="Semipreso com Tranças">
+        <option value="Coque Express">
+        <option value="Lash Lift">
+        <option value="Design Personalizado">
+        <option value="Design Personalizado + Tintura">
+        <option value="Design Personalizado + Henna">
+        <option value="Depilação de Buço">
+      </datalist>
+
+      <label style="display:none;">Observações:</label>
+      <textarea id="obsManual" rows="3" placeholder="Ex: Cliente preferiu um horário extra..." style="display:none;"></textarea>
 
       <label>Forma de Pagamento:</label>
       <select id="pagamentoManual">
@@ -128,9 +147,6 @@
 
       <label>Desconto (R$):</label>
       <input type="number" id="descontoManual" placeholder="Ex: 10" />
-
-      <label>Observações:</label>
-      <textarea id="obsManual" rows="3" placeholder="Ex: Cliente preferiu um horário extra..."></textarea>
 
       <button id="salvarManual" class="btnPrimario">💾 Salvar Atendimento</button>
     </div>
@@ -456,6 +472,29 @@ body {
 .btnPrimario:hover { background: var(--verde-lt); transform: translateY(-2px); }
 .btnPerigo:hover { background: #a8473f; transform: translateY(-2px); }
 .btnSecundario:hover { background: var(--dourado); color: var(--text); transform: translateY(-2px); }
+
+.btnPrimario:active, .btnPerigo:active, .btnSecundario:active {
+  transform: scale(0.95);
+}
+
+/* --- Botão Novo Atendimento em destaque --- */
+#btnNovoAtendimento {
+  font-size: .92rem;
+  padding: 12px 24px;
+  box-shadow: 0 4px 14px rgba(85,107,47,.35);
+}
+#btnNovoAtendimento:hover {
+  box-shadow: 0 6px 18px rgba(85,107,47,.45);
+}
+#btnNovoAtendimento:active {
+  box-shadow: 0 2px 8px rgba(85,107,47,.3);
+}
+@media (max-width: 600px) {
+  #btnNovoAtendimento {
+    width: 100%;
+    order: -1;
+  }
+}
 
 /* --- Tabela --- */
 table {
@@ -810,6 +849,48 @@ table {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+  // Rola suavemente até o campo em foco dentro do modal, para facilitar
+  // o acesso a campos em telas de celular.
+  document.querySelectorAll('.modal-content input, .modal-content select, .modal-content textarea').forEach(function (el) {
+    el.addEventListener('focus', function () {
+      setTimeout(function () {
+        el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }, 200);
+    });
+  });
+
+  // Catálogo de procedimentos com valores — preenche o campo "Valor (R$)"
+  // automaticamente quando o procedimento digitado bate com um item do catálogo.
+  const catalogoProcedimentos = {
+    "Maquiagem Social": 135,
+    "Maquiagem Express": 105,
+    "Brow Lamination": 120,
+    "Brow Lamination + Henna": 135,
+    "Baby Liss": 60,
+    "Rabo Clássico": 80,
+    "Semipreso Romântico": 90,
+    "Semipreso com Tranças": 100,
+    "Coque Express": 120,
+    "Lash Lift": 120,
+    "Design Personalizado": 35,
+    "Design Personalizado + Tintura": 45,
+    "Design Personalizado + Henna": 45,
+    "Depilação de Buço": 15
+  };
+
+  const campoProcedimento = document.getElementById('procedimentoManual');
+  const campoValor = document.getElementById('valorManual');
+  if (campoProcedimento && campoValor) {
+    campoProcedimento.addEventListener('input', function () {
+      const preco = catalogoProcedimentos[campoProcedimento.value];
+      if (preco !== undefined) {
+        campoValor.value = preco;
+      }
+    });
+  }
+</script>
 
 </body>
 </html>
