@@ -100,8 +100,8 @@ function calcularValor(procedimentosTexto) {
     .split(",")
     .map(p =>
       p.replace(/^[^\p{L}\d]+/u, "")
-       .split(" - ")[0]
-       .trim()
+        .split(" - ")[0]
+        .trim()
     );
 
   for (const nome in mapaPrecos) {
@@ -165,7 +165,7 @@ function showPeriodHours(period) {
   if (period === "Noite") { start = 18; end = 20; }
 
   for (let h = start; h <= end; h++) {
-    const hour = `${String(h).padStart(2,'0')}:00`;
+    const hour = `${String(h).padStart(2, '0')}:00`;
     const btn = document.createElement('button');
     btn.className = "chat-option-btn";
     btn.innerText = hour;
@@ -226,19 +226,19 @@ function showCalendar() {
   const currentDay = today.getDate();
 
   // --- MESES ATUALIZADOS (NOVEMBRO REMOVIDO + MARÇO E ABRIL INCLUÍDOS) ---
-let monthsAvailable = [
-  { name: "Dezembro 2025", month: 11, year: 2025 },
-  { name: "Janeiro 2026", month: 0, year: 2026 },
-  { name: "Fevereiro 2026", month: 1, year: 2026 },
-  { name: "Março 2026", month: 2, year: 2026 },
-  { name: "Abril 2026", month: 3, year: 2026 },
-  { name: "Maio 2026", month: 4, year: 2026 },
-  { name: "Junho 2026", month: 5, year: 2026 },
-  { name: "Julho 2026", month: 6, year: 2026 },
-  { name: "Agosto 2026", month: 7, year: 2026 },
-  { name: "Setembro 2026", month: 8, year: 2026 },
-  { name: "Outubro 2026", month: 9, year: 2026 }
-];
+  let monthsAvailable = [
+    { name: "Dezembro 2025", month: 11, year: 2025 },
+    { name: "Janeiro 2026", month: 0, year: 2026 },
+    { name: "Fevereiro 2026", month: 1, year: 2026 },
+    { name: "Março 2026", month: 2, year: 2026 },
+    { name: "Abril 2026", month: 3, year: 2026 },
+    { name: "Maio 2026", month: 4, year: 2026 },
+    { name: "Junho 2026", month: 5, year: 2026 },
+    { name: "Julho 2026", month: 6, year: 2026 },
+    { name: "Agosto 2026", month: 7, year: 2026 },
+    { name: "Setembro 2026", month: 8, year: 2026 },
+    { name: "Outubro 2026", month: 9, year: 2026 }
+  ];
 
   // --- Remove meses passados automaticamente ---
   monthsAvailable = monthsAvailable.filter(m => {
@@ -277,7 +277,13 @@ let monthsAvailable = [
         month === currentMonth &&
         i < currentDay; // O dia de hoje fica disponível
 
-      if (isPastDay) {
+      // --- BLOQUEIO ESPECÍFICO: 15 DE AGOSTO DE 2026 ---
+      const isBlockedDay =
+        year === 2026 &&
+        month === 7 && // Agosto (Janeiro = 0)
+        i === 15;
+
+      if (isPastDay || isBlockedDay) {
         btn.disabled = true;
         btn.style.opacity = "0.4";
         btn.style.cursor = "not-allowed";
@@ -394,19 +400,19 @@ function formatarTelefone(tel) {
 }
 
 async function sendToWhatsAppAndFirestore() {
-const mensagem = 
-  `Oi Ana! 💕 Tudo bem?\n` +
-  `Acabei de fazer meu agendamento pelo autoatendimento do site e ficaria super feliz em confirmar com você! ✨\n\n` +
-  `Aqui estão minhas informações:\n` +
-  `👤 Nome: ${answers[questions[0]]}\n` +
-  `📞 Telefone: ${formatarTelefone(answers[questions[1]])}\n` +
-  `📸 Instagram: ${answers[questions[2]]}\n` +
-  `📅 Data escolhida: ${answers["Escolha a data:"]}\n` +
-  `🕒 Período: ${answers["Qual período prefere? (Manhã, Tarde, Noite)"]}\n` +
-  `⏰ Horário: ${answers["Escolha o horário"]}\n` +
-  `💄 Procedimentos desejados: ${answers["Quais procedimentos deseja?"]}\n` +
-  `💳 Forma de pagamento: ${answers[questions[6]]}\n\n` +
-  `Fico no aguardo da sua confirmação. Obrigado pelo carinho e atenção! ✨🥰`;
+  const mensagem =
+    `Oi Ana! 💕 Tudo bem?\n` +
+    `Acabei de fazer meu agendamento pelo autoatendimento do site e ficaria super feliz em confirmar com você! ✨\n\n` +
+    `Aqui estão minhas informações:\n` +
+    `👤 Nome: ${answers[questions[0]]}\n` +
+    `📞 Telefone: ${formatarTelefone(answers[questions[1]])}\n` +
+    `📸 Instagram: ${answers[questions[2]]}\n` +
+    `📅 Data escolhida: ${answers["Escolha a data:"]}\n` +
+    `🕒 Período: ${answers["Qual período prefere? (Manhã, Tarde, Noite)"]}\n` +
+    `⏰ Horário: ${answers["Escolha o horário"]}\n` +
+    `💄 Procedimentos desejados: ${answers["Quais procedimentos deseja?"]}\n` +
+    `💳 Forma de pagamento: ${answers[questions[6]]}\n\n` +
+    `Fico no aguardo da sua confirmação. Obrigado pelo carinho e atenção! ✨🥰`;
 
   const telefone = "554699401775";
   window.open(`https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`, '_blank');
@@ -476,27 +482,27 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // POP-UP DE AVISO
-  document.addEventListener("DOMContentLoaded", () => {
-    const popup = document.getElementById("popupAviso");
-    const fechar = document.getElementById("fecharPopup");
-    const entendi = document.getElementById("entendiPopup");
+document.addEventListener("DOMContentLoaded", () => {
+  const popup = document.getElementById("popupAviso");
+  const fechar = document.getElementById("fecharPopup");
+  const entendi = document.getElementById("entendiPopup");
 
-    // abre popup após 1 segundo
-    setTimeout(() => {
-      popup.classList.add("active");
-    }, 1000);
+  // abre popup após 1 segundo
+  setTimeout(() => {
+    popup.classList.add("active");
+  }, 1000);
 
-    function fecharPopup() {
-      popup.classList.remove("active");
+  function fecharPopup() {
+    popup.classList.remove("active");
+  }
+
+  fechar.addEventListener("click", fecharPopup);
+  entendi.addEventListener("click", fecharPopup);
+
+  // fechar clicando fora
+  popup.addEventListener("click", (e) => {
+    if (e.target === popup) {
+      fecharPopup();
     }
-
-    fechar.addEventListener("click", fecharPopup);
-    entendi.addEventListener("click", fecharPopup);
-
-    // fechar clicando fora
-    popup.addEventListener("click", (e) => {
-      if (e.target === popup) {
-        fecharPopup();
-      }
-    });
   });
+});
