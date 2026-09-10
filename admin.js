@@ -45,6 +45,30 @@ const btnExportar = document.getElementById("btnExportar");
 const btnApagarMes = document.getElementById("btnApagarMes");
 const btnNovoAtendimento = document.getElementById("btnNovoAtendimento");
 
+// --- Despesas: elementos --- //
+const tabelaDespesas = document.getElementById("tabelaDespesas");
+const valorDespesasEl = document.getElementById("valorDespesas");
+const valorLiquidoEl = document.getElementById("valorLiquido");
+const btnNovaDespesa = document.getElementById("btnNovaDespesa");
+const modalDespesa = document.getElementById("modalDespesa");
+const fecharModalDespesa = document.getElementById("fecharModalDespesa");
+const salvarDespesaBtn = document.getElementById("salvarDespesa");
+
+// Totais globais usados para calcular o valor líquido (bruto - despesas)
+let totalBrutoGlobal = 0;
+let totalDespesasGlobal = 0;
+
+// Estado do filtro de mês: "todos" por padrão (antes controlado pela opção
+// "Todos os Meses" dentro do <select>, agora controlado pelo botão dedicado)
+let filtroMesAtual = "todos";
+
+function atualizarResumoLiquido() {
+  const liquido = totalBrutoGlobal - totalDespesasGlobal;
+  if (valorLiquidoEl) {
+    valorLiquidoEl.innerHTML = `<strong>Valor líquido: R$ ${liquido.toFixed(2)}</strong>`;
+  }
+}
+
 // --- Login --- //
 btnLogin.addEventListener("click", async () => {
   const email = usuarioInput.value.trim();
@@ -69,6 +93,10 @@ onAuthStateChanged(auth, (user) => {
     adminContainer.style.display = "block";
     criarFiltros();
     carregarAgendamentos();
+    carregarDespesas();
+    // Espera o layout renderizar para calcular a posição do cabeçalho fixo
+    requestAnimationFrame(ajustarHeaderFixo);
+    setTimeout(ajustarHeaderFixo, 300); // recalcula após fontes/ícones carregarem
   } else {
     adminContainer.style.display = "none";
     loginContainer.style.display = "flex";
@@ -77,14 +105,32 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+// --- Cabeçalho fixo: mantém os botões sempre visíveis, logo abaixo do
+//     cabeçalho do site, independente da rolagem da página --- //
+function ajustarHeaderFixo() {
+  const siteHeaderEl = document.querySelector(".site-header");
+  const adminHeaderEl = document.getElementById("adminHeader");
+  const spacerEl = document.getElementById("adminHeaderSpacer");
+  if (!siteHeaderEl || !adminHeaderEl || !spacerEl) return;
+
+  const topOffset = siteHeaderEl.offsetHeight;
+  adminHeaderEl.style.top = `${topOffset}px`;
+  spacerEl.style.height = `${adminHeaderEl.offsetHeight + 10}px`;
+}
+
+window.addEventListener("resize", () => {
+  if (adminContainer.style.display !== "none") ajustarHeaderFixo();
+});
+
 // --- Criar filtros de mês e dia --- //
 function criarFiltros() {
   if (document.getElementById("filtrosContainer")) return;
   const filtrosContainer = document.createElement("div");
   filtrosContainer.id = "filtrosContainer";
-  filtrosContainer.style.display = "flex";
+  filtrosContainer.style.display = "none"; // começa escondido, some botão "🔍 Filtros" que revela
   filtrosContainer.style.justifyContent = "center";
   filtrosContainer.style.alignItems = "center";
+  filtrosContainer.style.flexWrap = "wrap";
   filtrosContainer.style.gap = "10px";
   filtrosContainer.style.marginBottom = "15px";
 
@@ -94,8 +140,6 @@ function criarFiltros() {
   selectMes.style.borderRadius = "6px";
 
 const meses = [
-  { nome: "Todos os Meses", mes: "todos" },
-
   { nome: "Novembro 2025", mes: "2025-11" },
   { nome: "Dezembro 2025", mes: "2025-12" },
 
@@ -127,10 +171,33 @@ const meses = [
   const btnFiltrar = document.createElement("button");
   btnFiltrar.textContent = "🔍 Filtrar";
   btnFiltrar.className = "btnSecundario";
-  btnFiltrar.onclick = carregarAgendamentos;
+  btnFiltrar.onclick = () => {
+    filtroMesAtual = selectMes.value;
+    carregarAgendamentos();
+    carregarDespesas();
+  };
 
-  filtrosContainer.append(selectMes, inputDia, btnFiltrar);
-  adminContainer.insertBefore(filtrosContainer, adminContainer.querySelector("h1"));
+  const btnTodosMeses = document.createElement("button");
+  btnTodosMeses.textContent = "📅 Todos os Meses";
+  btnTodosMeses.className = "btnSecundario";
+  btnTodosMeses.onclick = () => {
+    filtroMesAtual = "todos";
+    inputDia.value = "";
+    carregarAgendamentos();
+    carregarDespesas();
+  };
+
+  filtrosContainer.append(selectMes, inputDia, btnFiltrar, btnTodosMeses);
+  adminContainer.insertBefore(filtrosContainer, adminContainer.querySelector(".panel-title"));
+
+  // Botão "🔍 Filtros" no cabeçalho abre/fecha o painel de filtros
+  const btnFiltros = document.getElementById("btnFiltros");
+  if (btnFiltros) {
+    btnFiltros.onclick = () => {
+      const aberto = filtrosContainer.style.display === "flex";
+      filtrosContainer.style.display = aberto ? "none" : "flex";
+    };
+  }
 }
 
 // --- Carregar agendamentos --- //
@@ -138,7 +205,7 @@ async function carregarAgendamentos() {
   const querySnapshot = await getDocs(collection(db, "agendamentos"));
   tabelaAgendamentos.innerHTML = "";
 
-  const filtroMes = document.getElementById("filtroMes")?.value || "todos";
+  const filtroMes = filtroMesAtual;
   const filtroDia = document.getElementById("filtroDia")?.value || "";
 
   let agendamentos = [];
@@ -224,7 +291,9 @@ agendamentos.sort((a, b) => {
   });
 
   totalAgendamentos.textContent = `Total de agendamentos: ${contador}`;
-  valorTotal.textContent = `Valor total: R$ ${total.toFixed(2)}`;
+  valorTotal.textContent = `Valor bruto (atendimentos): R$ ${total.toFixed(2)}`;
+  totalBrutoGlobal = total;
+  atualizarResumoLiquido();
 
   let resumoHTML = "<h4>Formas de Pagamento:</h4><ul>";
   for (const [forma, valor] of Object.entries(pagamentos))
@@ -239,6 +308,97 @@ agendamentos.sort((a, b) => {
       await updateDoc(doc(db, "agendamentos", id), { concluido });
       if (concluido) alert("💖 Mais um atendimento concluído! Parabéns, Ana! 🎉✨");
     });
+  });
+}
+
+// --- Despesas: carregar --- //
+async function carregarDespesas() {
+  if (!tabelaDespesas) return;
+  const querySnapshot = await getDocs(collection(db, "despesas"));
+  tabelaDespesas.innerHTML = "";
+
+  const filtroMes = filtroMesAtual;
+  const filtroDia = document.getElementById("filtroDia")?.value || "";
+
+  let despesas = [];
+  querySnapshot.forEach((docSnap) => {
+    const d = docSnap.data();
+    if (!d.data) return;
+    d.id = docSnap.id;
+    despesas.push(d);
+  });
+
+  despesas.sort((a, b) => new Date(a.data) - new Date(b.data));
+
+  let totalDespesas = 0;
+
+  despesas.forEach((d) => {
+    const dataBase = d.data.slice(0, 7);
+    if (filtroMes !== "todos" && dataBase !== filtroMes) return;
+    if (filtroDia && d.data !== filtroDia) return;
+
+    const valor = Number(d.valor || 0);
+    totalDespesas += valor;
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${d.nome || "-"}</td>
+      <td>${d.data ? d.data.split("-").reverse().join("/") : "-"}</td>
+      <td>${d.descricao || "-"}</td>
+      <td>${d.formaPagamento || "-"}</td>
+      <td>R$ ${valor.toFixed(2)}</td>
+      <td>
+        <button class="btnPerigo btnExcluirDespesa" data-id="${d.id}">🗑️ Excluir</button>
+      </td>
+    `;
+    tabelaDespesas.appendChild(tr);
+  });
+
+  if (valorDespesasEl) valorDespesasEl.textContent = `Despesas: R$ ${totalDespesas.toFixed(2)}`;
+  totalDespesasGlobal = totalDespesas;
+  atualizarResumoLiquido();
+
+  document.querySelectorAll(".btnExcluirDespesa").forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      const id = e.target.dataset.id;
+      if (!confirm("Tem certeza que deseja excluir esta despesa?")) return;
+      await deleteDoc(doc(db, "despesas", id));
+      carregarDespesas();
+    });
+  });
+}
+
+// --- Despesas: modal Nova Despesa --- //
+if (btnNovaDespesa && modalDespesa) {
+  btnNovaDespesa.addEventListener("click", () => {
+    modalDespesa.style.display = "flex";
+  });
+
+  fecharModalDespesa.addEventListener("click", () => {
+    modalDespesa.style.display = "none";
+  });
+
+  salvarDespesaBtn.addEventListener("click", async () => {
+    const nome = document.getElementById("nomeDespesa").value.trim();
+    const data = document.getElementById("dataDespesa").value;
+    const descricao = document.getElementById("descricaoDespesa").value.trim();
+    const valor = parseFloat(document.getElementById("valorDespesa").value || 0);
+    const formaPagamento = document.getElementById("pagamentoDespesa").value;
+
+    if (!nome || !data || !valor) {
+      alert("Preencha todos os campos da despesa!");
+      return;
+    }
+
+    await addDoc(collection(db, "despesas"), { nome, data, descricao, valor, formaPagamento });
+
+    alert("✅ Despesa adicionada!");
+    modalDespesa.style.display = "none";
+    document.getElementById("nomeDespesa").value = "";
+    document.getElementById("dataDespesa").value = "";
+    document.getElementById("descricaoDespesa").value = "";
+    document.getElementById("valorDespesa").value = "";
+    carregarDespesas();
   });
 }
 
@@ -413,9 +573,10 @@ async function exportarPDF(mes) {
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF();
 
+  // --- Página 1: Agendamentos --- //
   const querySnapshot = await getDocs(collection(db, "agendamentos"));
   let linhas = [];
-  let total = 0;
+  let totalBruto = 0;
 
   querySnapshot.forEach(docSnap => {
     const ag = docSnap.data();
@@ -425,7 +586,7 @@ async function exportarPDF(mes) {
         0
       );
 
-      total += valorFinal;
+      totalBruto += valorFinal;
 
       linhas.push([
         ag.nome || "-",
@@ -438,22 +599,74 @@ async function exportarPDF(mes) {
     }
   });
 
-  if (!linhas.length) {
+  // --- Despesas do mês --- //
+  const despesasSnapshot = await getDocs(collection(db, "despesas"));
+  let linhasDespesas = [];
+  let totalDespesas = 0;
+
+  despesasSnapshot.forEach(docSnap => {
+    const d = docSnap.data();
+    if (d.data?.startsWith(mes)) {
+      const valor = Number(d.valor || 0);
+      totalDespesas += valor;
+
+      linhasDespesas.push([
+        d.nome || "-",
+        d.data.split("-").reverse().join("/"),
+        d.descricao || "-",
+        d.formaPagamento || "-",
+        `R$ ${valor.toFixed(2)}`
+      ]);
+    }
+  });
+
+  if (!linhas.length && !linhasDespesas.length) {
     alert("Nenhum dado encontrado para este mês.");
     return false;
   }
 
+  // Página 1 — Agendamentos
   pdf.text(`Relatório de Agendamentos - ${mes}`, 14, 15);
+  if (linhas.length) {
+    pdf.autoTable({
+      startY: 25,
+      head: [["Nome", "Telefone", "Data", "Procedimento", "Pagamento", "Valor"]],
+      body: linhas,
+      styles: { fontSize: 9 }
+    });
+  } else {
+    pdf.setFontSize(10);
+    pdf.text("Nenhum atendimento neste mês.", 14, 30);
+  }
+  const yAgendamentos = pdf.lastAutoTable?.finalY || 40;
+  pdf.text(`Total bruto (atendimentos): R$ ${totalBruto.toFixed(2)}`, 14, yAgendamentos + 10);
 
-  pdf.autoTable({
-    startY: 25,
-    head: [["Nome", "Telefone", "Data", "Procedimento", "Pagamento", "Valor"]],
-    body: linhas,
-    styles: { fontSize: 9 }
-  });
+  // Página 2 — Despesas (nova planilha/página do relatório)
+  pdf.addPage();
+  pdf.text(`Despesas - ${mes}`, 14, 15);
+  if (linhasDespesas.length) {
+    pdf.autoTable({
+      startY: 25,
+      head: [["Despesa", "Data", "Descrição", "Pagamento", "Valor"]],
+      body: linhasDespesas,
+      styles: { fontSize: 9 }
+    });
+  } else {
+    pdf.setFontSize(10);
+    pdf.text("Nenhuma despesa registrada neste mês.", 14, 30);
+  }
+  const yDespesas = pdf.lastAutoTable?.finalY || 40;
+  pdf.text(`Total de despesas: R$ ${totalDespesas.toFixed(2)}`, 14, yDespesas + 10);
 
-  const y = pdf.lastAutoTable.finalY || 40;
-  pdf.text(`Total do mês: R$ ${total.toFixed(2)}`, 14, y + 10);
+  // --- Resumo Financeiro final (já descontando as despesas) --- //
+  const totalLiquido = totalBruto - totalDespesas;
+  pdf.setFontSize(12);
+  pdf.text("Resumo Financeiro", 14, yDespesas + 25);
+  pdf.setFontSize(10);
+  pdf.text(`Total bruto: R$ ${totalBruto.toFixed(2)}`, 14, yDespesas + 33);
+  pdf.text(`Total de despesas: R$ ${totalDespesas.toFixed(2)}`, 14, yDespesas + 40);
+  pdf.setFontSize(11);
+  pdf.text(`Total líquido: R$ ${totalLiquido.toFixed(2)}`, 14, yDespesas + 49);
 
   pdf.save(`agendamentos-${mes}.pdf`);
   return true;
@@ -469,15 +682,23 @@ async function apagarPorMes(mes) {
     }
   }
 
-  alert(`Agendamentos de ${mes} apagados com sucesso.`);
+  const despesasSnapshot = await getDocs(collection(db, "despesas"));
+  for (const docSnap of despesasSnapshot.docs) {
+    const d = docSnap.data();
+    if (d.data?.startsWith(mes)) {
+      await deleteDoc(doc(db, "despesas", docSnap.id));
+    }
+  }
+
+  alert(`Agendamentos e despesas de ${mes} apagados com sucesso.`);
 }
 
 
 let pdfExportado = false;
 
 btnExportar.onclick = async () => {
-  const mes = document.getElementById("filtroMes").value;
-  if (mes === "todos") return alert("Selecione um mês.");
+  const mes = filtroMesAtual;
+  if (mes === "todos") return alert("Selecione um mês específico (o filtro está em 'Todos os Meses').");
   pdfExportado = await exportarPDF(mes);
 };
 
@@ -487,12 +708,14 @@ btnApagarMes.onclick = async () => {
     return;
   }
 
-  const mes = document.getElementById("filtroMes").value;
+  const mes = filtroMesAtual;
+  if (mes === "todos") return alert("Selecione um mês específico (o filtro está em 'Todos os Meses').");
   if (!confirm(`Tem certeza que deseja apagar os dados de ${mes}?`)) return;
 
   await apagarPorMes(mes);
   pdfExportado = false;
   carregarAgendamentos();
+  carregarDespesas();
 };
 
 const btnEsqueci = document.getElementById("btnEsqueciSenha");
