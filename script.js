@@ -78,8 +78,8 @@ const db = getFirestore(app);
 // --- Calcular valor ---
 function calcularValor(procedimentosTexto) {
   const mapaPrecos = {
-    "Maquiagem Social": 135,
-    "Maquiagem Express": 105,
+    "Maquiagem Social": 150,
+    "Curso | AutoMaquiagem": 300,
     "Brow Lamination": 120,
     "Brow Lamination + Henna": 135,
     "Baby Liss": 60,
@@ -320,8 +320,8 @@ function showProcedures() {
   sendBtn.style.display = 'none';
   botMessage("💄 Agora me conta, quais procedimentos você gostaria de fazer? (pode escolher mais de um)");
   const procedures = [
-    "💄 Maquiagem Social - R$ 135,00",
-    "⚡ Maquiagem Express - R$ 105,00",
+    "💄 Maquiagem Social - R$ 150,00",
+    "⚡ Curso | AutoMaquiagem - R$ 300,00",
     "🌿 Brow Lamination - R$ 120,00",
     "🌿 Brow Lamination + Henna - R$ 135,00",
     "✨ Baby Liss - R$ 60,00",
