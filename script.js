@@ -20,13 +20,25 @@ const answers = {};
 
 const questions = [
   "👋 Olá, MARAVILHOSA! ✨💖\nSeja muito bem-vinda(o) ao autoatendimento da Ana Luiza Fernandes Makeup!\nPara começarmos, qual é o seu nome? 😊",
-  "Perfeito! Agora, poderia me informar seu número de telefone com DDD? 📞",
-  "Que prazer falar com você! 💕 Qual é o seu Instagram? (se preferir não informar, digite 'pular')",
+  "Perfeito, {nome}! Agora, poderia me informar seu número de telefone com DDD? 📞",
+  "Que prazer falar com você, {nome}! 💕 Qual é o seu Instagram? (se preferir não informar, digite 'pular')",
+  "Ah, {nome}, mais uma coisa 🎂 Qual é a sua data de aniversário? (dia/mês, ex: 15/03) Assim consigo te mandar um carinho especial no seu mês! Se preferir não informar, digite 'pular'.",
   "Escolha a data:",
   "Qual período prefere? (Manhã, Tarde, Noite)",
   "Quais procedimentos deseja?",
   "Qual a forma de pagamento? (PIX, Dinheiro, Cartão de Crédito, Cartão de Débito)"
 ];
+
+// --- Personalização com o nome da cliente ---
+function getPrimeiroNome() {
+  const nome = (answers[questions[0]] || "").trim();
+  if (!nome || nome.toLowerCase() === "não informado") return "querida";
+  return nome.split(" ")[0];
+}
+
+function resolveTemplate(texto) {
+  return texto.replace(/\{nome\}/g, getPrimeiroNome());
+}
 
 let inactivityTimer;
 function resetInactivityTimer() {
@@ -61,7 +73,16 @@ function userMessage(text) {
 
 // --- Firebase Firestore ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAlZAZjT8ZOWPf40Tf4lowdXcWxO179e1I",
@@ -74,6 +95,57 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// --- Disponibilidade (dias, horários e bloqueios definidos no painel) ---
+let dispoConfig = {
+  diasSemana: { 0: true, 1: true, 2: true, 3: true, 4: true, 5: true, 6: true },
+  periodos: {
+    manha: { ativo: true, inicio: 5, fim: 11 },
+    tarde: { ativo: true, inicio: 12, fim: 17 },
+    noite: { ativo: true, inicio: 18, fim: 20 }
+  },
+  diasBloqueados: [],
+  horariosBloqueados: {}
+};
+
+async function carregarDisponibilidade() {
+  try {
+    const snap = await getDoc(doc(db, "disponibilidade", "config"));
+    if (snap.exists()) {
+      const dados = snap.data();
+      dispoConfig = {
+        diasSemana: { ...dispoConfig.diasSemana, ...(dados.diasSemana || {}) },
+        periodos: {
+          manha: { ...dispoConfig.periodos.manha, ...(dados.periodos?.manha || {}) },
+          tarde: { ...dispoConfig.periodos.tarde, ...(dados.periodos?.tarde || {}) },
+          noite: { ...dispoConfig.periodos.noite, ...(dados.periodos?.noite || {}) }
+        },
+        diasBloqueados: dados.diasBloqueados || [],
+        horariosBloqueados: dados.horariosBloqueados || {}
+      };
+    }
+  } catch (e) {
+    console.error("Não foi possível carregar a disponibilidade, usando padrão:", e);
+  }
+}
+const dispoConfigPromise = carregarDisponibilidade();
+
+// --- Retorna a lista de horários já reservados ou bloqueados numa data ---
+async function getHorariosIndisponiveis(dataString) {
+  if (!dataString) return [];
+  const bloqueadosManual = dispoConfig.horariosBloqueados[dataString] || [];
+  const ocupados = [];
+  try {
+    const snap = await getDocs(query(collection(db, "agendamentos"), where("data", "==", dataString)));
+    snap.forEach((docSnap) => {
+      const ag = docSnap.data();
+      if (ag.horario) ocupados.push(ag.horario);
+    });
+  } catch (e) {
+    console.error("Não foi possível verificar horários já reservados:", e);
+  }
+  return [...new Set([...bloqueadosManual, ...ocupados])];
+}
 
 // --- Calcular valor ---
 function calcularValor(procedimentosTexto) {
@@ -121,10 +193,10 @@ function askNext() {
     else if (question === "Quais procedimentos deseja?") showProcedures();
     else if (question === "Escolha a data:") showCalendar();
     else if (question === "Qual a forma de pagamento? (PIX, Dinheiro, Cartão de Crédito, Cartão de Débito)") showOptions(question);
-    else botMessage(question);
+    else botMessage(resolveTemplate(question));
   } else {
     sendToWhatsAppAndFirestore();
-    botMessage("🎉 Prontinho! Recebi todas as suas informações. Te chamo no WhatsApp para confirmar tudo certinho. Até já! 💕");
+    botMessage(resolveTemplate("🎉 Prontinho, {nome}! Recebi todas as suas informações. Te chamo no WhatsApp para confirmar tudo certinho. Até já! 💕"));
   }
 }
 
@@ -132,8 +204,11 @@ function askNext() {
 function showPeriods() {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
-  botMessage("Ótimo! 😊 Qual período do dia fica melhor para você?");
-  const periods = ["Manhã", "Tarde", "Noite"];
+  botMessage(resolveTemplate("Ótimo, {nome}! 😊 Qual período do dia fica melhor para você?"));
+  const periodosAtivos = { "Manhã": "manha", "Tarde": "tarde", "Noite": "noite" };
+  const periods = ["Manhã", "Tarde", "Noite"].filter(
+    (p) => dispoConfig.periodos[periodosAtivos[p]].ativo !== false
+  );
   const optionsDiv = document.createElement('div');
   optionsDiv.id = 'optionsDiv';
   chatMessages.appendChild(optionsDiv);
@@ -153,30 +228,44 @@ function showPeriods() {
   });
 }
 
-function showPeriodHours(period) {
-  botMessage(`Perfeito! Agora escolha o horário (${period}): 🕒`);
+async function showPeriodHours(period) {
+  botMessage(resolveTemplate(`Perfeito, {nome}! Agora escolha o horário (${period}): 🕒`));
   const optionsDiv = document.createElement('div');
   optionsDiv.id = 'optionsDiv';
+  optionsDiv.innerText = "Carregando horários disponíveis...";
   chatMessages.appendChild(optionsDiv);
 
-  let start, end;
-  if (period === "Manhã") { start = 5; end = 11; }
-  if (period === "Tarde") { start = 12; end = 17; }
-  if (period === "Noite") { start = 18; end = 20; }
+  const mapaPeriodo = { "Manhã": "manha", "Tarde": "tarde", "Noite": "noite" };
+  const configPeriodo = dispoConfig.periodos[mapaPeriodo[period]];
+  const start = configPeriodo.inicio;
+  const end = configPeriodo.fim;
+
+  const dataEscolhida = answers["Escolha a data:"];
+  const horariosIndisponiveis = await getHorariosIndisponiveis(dataEscolhida);
+
+  optionsDiv.innerText = "";
 
   for (let h = start; h <= end; h++) {
     const hour = `${String(h).padStart(2, '0')}:00`;
     const btn = document.createElement('button');
     btn.className = "chat-option-btn";
     btn.innerText = hour;
-    btn.onclick = () => {
-      answers["Escolha o horário"] = hour;
-      userMessage(hour);
-      optionsDiv.remove();
-      step++;
-      askNext();
-      resetInactivityTimer();
-    };
+
+    if (horariosIndisponiveis.includes(hour)) {
+      btn.disabled = true;
+      btn.style.opacity = "0.4";
+      btn.style.cursor = "not-allowed";
+      btn.innerText = `${hour} (indisponível)`;
+    } else {
+      btn.onclick = () => {
+        answers["Escolha o horário"] = hour;
+        userMessage(hour);
+        optionsDiv.remove();
+        step++;
+        askNext();
+        resetInactivityTimer();
+      };
+    }
     optionsDiv.appendChild(btn);
   }
 }
@@ -185,10 +274,10 @@ function showPeriodHours(period) {
 function showOptions(question) {
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
-  if (question === questions[6]) {
-    botMessage("Quase lá! 💳 Qual será a forma de pagamento?");
+  if (question === questions[7]) {
+    botMessage(resolveTemplate("Quase lá, {nome}! 💳 Qual será a forma de pagamento?"));
   } else {
-    botMessage(question);
+    botMessage(resolveTemplate(question));
   }
   const optionsDiv = document.createElement('div');
   optionsDiv.id = 'optionsDiv';
@@ -212,10 +301,11 @@ function showOptions(question) {
 }
 
 // --- Calendário ---
-function showCalendar() {
+async function showCalendar() {
+  await dispoConfigPromise;
   userInput.style.display = 'none';
   sendBtn.style.display = 'none';
-  botMessage('Agora vamos marcar a data! 📅 Escolha o mês e o dia:');
+  botMessage(resolveTemplate('Show, {nome}! Agora vamos marcar a data! 📅 Escolha o mês e o dia:'));
   const container = document.createElement('div');
   container.id = 'calendarContainer';
   chatMessages.appendChild(container);
@@ -277,13 +367,15 @@ function showCalendar() {
         month === currentMonth &&
         i < currentDay; // O dia de hoje fica disponível
 
-      // --- BLOQUEIO ESPECÍFICO: 15 DE AGOSTO DE 2026 ---
-      const isBlockedDay =
-        year === 2026 &&
-        month === 7 && // Agosto (Janeiro = 0)
-        i === 15;
+      // --- Dia da semana desativado no painel administrativo ---
+      const diaSemana = new Date(year, month, i).getDay();
+      const diaSemanaDesativado = dispoConfig.diasSemana[diaSemana] === false;
 
-      if (isPastDay || isBlockedDay) {
+      // --- Dia bloqueado manualmente no painel administrativo ---
+      const dateStringDia = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+      const isBlockedDay = dispoConfig.diasBloqueados.includes(dateStringDia);
+
+      if (isPastDay || diaSemanaDesativado || isBlockedDay) {
         btn.disabled = true;
         btn.style.opacity = "0.4";
         btn.style.cursor = "not-allowed";
@@ -407,11 +499,12 @@ async function sendToWhatsAppAndFirestore() {
     `👤 Nome: ${answers[questions[0]]}\n` +
     `📞 Telefone: ${formatarTelefone(answers[questions[1]])}\n` +
     `📸 Instagram: ${answers[questions[2]]}\n` +
+    `🎂 Aniversário: ${answers[questions[3]]}\n` +
     `📅 Data escolhida: ${answers["Escolha a data:"]}\n` +
     `🕒 Período: ${answers["Qual período prefere? (Manhã, Tarde, Noite)"]}\n` +
     `⏰ Horário: ${answers["Escolha o horário"]}\n` +
     `💄 Procedimentos desejados: ${answers["Quais procedimentos deseja?"]}\n` +
-    `💳 Forma de pagamento: ${answers[questions[6]]}\n\n` +
+    `💳 Forma de pagamento: ${answers[questions[7]]}\n\n` +
     `Fico no aguardo da sua confirmação. Obrigado pelo carinho e atenção! ✨🥰`;
 
   const telefone = "554699401775";
@@ -422,6 +515,7 @@ async function sendToWhatsAppAndFirestore() {
       nome: answers[questions[0]],
       telefone: formatarTelefone(answers[questions[1]]),
       instagram: answers[questions[2]],
+      aniversario: answers[questions[3]],
       data: answers["Escolha a data:"],
       periodo: answers["Qual período prefere? (Manhã, Tarde, Noite)"],
       horario: answers["Escolha o horário"],
@@ -444,7 +538,7 @@ sendBtn.addEventListener('click', () => {
   if (!input) return;
 
   // --- VALIDAÇÃO EXCLUSIVA DO TELEFONE ---
-  if (questions[step] === "Perfeito! Agora, poderia me informar seu número de telefone com DDD? 📞") {
+  if (step === 1) {
 
     // Remove tudo que não for número
     const numeros = input.replace(/\D/g, "");

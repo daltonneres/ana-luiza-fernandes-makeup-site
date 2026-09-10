@@ -52,6 +52,7 @@
       <button id="btnLogout" class="btnSecundario" aria-label="Sair do painel">📤 Sair</button>
       <button id="btnNovoAtendimento" class="btnPrimario" aria-label="Adicionar novo atendimento">➕ Novo Atendimento</button>
       <button id="btnFiltros" class="btnSecundario" aria-label="Abrir filtros de mês e dia">🔍 Filtros</button>
+      <button id="btnDisponibilidade" class="btnSecundario" aria-label="Editar disponibilidade de dias e horários">📅 Disponibilidade</button>
       <button id="btnExportar" class="btnSecundario" aria-label="Exportar agendamentos em PDF">📄 Exportar PDF</button>
       <button id="btnApagarMes" class="btnPerigo" aria-label="Apagar agendamentos do mês">🗑️ Apagar mês</button>
       <button id="btnNovaDespesa" class="btnPerigo" aria-label="Adicionar nova despesa">💸 Nova Despesa</button>
@@ -67,6 +68,7 @@
     <tr>
       <th>Nome</th>
       <th>Telefone</th>
+      <th>Aniversário</th>
       <th>Data</th>
       <th>Período</th>
       <th>Horário</th>
@@ -200,6 +202,61 @@
       </select>
 
       <button id="salvarDespesa" class="btnPrimario">💾 Salvar Despesa</button>
+    </div>
+  </div>
+
+  <!-- Modal Disponibilidade -->
+  <div id="modalDisponibilidade" class="modal">
+    <div class="modal-content modal-disponibilidade">
+      <span class="close" id="fecharDisponibilidade">&times;</span>
+      <h2>📅 Disponibilidade de Atendimento</h2>
+
+      <h3 class="disp-subtitulo">Dias da semana em que atende</h3>
+      <div class="disp-dias-semana" id="diasSemanaContainer">
+        <label><input type="checkbox" class="chkDiaSemana" data-dia="0" checked> Dom</label>
+        <label><input type="checkbox" class="chkDiaSemana" data-dia="1" checked> Seg</label>
+        <label><input type="checkbox" class="chkDiaSemana" data-dia="2" checked> Ter</label>
+        <label><input type="checkbox" class="chkDiaSemana" data-dia="3" checked> Qua</label>
+        <label><input type="checkbox" class="chkDiaSemana" data-dia="4" checked> Qui</label>
+        <label><input type="checkbox" class="chkDiaSemana" data-dia="5" checked> Sex</label>
+        <label><input type="checkbox" class="chkDiaSemana" data-dia="6" checked> Sáb</label>
+      </div>
+
+      <h3 class="disp-subtitulo">Períodos e horários</h3>
+      <div class="disp-periodos" id="periodosContainer">
+        <div class="disp-periodo-linha">
+          <label><input type="checkbox" id="ativoManha" checked> Manhã</label>
+          <label>Das <input type="number" id="inicioManha" min="0" max="23" value="6"> às
+            <input type="number" id="fimManha" min="0" max="23" value="11">h</label>
+        </div>
+        <div class="disp-periodo-linha">
+          <label><input type="checkbox" id="ativoTarde" checked> Tarde</label>
+          <label>Das <input type="number" id="inicioTarde" min="0" max="23" value="12"> às
+            <input type="number" id="fimTarde" min="0" max="23" value="17">h</label>
+        </div>
+        <div class="disp-periodo-linha">
+          <label><input type="checkbox" id="ativoNoite" checked> Noite</label>
+          <label>Das <input type="number" id="inicioNoite" min="0" max="23" value="18"> às
+            <input type="number" id="fimNoite" min="0" max="23" value="20">h</label>
+        </div>
+      </div>
+
+      <button id="salvarDisponibilidade" class="btnPrimario">💾 Salvar Configurações</button>
+
+      <h3 class="disp-subtitulo">Bloquear um dia inteiro</h3>
+      <div class="disp-bloqueio-linha">
+        <input type="date" id="dataBloqueioDia">
+        <button id="btnBloquearDia" class="btnPerigo">🚫 Bloquear dia</button>
+      </div>
+      <ul id="listaDiasBloqueados" class="disp-lista-bloqueios"></ul>
+
+      <h3 class="disp-subtitulo">Bloquear um horário específico</h3>
+      <div class="disp-bloqueio-linha">
+        <input type="date" id="dataBloqueioHorario">
+        <input type="time" id="horaBloqueioHorario">
+        <button id="btnBloquearHorario" class="btnPerigo">🚫 Bloquear horário</button>
+      </div>
+      <ul id="listaHorariosBloqueados" class="disp-lista-bloqueios"></ul>
     </div>
   </div>
 
@@ -634,6 +691,89 @@ table {
   max-height: 90vh;
   overflow-y: auto;
   text-align: left;
+}
+
+.modal-disponibilidade {
+  max-width: 520px;
+}
+.disp-subtitulo {
+  font-family: var(--font-display);
+  color: var(--verde);
+  margin: 14px 0 4px;
+  font-size: 1.05rem;
+  border-top: 1px solid rgba(212,175,55,.3);
+  padding-top: 10px;
+}
+.disp-dias-semana {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.disp-dias-semana label,
+.disp-periodo-linha label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .88rem;
+  color: var(--text);
+}
+.disp-periodo-linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+}
+.disp-periodo-linha input[type="number"] {
+  width: 55px;
+  padding: 5px 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(212,175,55,.4);
+  text-align: center;
+}
+.disp-bloqueio-linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.disp-bloqueio-linha input {
+  padding: 7px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(212,175,55,.4);
+}
+.disp-lista-bloqueios {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 140px;
+  overflow-y: auto;
+}
+.disp-lista-bloqueios li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--off-white, #faf7f2);
+  border: 1px solid rgba(212,175,55,.3);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: .85rem;
+}
+.disp-lista-bloqueios button {
+  background: var(--verde);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 4px 12px;
+  font-size: .78rem;
+  cursor: pointer;
+}
+.disp-lista-bloqueios button:hover {
+  background: var(--dourado-dk);
 }
 
 .modal-content h2 {

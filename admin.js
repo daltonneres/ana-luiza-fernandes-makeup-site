@@ -6,8 +6,12 @@ import {
   getDocs,
   deleteDoc,
   doc,
+  getDoc,
+  setDoc,
   updateDoc,
-  addDoc
+  addDoc,
+  arrayUnion,
+  arrayRemove
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {
   getAuth,
@@ -200,6 +204,156 @@ const meses = [
   }
 }
 
+// --- Disponibilidade: elementos e configuração --- //
+const btnDisponibilidade = document.getElementById("btnDisponibilidade");
+const modalDisponibilidade = document.getElementById("modalDisponibilidade");
+const fecharDisponibilidade = document.getElementById("fecharDisponibilidade");
+const salvarDisponibilidadeBtn = document.getElementById("salvarDisponibilidade");
+const btnBloquearDia = document.getElementById("btnBloquearDia");
+const btnBloquearHorario = document.getElementById("btnBloquearHorario");
+const listaDiasBloqueados = document.getElementById("listaDiasBloqueados");
+const listaHorariosBloqueados = document.getElementById("listaHorariosBloqueados");
+
+const dispRef = doc(db, "disponibilidade", "config");
+
+const DISPONIBILIDADE_PADRAO = {
+  diasSemana: { 0: true, 1: true, 2: true, 3: true, 4: true, 5: true, 6: true },
+  periodos: {
+    manha: { ativo: true, inicio: 6, fim: 11 },
+    tarde: { ativo: true, inicio: 12, fim: 17 },
+    noite: { ativo: true, inicio: 18, fim: 20 }
+  },
+  diasBloqueados: [],
+  horariosBloqueados: {}
+};
+
+async function carregarConfigDisponibilidade() {
+  const snap = await getDoc(dispRef);
+  if (!snap.exists()) return JSON.parse(JSON.stringify(DISPONIBILIDADE_PADRAO));
+  const dados = snap.data();
+  return {
+    diasSemana: { ...DISPONIBILIDADE_PADRAO.diasSemana, ...(dados.diasSemana || {}) },
+    periodos: {
+      manha: { ...DISPONIBILIDADE_PADRAO.periodos.manha, ...(dados.periodos?.manha || {}) },
+      tarde: { ...DISPONIBILIDADE_PADRAO.periodos.tarde, ...(dados.periodos?.tarde || {}) },
+      noite: { ...DISPONIBILIDADE_PADRAO.periodos.noite, ...(dados.periodos?.noite || {}) }
+    },
+    diasBloqueados: dados.diasBloqueados || [],
+    horariosBloqueados: dados.horariosBloqueados || {}
+  };
+}
+
+function renderListasBloqueios(config) {
+  listaDiasBloqueados.innerHTML = "";
+  (config.diasBloqueados || []).slice().sort().forEach((data) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<span>🚫 ${data.split("-").reverse().join("/")}</span>`;
+    const btn = document.createElement("button");
+    btn.textContent = "Liberar";
+    btn.onclick = async () => {
+      await setDoc(dispRef, { diasBloqueados: arrayRemove(data) }, { merge: true });
+      abrirModalDisponibilidade();
+    };
+    li.appendChild(btn);
+    listaDiasBloqueados.appendChild(li);
+  });
+
+  listaHorariosBloqueados.innerHTML = "";
+  Object.entries(config.horariosBloqueados || {}).forEach(([data, horarios]) => {
+    (horarios || []).forEach((hora) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<span>🚫 ${data.split("-").reverse().join("/")} às ${hora}</span>`;
+      const btn = document.createElement("button");
+      btn.textContent = "Liberar";
+      btn.onclick = async () => {
+        await setDoc(dispRef, { horariosBloqueados: { [data]: arrayRemove(hora) } }, { merge: true });
+        abrirModalDisponibilidade();
+      };
+      li.appendChild(btn);
+      listaHorariosBloqueados.appendChild(li);
+    });
+  });
+}
+
+async function abrirModalDisponibilidade() {
+  const config = await carregarConfigDisponibilidade();
+
+  document.querySelectorAll(".chkDiaSemana").forEach((chk) => {
+    const dia = chk.dataset.dia;
+    chk.checked = config.diasSemana[dia] !== false;
+  });
+
+  document.getElementById("ativoManha").checked = config.periodos.manha.ativo !== false;
+  document.getElementById("inicioManha").value = config.periodos.manha.inicio;
+  document.getElementById("fimManha").value = config.periodos.manha.fim;
+
+  document.getElementById("ativoTarde").checked = config.periodos.tarde.ativo !== false;
+  document.getElementById("inicioTarde").value = config.periodos.tarde.inicio;
+  document.getElementById("fimTarde").value = config.periodos.tarde.fim;
+
+  document.getElementById("ativoNoite").checked = config.periodos.noite.ativo !== false;
+  document.getElementById("inicioNoite").value = config.periodos.noite.inicio;
+  document.getElementById("fimNoite").value = config.periodos.noite.fim;
+
+  renderListasBloqueios(config);
+  modalDisponibilidade.style.display = "flex";
+}
+
+if (btnDisponibilidade) {
+  btnDisponibilidade.addEventListener("click", abrirModalDisponibilidade);
+  fecharDisponibilidade.addEventListener("click", () => modalDisponibilidade.style.display = "none");
+
+  salvarDisponibilidadeBtn.addEventListener("click", async () => {
+    const diasSemana = {};
+    document.querySelectorAll(".chkDiaSemana").forEach((chk) => {
+      diasSemana[chk.dataset.dia] = chk.checked;
+    });
+
+    const periodos = {
+      manha: {
+        ativo: document.getElementById("ativoManha").checked,
+        inicio: parseInt(document.getElementById("inicioManha").value, 10),
+        fim: parseInt(document.getElementById("fimManha").value, 10)
+      },
+      tarde: {
+        ativo: document.getElementById("ativoTarde").checked,
+        inicio: parseInt(document.getElementById("inicioTarde").value, 10),
+        fim: parseInt(document.getElementById("fimTarde").value, 10)
+      },
+      noite: {
+        ativo: document.getElementById("ativoNoite").checked,
+        inicio: parseInt(document.getElementById("inicioNoite").value, 10),
+        fim: parseInt(document.getElementById("fimNoite").value, 10)
+      }
+    };
+
+    await setDoc(dispRef, { diasSemana, periodos }, { merge: true });
+    alert("✅ Configurações de disponibilidade salvas!");
+  });
+
+  btnBloquearDia.addEventListener("click", async () => {
+    const data = document.getElementById("dataBloqueioDia").value;
+    if (!data) return alert("Escolha uma data para bloquear.");
+    await setDoc(dispRef, { diasBloqueados: arrayUnion(data) }, { merge: true });
+    document.getElementById("dataBloqueioDia").value = "";
+    abrirModalDisponibilidade();
+  });
+
+  btnBloquearHorario.addEventListener("click", async () => {
+    const data = document.getElementById("dataBloqueioHorario").value;
+    const hora = document.getElementById("horaBloqueioHorario").value;
+    if (!data || !hora) return alert("Escolha a data e o horário para bloquear.");
+    await setDoc(dispRef, { horariosBloqueados: { [data]: arrayUnion(hora) } }, { merge: true });
+    document.getElementById("dataBloqueioHorario").value = "";
+    document.getElementById("horaBloqueioHorario").value = "";
+    abrirModalDisponibilidade();
+  });
+
+  window.addEventListener("click", (e) => {
+    if (e.target === modalDisponibilidade) modalDisponibilidade.style.display = "none";
+  });
+}
+
 // --- Carregar agendamentos --- //
 async function carregarAgendamentos() {
   const querySnapshot = await getDocs(collection(db, "agendamentos"));
@@ -264,6 +418,7 @@ agendamentos.sort((a, b) => {
     tr.innerHTML = `
       <td>${ag.nome || "-"}</td>
       <td>${ag.telefone || "-"}</td>
+      <td>${ag.aniversario && ag.aniversario !== "Não informado" ? ag.aniversario : "-"}</td>
       <td>${ag.data ? ag.data.split("-").reverse().join("/") : "-"}</td>
       <td>${ag.periodo || "-"}</td>
       <td>${ag.horario || "-"}</td>
